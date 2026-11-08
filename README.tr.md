@@ -16,9 +16,9 @@ Bluetooth LE üzerinden, bilgisayarından. Verin sende kalır.</p>
   <img src="https://img.shields.io/badge/Huawei%20Band%206-BLE-ff7a1a?labelColor=1c1c1c" alt="BLE üzerinden Huawei Band 6">
 </p>
 
-**Durum:** erken aşama. Protokol kodu, Gadgetbridge'in kendi Java kodundan üretilen vektörlerle ve
-simüle edilmiş bir bantla test edildi. Henüz gerçek bir Band 6'ya karşı çalıştırılmadı; aşağıdaki ilk
-adım, bandının hangi eşleştirme yolunu kullandığını gösterecek.
+**Durum:** erken aşama ve gerçek bir Band 6'da (yazılım 11.1.3.20) çalışıyor: eşleştirme, kayıtlı
+anahtarla yeniden bağlanma, pil, yazılım sürümü, bugünkü toplamlar ve saati ayarlama. Dakika dakika
+geçmiş ve uyku, Gadgetbridge vektörleri ve simüle bantla geçiyor; takılmış bir bantta denenmeyi bekliyor.
 
 ## Başla
 
@@ -32,11 +32,16 @@ uv run openband status     # pil, bugünkü adım, yazılım sürümü
 uv run openband sync --days 7 --format csv
 ```
 
-Başlamadan önce bandın eşli olduğu telefonda Bluetooth'u kapat (ya da Huawei Health'i kapat); yoksa
-bağlantıyı telefon tutar ve bant görünmez.
+Başlamadan önce bandın eşli olduğu telefonda Bluetooth'u kapat (yalnızca Kontrol Merkezi'nden değil,
+Ayarlar > Bluetooth'tan) ve Huawei Health'i kapat; yoksa bağlantıyı telefon tutar ve bant görünmez.
+Openband eşleştikten sonra Huawei Health artık bağlanamaz, telefonun Bluetooth'u açık kalabilir.
+
+Bant, ekranı uyandıktan sonra yalnızca kısa bir süre yayın yapar. Her komuttan önce ekranını aç;
+Openband 90 saniyeye kadar bekler (`--wait`) ve bant görünür görünmez bağlanır.
 
 macOS'ta Openband'i Terminal ya da iTerm'den çalıştır ve Bluetooth izni istenince ver. Bluetooth
-izni olmayan bir süreci macOS durdurur (çıkış kodu 134); bazı IDE ve ajan kabuklarında olan budur.
+izni olmayan bir süreci macOS durdurur (çıkış kodu 134, çoğu zaman mesajsız); Warp'ta ve bazı IDE
+ve ajan kabuklarında olan budur.
 
 ## Neden
 
@@ -54,7 +59,7 @@ banttan hiçbir şey silme.
 | Özellik | Durum |
 |---|---|
 | Çerçeveleme, dilimleme, CRC16, TLV, AES-CBC/GCM | hazır; Gadgetbridge vektörleriyle uyumlu |
-| Eşleştirme, normal mod (destek tipi 0) | hazır; bandın Ayarlar > Hakkında ekranındaki MAC adresi gerekir |
+| Eşleştirme, normal mod (destek tipi 0 ya da 8; Band 6 bu) | hazır, gerçek bantta çalışıyor; bandın Ayarlar > Hakkında ekranındaki MAC adresi gerekir |
 | Eşleştirme, HiChain Lite (PIN ve anahtar türleri) | hazır |
 | Tam HiChain (SPEKE) | yok; bir bant bunu isterse Openband net bir mesajla durur |
 | Pil, yazılım sürümü, bugünkü adım, kalori ve mesafe | hazır |
@@ -65,7 +70,8 @@ banttan hiçbir şey silme.
 | Bildirimler, alarmlar, ayarlar | henüz yok |
 | iPhone uygulaması | planlandı; protokol gerçek bir bantta doğrulandıktan sonra |
 
-"Hazır" olan her satır testlerle kapsanıyor; hiçbiri henüz gerçek bir bantta denenmedi.
+"Hazır" olan her satır testlerle kapsanıyor. Şimdiye kadar gerçek bir Band 6'da denenenler: normal
+modda eşleştirme, yeniden bağlanma, pil, yazılım sürümü, bugünkü toplamlar, saati ayarlama.
 
 ## Eşleştirme ve Huawei Health'e etkisi
 

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import sys
 from typing import Callable, Protocol
 
 from . import frame
@@ -150,7 +151,10 @@ async def find_band(name_hint: str | None = None, address: str | None = None, ti
     from bleak import BleakScanner
 
     if address:
-        dev = await BleakScanner.find_device_by_address(address, timeout=timeout)
+        quick = min(timeout, 8.0) if sys.platform == "darwin" else timeout
+        dev = await BleakScanner.find_device_by_address(address, timeout=quick)
+        if dev is None and sys.platform == "darwin":
+            dev = await _known_peripheral(address)
         if dev is None:
             raise BandError(f"no device with address {address} nearby")
         return dev
@@ -167,19 +171,48 @@ async def find_band(name_hint: str | None = None, address: str | None = None, ti
     return dev
 
 
+async def _known_peripheral(address: str):
+    """A peripheral macOS already knows, without waiting for it to advertise.
+
+    A paired band stops advertising openly soon after a disconnect, so a scan misses it. Connecting
+    to the peripheral CoreBluetooth remembers leaves a pending connection in the Bluetooth
+    controller, which completes the moment the band reaches out, the way the phone app reconnects.
+    """
+    try:
+        from bleak.backends.corebluetooth.CentralManagerDelegate import CentralManagerDelegate
+        from bleak.backends.device import BLEDevice
+        from Foundation import NSUUID
+    except ImportError as e:
+        log.info("pending connection not available: %s", e)
+        return None
+    manager = CentralManagerDelegate()
+    await manager.wait_until_ready()
+    uuid = NSUUID.alloc().initWithUUIDString_(address)
+    if uuid is None:
+        return None
+    peripherals = manager.central_manager.retrievePeripheralsWithIdentifiers_([uuid])
+    log.info("macOS knows %d peripheral(s) for %s", len(peripherals or []), address)
+    if not peripherals:
+        return None
+    peripheral = peripherals[0]
+    log.info("band not advertising; waiting for it on a pending connection")
+    return BLEDevice(address, peripheral.name(), (peripheral, manager))
+
+
 class Connection:
     """`async with Connection(device) as band:` connects, subscribes and yields a Band."""
 
-    def __init__(self, device, session: Session | None = None, timeout: float = 8.0):
+    def __init__(self, device, session: Session | None = None, timeout: float = 8.0, connect_timeout: float = 90.0):
         self.device = device
         self.session = session
         self.timeout = timeout
+        self.connect_timeout = connect_timeout
         self.client = None
 
     async def __aenter__(self) -> Band:
         from bleak import BleakClient
 
-        self.client = BleakClient(self.device)
+        self.client = BleakClient(self.device, timeout=self.connect_timeout)
         await self.client.connect()
         transport = BleTransport(self.client)
         band = Band(transport, self.session, self.timeout)

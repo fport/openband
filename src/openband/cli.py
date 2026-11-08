@@ -48,7 +48,10 @@ async def _target(args, store: Store):
         known = store.all()
         if len(known) == 1:
             address = known[0].address
-    dev = await find_band(name_hint=args.name, address=address)
+    wait = getattr(args, "wait", 90.0)
+    out(f"Looking for the band (up to {wait:.0f}s). If it does not show up, wake its screen or restart it")
+    out("(Settings > System > Restart on the band); Openband connects as soon as it appears.")
+    dev = await find_band(name_hint=args.name, address=address, timeout=wait)
     return dev
 
 
@@ -85,7 +88,7 @@ async def do_scan(args, store: Store) -> int:
 async def do_probe(args, store: Store) -> int:
     dev = await _target(args, store)
     out(f"Connecting to {dev.name or dev.address} ...")
-    async with Connection(dev) as band:
+    async with Connection(dev, connect_timeout=getattr(args, "wait", 90.0)) as band:
         params = await read_link_params(band)
     info = {"name": dev.name, "address": dev.address, **describe(params)}
     out(json.dumps(info, indent=2))
@@ -101,20 +104,25 @@ async def _after_auth(band: Band) -> dict:
 
 
 async def do_pair(args, store: Store) -> int:
-    dev, rec = await _session(args, store)
-    if rec.bonded and not args.again:
+    known = store.get(args.address) if args.address else None
+    if known and known.bonded and not args.again:
         out("Openband is already paired with this band. Use `openband status`, or `pair --again` to redo it.")
         return 0
+    # Ask before looking for the band: it may only advertise for a short while.
     out(PAIR_WARNING)
     if not args.yes:
         answer = input("Pair now? [y/N] ").strip().lower()
         if answer not in ("y", "yes", "e", "evet"):
             out("Nothing changed.")
             return 1
+    dev, rec = await _session(args, store)
+    if rec.bonded and not args.again:
+        out("Openband is already paired with this band. Use `openband status`, or `pair --again` to redo it.")
+        return 0
     if args.again:
         rec.bonded = False
     out(f"Connecting to {dev.name or dev.address} ...")
-    async with Connection(dev) as band:
+    async with Connection(dev, connect_timeout=getattr(args, "wait", 90.0)) as band:
         report = await authenticate(band, rec, allow_bond=True)
         rec.bonded = True
         rec.name = dev.name or rec.name
@@ -137,7 +145,7 @@ async def _connect_authed(args, store: Store):
     dev, rec = await _session(args, store)
     if not rec.bonded:
         raise AuthError("Openband has not been paired with this band yet; run `openband pair` first")
-    conn = Connection(dev)
+    conn = Connection(dev, connect_timeout=getattr(args, "wait", 90.0))
     band = await conn.__aenter__()
     try:
         await authenticate(band, rec, allow_bond=False)
@@ -245,6 +253,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("-v", "--verbose", action="count", default=0, help="-v: steps, -vv: every byte on the wire")
     p.add_argument("--address", help="the band's Bluetooth address (a UUID on macOS); see `openband scan`")
     p.add_argument("--name", help="pick the band whose name contains this")
+    p.add_argument("--wait", type=float, default=90.0, help="seconds to wait for the band to show up (default 90)")
     sub = p.add_subparsers(dest="command", required=True)
 
     s = sub.add_parser("scan", help="list Huawei bands nearby")

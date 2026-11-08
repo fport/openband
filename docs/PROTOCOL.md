@@ -41,7 +41,7 @@ BondParams and goes up by one per message.
 | Step | Command | Encrypted | What |
 |---|---|---|---|
 | 1 | `01` LinkParams | no | slice size, MTU, auth version, server nonce (tag 05: `?, auth_version, nonce16`), support type (07), auth algo (08), encrypt method (0C) |
-| 2 | `33` SecurityNegotiation | no | only for support types 1-4; the answer picks HiChain Lite (1 or 2) or full HiChain |
+| 2 | `33` SecurityNegotiation | no | only for support types 1-4; the answer picks HiChain Lite (1 or 2) or full HiChain. Types 0 and 8 skip it and use normal mode |
 | 3 | `2C` PinCode | no | HiChain Lite with auth version != 2: the band's PIN, encrypted with the digest secret |
 | 4 | `13` Auth | no | `01` = challenge (32 bytes), `02` = auth version (2 bytes) + client nonce; the band answers with the expected response |
 | 5 | `0F` BondParams | no | our serial and (made-up) MAC; the band answers with bond status and the IV counter |
@@ -63,6 +63,11 @@ Normal mode wraps it with a key derived from the band's own Bluetooth MAC, which
 never reveals a device's MAC, but the band shows it under Settings > About.
 
 The session key is ours: 16 random bytes created on your computer. No account or server.
+
+**Seen on a real Band 6** (model `Fara-B19`, firmware 11.1.3.20): protocol version 2, auth version 1,
+support type 8, auth algo 1, encrypt method 0 (AES-CBC), slice size and MTU 244. That is normal mode.
+The Bond answer comes about four seconds after the request. Right after Bond the band sends an
+encrypted `0F/03` that cannot be read yet; the next one, `0F/03 01=0001`, decrypts fine.
 
 ## Data (service 0x07)
 

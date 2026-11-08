@@ -16,9 +16,9 @@ Over Bluetooth LE, from your computer. Your data stays with you.</p>
   <img src="https://img.shields.io/badge/Huawei%20Band%206-BLE-ff7a1a?labelColor=1c1c1c" alt="Huawei Band 6 over BLE">
 </p>
 
-**Status:** early. The protocol code passes against vectors from Gadgetbridge's own Java code and a
-simulated band. It has not yet been run against a real Band 6; the first step below is the one that
-tells us which pairing path your band uses.
+**Status:** early, and working on a real Band 6 (firmware 11.1.3.20): pairing, reconnecting with the
+stored key, battery, firmware, today's totals and setting the clock. Per-minute history and sleep
+pass against Gadgetbridge vectors and a simulated band and still wait for a band that was worn.
 
 ## Start
 
@@ -32,12 +32,16 @@ uv run openband status     # battery, today's steps, firmware
 uv run openband sync --days 7 --format csv
 ```
 
-Before you start, turn off Bluetooth on the phone the band is paired with (or close Huawei Health),
-otherwise the phone holds the connection and the band does not show up.
+Before you start, turn off Bluetooth on the phone the band is paired with (Settings > Bluetooth, not
+just Control Center) and close Huawei Health, otherwise the phone holds the connection and the band
+does not show up. Once Openband is paired, Huawei Health can no longer connect, so the phone can stay on.
+
+The band only advertises for a short while after its screen wakes up. Wake it before each command;
+Openband waits up to 90 seconds (`--wait`) and connects as soon as the band appears.
 
 On macOS, run Openband from Terminal or iTerm and allow Bluetooth when asked. A process without
-Bluetooth permission is stopped by macOS (exit code 134), which is what happens inside some IDE
-and agent shells.
+Bluetooth permission is stopped by macOS (exit code 134, often with no message), which is what
+happens in Warp and inside some IDE and agent shells.
 
 ## Why
 
@@ -54,7 +58,7 @@ values, keep the key local, never delete anything from the band.
 | Feature | State |
 |---|---|
 | Framing, slicing, CRC16, TLV, AES-CBC/GCM | done; matches Gadgetbridge vectors |
-| Pairing, normal mode (support type 0) | done; needs the band's MAC from Settings > About |
+| Pairing, normal mode (support type 0 or 8; the Band 6) | done, works on a real band; needs the band's MAC from Settings > About |
 | Pairing, HiChain Lite (PIN and key variants) | done |
 | Full HiChain (SPEKE) | not built; Openband stops with a clear message if a band asks for it |
 | Battery, firmware, today's steps, kcal and distance | done |
@@ -65,7 +69,8 @@ values, keep the key local, never delete anything from the band.
 | Notifications, alarms, settings | not built yet |
 | iPhone app | planned, after the protocol is confirmed on a real band |
 
-Each row marked done is covered by tests; none has been checked against a real band yet.
+Each row marked done is covered by tests. Checked on a real Band 6 so far: normal-mode pairing,
+reconnecting, battery, firmware, today's totals, setting the clock.
 
 ## Pairing, and what it does to Huawei Health
 
