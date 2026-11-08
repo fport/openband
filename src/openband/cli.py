@@ -45,7 +45,12 @@ Nothing is deleted from the band, and you can go back to Huawei Health any time 
 
 
 def out(msg: str = "") -> None:
-    print(msg, flush=True)
+    try:
+        print(msg, flush=True)
+    except BrokenPipeError:
+        # Whoever read our output (so101-band, a pipe) is gone: a listener left behind would hold the
+        # band and its socket, so leave at once.
+        os._exit(0)
 
 
 async def _target(args, store: Store):
@@ -203,7 +208,12 @@ async def _notify_via_listener(payload: dict) -> str | None:
 
 async def do_notify(args, store: Store) -> int:
     payload = {"title": args.title, "text": args.text or "", "sender": args.sender}
+    if args.music:
+        payload = {"music": " ".join(t for t in (args.title, args.text) if t)}
     answer = await _notify_via_listener(payload)
+    if answer is None and args.music:
+        out("error: --music needs a running `openband listen`")
+        return 2
     if answer is not None:
         if answer != "ok":
             out(answer)
@@ -237,6 +247,9 @@ async def do_listen(args, store: Store) -> int:
     from any shell reaches the band through a local socket, without Bluetooth of its own."""
     loop = asyncio.get_running_loop()
     tasks: set[asyncio.Task] = set()
+    # What the band believes the player is doing. It only sends the next play/pause press once the
+    # phone has confirmed the last one (as a real player would), so every screen update echoes it.
+    player = {"playing": True}
     inbox: asyncio.Queue[tuple[dict, asyncio.Future]] = asyncio.Queue()
 
     async def on_client(reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
@@ -247,9 +260,12 @@ async def do_listen(args, store: Store) -> int:
             answer = await asyncio.wait_for(done, 120.0)
         except Exception as e:  # noqa: BLE001 - report anything back to the caller
             answer = f"error: {e}"
-        writer.write((answer + "\n").encode())
-        await writer.drain()
-        writer.close()
+        try:
+            writer.write((answer + "\n").encode())
+            await writer.drain()
+            writer.close()
+        except (ConnectionError, OSError):
+            pass  # the sender gave up waiting; nothing to tell it
 
     path = socket_path()
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -258,7 +274,8 @@ async def do_listen(args, store: Store) -> int:
     os.chmod(path, 0o600)
 
     async def run(press: controls.ButtonPress, band: Band) -> None:
-        line = json.dumps({"ts": int(time.time()), "button": press.name, "code": press.code, "volume": press.volume})
+        line = json.dumps({"ts": int(time.time()), "button": press.name, "code": press.code, "volume": press.volume,
+                           "t": round(time.time(), 3)})
         out(line)
         label = press.name
         if args.exec:
@@ -270,9 +287,11 @@ async def do_listen(args, store: Store) -> int:
                 label = reply[-1]
             elif proc.returncode:
                 label = f"{press.name}: exit {proc.returncode}"
+        if not args.exec:
+            return  # whoever reads our output (so101-band) writes the band's screen itself
         if press.name == "find":
             # No music screen to write on: show what the command printed as a notification.
-            if args.exec and label != press.name:
+            if label != press.name:
                 await _notify(band, {"title": args.title, "text": label, "sender": args.title})
         else:
             await band.send(controls.music_info(args.title, label))
@@ -305,6 +324,10 @@ async def do_listen(args, store: Store) -> int:
                     press = controls.parse_button(body)
                     if press is None:
                         return
+                    if press.code in (1, 3, 4):  # play, previous, next: a player plays on
+                        player["playing"] = True
+                    elif press.code == 2:  # pause
+                        player["playing"] = False
                     if press.code not in controls.BUTTONS:
                         # 100 arrives when the band connects or opens its music screen: not a press.
                         t = loop.create_task(_send_all(band, controls.music_ack(command), controls.music_info(args.title, "ready")))
@@ -316,27 +339,64 @@ async def do_listen(args, store: Store) -> int:
                 t.add_done_callback(tasks.discard)
 
             band.listen(on_message)
-            try:
+
+            async def setup(band=band) -> None:
+                t0 = time.monotonic()
+                try:
+                    await asyncio.wait_for(_announce(band), 15.0)
+                except asyncio.TimeoutError:
+                    log.warning("announce took too long; carrying on")
+                # The band asks for the music state (25/01) as soon as it connects, before our key is in
+                # place, so that first ask goes unanswered: answer it now.
+                await band.send(controls.music_ack(controls.MUSIC_STATUS))
                 await band.send(controls.music_info(args.title, "ready"))
+                log.info("setup done in %.1f s", time.monotonic() - t0)
+
+            # Runs beside the inbox: a slow answer during setup must not hold up the screen.
+            setup_task = loop.create_task(setup())
+            try:
                 while conn.client is not None and conn.client.is_connected:
                     try:
                         payload, done = await asyncio.wait_for(inbox.get(), 1.0)
                     except asyncio.TimeoutError:
                         continue
+                    t0 = time.monotonic()
                     try:
-                        await _notify(band, payload)
-                        out(f"notified: {payload.get('title', '')}")
+                        if "music" in payload:
+                            await asyncio.wait_for(band.send(controls.music_info(
+                                args.title, str(payload["music"]), playing=player["playing"])), 5.0)
+                            out(f"music screen in {1000 * (time.monotonic() - t0):.0f} ms: {payload['music']}")
+                        else:
+                            await asyncio.wait_for(_notify(band, payload), 8.0)
+                            out(f"notified: {payload.get('title', '')}")
                         if not done.done():
                             done.set_result("ok")
                     except Exception as e:  # noqa: BLE001
+                        log.warning("inbox: %r", e)
                         if not done.done():
-                            done.set_result(f"error: {e}")
+                            done.set_result(f"error: {e!r}")
             finally:
+                setup_task.cancel()
                 await conn.__aexit__(None, None, None)
             out("The band disconnected; reconnecting (wake its screen).")
     finally:
         server.close()
         path.unlink(missing_ok=True)
+
+
+async def _announce(band: Band) -> None:
+    """Present as Gadgetbridge does (services, commands, an Android phone). A Band 6 set up from an
+    iPhone shows its Music app only after this; then its buttons reach `listen`."""
+    from . import capabilities as caps
+
+    try:
+        services = caps.services_from(await band.request(caps.supported_services()))
+        for req in caps.supported_commands(services, band.session.params.slice_size):
+            await band.request(req)
+        await band.request(caps.phone_info(), timeout=4.0)
+        log.info("announced as an Android phone")
+    except BandError as e:
+        log.info("announce: %s", e)
 
 
 async def _send_all(band: Band, *reqs) -> None:
@@ -416,6 +476,61 @@ async def do_sync(args, store: Store) -> int:
     return 0
 
 
+async def do_caps(args, store: Store) -> int:
+    """Tell the band what Openband supports and print what it supports back."""
+    from . import capabilities as caps
+
+    conn, band, _ = await _connect_authed(args, store)
+    try:
+        services = caps.services_from(await band.request(caps.supported_services()))
+        out(f"Services: {' '.join(f'{s:02x}' for s in services)}")
+        for req in caps.supported_commands(services, band.session.params.slice_size):
+            for service, cmds in caps.commands_from(await band.request(req)).items():
+                name = caps.SERVICE_NAMES.get(service, "")
+                out(f"  {service:02x} {name:<14} {' '.join(f'{c:02x}' for c in cmds)}")
+        try:
+            raw = (await band.request(caps.expand_capability())).get(0x01, b"")
+            bits = caps.capability_bits(raw)
+            out(f"Expand capabilities ({len(bits)} bits): {' '.join(str(b) for b in bits)}")
+            for bit, name in caps.CAPABILITY_NAMES.items():
+                if bit in bits and name != "?":
+                    out(f"  {bit}: {name}")
+        except BandError as e:
+            out(f"Expand capabilities: {e}")
+    finally:
+        await conn.__aexit__(None, None, None)
+    out("Now look at the band's app list: a Music app may have appeared.")
+    return 0
+
+
+async def do_announce(args, store: Store) -> int:
+    """Experimental: tell the band what Gadgetbridge tells it (services, commands, an Android phone),
+    then say a song is playing. Prints every answer, so we learn what the band makes of it."""
+    from . import capabilities as caps
+
+    conn, band, _ = await _connect_authed(args, store)
+    try:
+        services = caps.services_from(await band.request(caps.supported_services()))
+        for req in caps.supported_commands(services, band.session.params.slice_size):
+            await band.request(req)
+        out("services and commands announced")
+        for name, req in (("phone info (Android 14)", caps.phone_info()), ("connect status", caps.connect_status()),
+                          ("default switch", caps.default_switch())):
+            try:
+                out(f"{name}: {await band.request(req, timeout=4.0)!r}")
+            except BandError as e:
+                out(f"{name}: {e}")
+        try:
+            out(f"music info: {await band.request(controls.music_info('Openband', 'ready'), timeout=4.0)!r}")
+        except BandError as e:
+            out(f"music info: {e}")
+        out("Staying connected for 20 s: open the band's app list and look for Music.")
+        await asyncio.sleep(20)
+    finally:
+        await conn.__aexit__(None, None, None)
+    return 0
+
+
 async def do_key(args, store: Store) -> int:
     """Print the pairing record as one line, for the iPhone app ("Use my Mac's key")."""
     recs = [r for r in store.all() if r.bonded and (not args.address or r.address == args.address)]
@@ -472,12 +587,16 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--format", choices=("json", "csv"), default="json")
 
     sub.add_parser("forget", help="drop what Openband remembers about a band")
+    sub.add_parser("announce", help="experimental: present as an Android phone, to unlock band features")
+    sub.add_parser("caps", help="announce what Openband supports; print what the band supports")
     sub.add_parser("key", help="print the pairing key as one line, to share it with the iPhone app (keep it private)")
 
     s = sub.add_parser("notify", help="show a notification on the band")
     s.add_argument("title")
     s.add_argument("text", nargs="?", default="")
     s.add_argument("--sender", default="Openband")
+    s.add_argument("--music", action="store_true",
+                   help="write it on the band's music screen (no buzz) instead; needs a running `listen`")
     s.add_argument("--no-bluetooth", action="store_true",
                    help="only hand it to a running `openband listen`; never open Bluetooth (for hooks run in Warp or an IDE)")
 
@@ -497,6 +616,8 @@ COMMANDS = {
     "sync": do_sync,
     "forget": do_forget,
     "key": do_key,
+    "caps": do_caps,
+    "announce": do_announce,
     "notify": do_notify,
     "listen": do_listen,
 }

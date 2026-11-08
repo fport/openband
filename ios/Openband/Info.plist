@@ -42,6 +42,16 @@
 	<string>public.app-category.healthcare-fitness</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Openband uses Bluetooth to talk directly to the band on your wrist.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_so101band._tcp</string>
+	</array>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Openband reads the steps your iPhone counted to fill the minutes your band has nothing for.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Openband saves what your band measured (steps, heart rate, blood oxygen, sleep) to Apple Health.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Openband talks to so101-band on your Mac over the local network to drive the robot arm.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>OpenSauceSans-Regular.otf</string>

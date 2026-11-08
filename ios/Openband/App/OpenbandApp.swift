@@ -59,6 +59,9 @@ struct RootView: View {
                         TrendsView()
                             .tabItem { Label("Trends", systemImage: "chart.xyaxis.line") }
                             .tag(AppTab.trends)
+                        RobotView()
+                            .tabItem { Label("Robot", systemImage: "hand.raised") }
+                            .tag(AppTab.robot)
                         BandView()
                             .tabItem { Label("Band", systemImage: "rectangle.portrait") }
                             .tag(AppTab.band)
@@ -121,6 +124,7 @@ struct RootView: View {
         case .sleep: router.tab = .sleep
         case .trends: router.tab = .trends
         case .band: router.tab = .band
+        case .robot: router.tab = .robot
         case .scoreRecovery: router.tab = .today; router.todayPath = [.score(.recovery, day: today)]
         case .scoreSleep: router.tab = .today; router.todayPath = [.score(.sleep, day: today)]
         case .scoreStrain: router.tab = .today; router.todayPath = [.score(.strain, day: today)]
@@ -132,18 +136,18 @@ struct RootView: View {
     }
 }
 
-/// DEBUG `-freeband-screen <name>` jumps to a screen for screenshots.
+/// DEBUG `-openband-screen <name>` jumps to a screen for screenshots.
 enum DebugScreen: String {
-    case today, sleep, trends, band, settings, onboarding, live
+    case today, sleep, trends, robot, band, settings, onboarding, live
     case scoreRecovery = "score-recovery"
     case scoreSleep = "score-sleep"
     case scoreStrain = "score-strain"
 
-    /// DEBUG `-freeband-day <offset>`: the day Today and the score screens open on (-1 = yesterday).
+    /// DEBUG `-openband-day <offset>`: the day Today and the score screens open on (-1 = yesterday).
     static var dayOffset: Int {
         #if DEBUG
         let args = ProcessInfo.processInfo.arguments
-        guard let i = args.firstIndex(of: "-freeband-day"), i + 1 < args.count else { return 0 }
+        guard let i = args.firstIndex(of: "-openband-day"), i + 1 < args.count else { return 0 }
         return min(0, Int(args[i + 1]) ?? 0)
         #else
         return 0
@@ -153,7 +157,7 @@ enum DebugScreen: String {
     static var current: DebugScreen? {
         #if DEBUG
         let args = ProcessInfo.processInfo.arguments
-        guard let i = args.firstIndex(of: "-freeband-screen"), i + 1 < args.count else { return nil }
+        guard let i = args.firstIndex(of: "-openband-screen"), i + 1 < args.count else { return nil }
         return DebugScreen(rawValue: args[i + 1])
         #else
         return nil

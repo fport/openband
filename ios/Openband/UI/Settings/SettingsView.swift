@@ -51,6 +51,9 @@ struct SettingsView: View {
                 section(String(localized: "Integrations")) {
                     ListCard {
                         // Web access (Freeband's hub) is off in Openband until it has a hub of its own.
+                        link(.appleHealth, String(localized: "Apple Health"),
+                             value: AppleHealth.shared.writeEnabled || AppleHealth.shared.readEnabled ? String(localized: "On") : String(localized: "Off"),
+                             icon: "heart.text.square")
                         link(.webhooks, String(localized: "Webhooks"), value: webhookSummary, icon: "arrow.up.forward.app")
                         link(.shortcuts, String(localized: "Shortcuts & Siri"), icon: "square.2.layers.3d", last: true)
                     }

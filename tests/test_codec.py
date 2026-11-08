@@ -171,3 +171,25 @@ def test_find_phone():
     assert not controls.find_phone_started(TLV())
     stop = controls.find_phone_stop()
     assert (stop.service, stop.command, stop.tlv.get(0x01)) == (0x0B, 0x02, b"\x02")
+
+
+# --- capabilities ---------------------------------------------------------------------------
+
+from openband import capabilities as caps  # noqa: E402
+
+
+def test_supported_commands_split_and_parse():
+    services = [0x01, 0x02, 0x07, 0x0B, 0x25]
+    reqs = caps.supported_commands(services, 0xF4)
+    assert reqs and all(r.command == 0x03 for r in reqs)
+    inner = TLV.parse(reqs[0].tlv.get(0x81))
+    assert inner.get_all(0x02)[0] == b"\x01"
+    # The band answers with 02 service + 04 flag per command.
+    answer = TLV().put(0x81, TLV().put(0x02, 0x25, size=1).put(0x04, bytes([1, 0, 1])))
+    assert caps.commands_from(answer) == {0x25: [0x02, 0x0E]}
+    assert caps.capability_bits(bytes([0b00000101, 0b10000000])) == [0, 2, 15]
+
+
+def test_music_info_says_playing_the_android_way():
+    assert controls.music_info("a", "b").tlv.get(0x03) == b"\x03"
+    assert controls.music_info("a", "b", playing=False).tlv.get(0x03) == b"\x02"

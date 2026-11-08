@@ -8,7 +8,7 @@ enum BandFeatures {
 }
 
 enum AppTab: String, Hashable, CaseIterable {
-    case today, sleep, trends, band
+    case today, sleep, trends, robot, band
 }
 
 /// Every pushed screen. Days travel as `DayKey.index` so routes stay plain values.
@@ -23,6 +23,7 @@ enum Route: Hashable {
     case profile
     case webAccess
     case webhooks
+    case appleHealth
     case shortcuts
     case diagnostics
     case about
@@ -51,6 +52,7 @@ final class AppRouter: ObservableObject {
         case .sleep: Binding(get: { self.sleepPath }, set: { self.sleepPath = $0 })
         case .trends: Binding(get: { self.trendsPath }, set: { self.trendsPath = $0 })
         case .band: Binding(get: { self.bandPath }, set: { self.bandPath = $0 })
+        case .robot: Binding(get: { [] }, set: { _ in })
         }
     }
 
@@ -113,6 +115,7 @@ private struct RouteView: View {
         case .profile: ProfileView()
         case .webAccess: WebAccessView()
         case .webhooks: WebhooksView()
+        case .appleHealth: AppleHealthView()
         case .shortcuts: ShortcutsView()
         case .diagnostics: DiagnosticsView()
         case .about: AboutView()

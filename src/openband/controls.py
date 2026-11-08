@@ -41,6 +41,11 @@ FIND_PHONE = 0x0B
 FIND_PHONE_EVENT = 0x01
 FIND_PHONE_STOP = 0x02
 
+# Android's PlaybackState values, which the band expects (Gadgetbridge SetMusicRequest): 0 none, 1 stopped,
+# 2 paused, 3 playing. Anything but "playing" makes the band say it cannot control music.
+PAUSED = 2
+PLAYING = 3
+
 BUTTONS = {1: "play", 2: "pause", 3: "previous", 4: "next", 5: "volume_up", 6: "volume_down"}
 
 
@@ -76,7 +81,7 @@ def music_info(artist: str, title: str, playing: bool = True, max_volume: int = 
         TLV()
         .put(0x01, _clip(artist, 60))
         .put(0x02, _clip(title, 60))
-        .put(0x03, 1 if playing else 2, size=1)
+        .put(0x03, PLAYING if playing else PAUSED, size=1)
         .put(0x04, max_volume, size=1)
         .put(0x05, volume, size=1)
     )

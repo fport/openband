@@ -219,6 +219,23 @@ final class AppModel: ObservableObject {
         sessionIngest.touchedDays[id, default: []].formUnion(result.touchedDays)
         sessionIngest.minuteDays[id] = result.minuteDays
         sessionIngest.sleeps += result.sleeps
+        let name = band(id)?.displayName ?? "Huawei Band"
+        Task {
+            await AppleHealth.shared.export(history, bandName: name)
+            await fillGapsFromHealth(bandID: id)
+        }
+    }
+
+    /// iPhone steps into the minutes the band left empty (Settings › Apple Health), then scores.
+    func fillGapsFromHealth(bandID: UUID? = nil) async {
+        guard !isDemo, AppleHealth.shared.readEnabled else { return }
+        let ids = bandID.map { [$0] } ?? ((try? context.fetch(FetchDescriptor<Band>())) ?? []).map(\.id)
+        let from = Date().addingTimeInterval(-Double(DailyRollup.maxDays) * 86_400)
+        for id in ids {
+            let days = await AppleHealth.shared.fillGaps(bandID: id, context: context, from: from)
+            if let first = days.min() { pendingRollup[id] = min(pendingRollup[id] ?? first, first) }
+        }
+        runPendingRollups()
     }
 
     /// One band per MAC: folds bands added twice 

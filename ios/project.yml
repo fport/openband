@@ -31,6 +31,10 @@ targets:
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         NSBluetoothAlwaysUsageDescription: Openband uses Bluetooth to talk directly to the band on your wrist.
+        NSLocalNetworkUsageDescription: Openband talks to so101-band on your Mac over the local network to drive the robot arm.
+        NSBonjourServices: [_so101band._tcp]
+        NSHealthShareUsageDescription: Openband reads the steps your iPhone counted to fill the minutes your band has nothing for.
+        NSHealthUpdateUsageDescription: Openband saves what your band measured (steps, heart rate, blood oxygen, sleep) to Apple Health.
         ITSAppUsesNonExemptEncryption: false
         LSApplicationCategoryType: public.app-category.healthcare-fitness
         UILaunchScreen: {}
@@ -41,6 +45,10 @@ targets:
         CFBundleURLTypes:
           - CFBundleURLName: dev.fport.openband
             CFBundleURLSchemes: [openband]
+    entitlements:
+      path: Openband/Openband.entitlements
+      properties:
+        com.apple.developer.healthkit: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.fport.openband
