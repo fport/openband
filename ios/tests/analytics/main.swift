@@ -182,9 +182,15 @@ for (m, k) in [(10, StageKind.awake), (100, .light), (90, .deep), (15, .awake), 
 }
 // HR: 60 every minute except minutes 100-107 = [60,58,56,55,54,55,57,60] (sum 455).
 let dip: [Int] = [60, 58, 56, 55, 54, 55, 57, 60]
-let hrSeries = (0 ..< 480).map { m in TimedValue(ts: bed.addingTimeInterval(TimeInterval(m * 60)), value: (100 ..< 108).contains(m) ? dip[m - 100] : 60) }
+let hrSeries: [TimedValue] = (0 ..< 480).map { (m: Int) -> TimedValue in
+    let bpm: Int = (100 ..< 108).contains(m) ? dip[m - 100] : 60
+    return TimedValue(ts: bed.addingTimeInterval(TimeInterval(m * 60)), value: bpm)
+}
 // SpO2: 96 every minute, 89 at minutes 200 and 201.
-let spo2Series = (0 ..< 480).map { m in TimedValue(ts: bed.addingTimeInterval(TimeInterval(m * 60)), value: m == 200 || m == 201 ? 89 : 96) }
+let spo2Series: [TimedValue] = (0 ..< 480).map { (m: Int) -> TimedValue in
+    let low: Bool = m == 200 || m == 201
+    return TimedValue(ts: bed.addingTimeInterval(TimeInterval(m * 60)), value: low ? 89 : 96)
+}
 var sleepIn = SleepInput(bedTime: bed, wakeTime: wake, deepMinutes: 90, lightMinutes: 240, remMinutes: 100, awakeMinutes: 50,
                          segments: timeline, wakeCount: 2, heartRate: hrSeries, spo2: spo2Series)
 let m1 = SleepMetricsCalc.compute(sleepIn, minutes: [], awakeHRMean: 70)
