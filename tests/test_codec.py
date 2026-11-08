@@ -94,3 +94,80 @@ def test_security_negotiation_answers():
     assert cmd.parse_security_negotiation(TLV().put(0x02, 2, size=1)) == 2
     assert cmd.parse_security_negotiation(TLV().put(0x01, 1, size=1)) == cmd.HICHAIN_FULL
     assert cmd.is_hichain3(cmd.parse_security_negotiation(TLV().put(0x01, 4, size=1).put(0x02, 1, size=1)))
+
+
+# --- controls -------------------------------------------------------------------------------
+
+from openband import controls  # noqa: E402
+
+
+def test_notification_layout():
+    req = controls.notification(0x1234, "Claude", "done: tests pass", sender="claude")
+    assert (req.service, req.command, req.encrypted) == (0x02, 0x01, True)
+    t = req.tlv
+    assert t.get(0x01) == b"\x12\x34" and t.get(0x02) == b"\x7f" and t.get(0x03) == b"\x01"
+    items = TLV.parse(TLV.parse(t.get(0x84)).get(0x8C)).get_all(0x8D)
+    texts = [TLV.parse(i) for i in items]
+    assert [(x.get(0x0E), x.get(0x0F), x.get(0x10)) for x in texts] == [
+        (b"\x03", b"\x02", b"Claude"),
+        (b"\x02", b"\x02", b"claude"),
+        (b"\x01", b"\x02", b"done: tests pass"),
+    ]
+
+
+def test_notification_clips_long_text():
+    req = controls.notification(1, "t", "x" * 1000)
+    last = TLV.parse(TLV.parse(TLV.parse(req.tlv.get(0x84)).get(0x8C)).get_all(0x8D)[-1])
+    assert len(last.get(0x10).decode()) == controls.MAX_TEXT
+
+
+def test_music_buttons():
+    assert controls.parse_button(TLV().put(0x01, 4, size=1)).name == "next"
+    assert controls.parse_button(TLV().put(0x01, 100, size=1)).code == 100
+    assert controls.parse_button(TLV().put(0x02, 7, size=1)).volume == 7
+    assert controls.parse_button(TLV()) is None
+    ack = controls.music_ack(0x03)
+    assert ack.tlv.uint(0x7F) == 100000 and not ack.expects_reply
+
+
+# --- notify through a running listener ------------------------------------------------------
+
+import asyncio  # noqa: E402
+import json  # noqa: E402
+
+from openband import cli  # noqa: E402
+
+
+async def test_notify_goes_through_the_listener_socket(monkeypatch):
+    import tempfile
+
+    # AF_UNIX paths are limited to ~104 bytes; pytest's tmp_path on macOS is longer.
+    monkeypatch.setenv("OPENBAND_HOME", tempfile.mkdtemp(prefix="ob", dir="/tmp"))
+    got = []
+
+    async def fake_listener(reader, writer):
+        got.append(json.loads(await reader.readline()))
+        writer.write(b"ok\n")
+        await writer.drain()
+        writer.close()
+
+    server = await asyncio.start_unix_server(fake_listener, path=str(cli.socket_path()))
+    try:
+        answer = await cli._notify_via_listener({"title": "Claude", "text": "done", "sender": "Claude"})
+    finally:
+        server.close()
+    assert answer == "ok"
+    assert got == [{"title": "Claude", "text": "done", "sender": "Claude"}]
+
+
+async def test_notify_without_listener(tmp_path, monkeypatch):
+    monkeypatch.setenv("OPENBAND_HOME", str(tmp_path))
+    assert await cli._notify_via_listener({"title": "x"}) is None
+
+
+def test_find_phone():
+    assert controls.find_phone_started(TLV().put(0x01, True))
+    assert not controls.find_phone_started(TLV().put(0x01, False))
+    assert not controls.find_phone_started(TLV())
+    stop = controls.find_phone_stop()
+    assert (stop.service, stop.command, stop.tlv.get(0x01)) == (0x0B, 0x02, b"\x02")

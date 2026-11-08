@@ -30,6 +30,8 @@ uv run openband probe      # read its link parameters; changes nothing
 uv run openband pair       # hand the band a key of our own (read the note below first)
 uv run openband status     # battery, today's steps, firmware
 uv run openband sync --days 7 --format csv
+uv run openband listen     # stay connected: taps on the band, notifications from any shell
+uv run openband notify "Claude" "tests pass" --no-bluetooth
 ```
 
 Before you start, turn off Bluetooth on the phone the band is paired with (Settings > Bluetooth, not
@@ -66,8 +68,11 @@ values, keep the key local, never delete anything from the band.
 | Per-minute history: steps, kcal, distance, heart rate, SpO2, resting heart rate | done |
 | Sleep: light and deep spans | done |
 | TruSleep stages (REM, awake), workouts, stress | not built yet (file-transfer service) |
-| Notifications, alarms, settings | not built yet |
-| iPhone app | planned, after the protocol is confirmed on a real band |
+| Notifications from the computer (`notify`), through a running `listen` | done, works on a real band |
+| Taps on the band ("Find phone", music buttons) as events and commands (`listen --exec`) | done; "Find phone" works on a real band |
+| Claude Code hooks: the band buzzes when Claude needs you or finishes | done (`scripts/claude_hook.py`) |
+| iPhone app (Freeband's screens and scores on the Huawei protocol) | builds and runs in the simulator; not yet tried on a phone |
+| Alarms, settings, workouts | not built yet |
 
 Each row marked done is covered by tests. Checked on a real Band 6 so far: normal-mode pairing,
 reconnecting, battery, firmware, today's totals, setting the clock.
@@ -81,13 +86,44 @@ reconnecting, battery, firmware, today's totals, setting the clock.
 - Nothing is deleted from the band. Openband only reads history.
 - The key lives in `~/.config/openband/bands.json`, readable only by you.
 
+## Claude Code on your wrist
+
+Keep `openband listen` running in Terminal, then add two hooks to `~/.claude/settings.json`:
+
+```json
+"hooks": {
+  "Notification": [{"hooks": [{"type": "command", "command": "python3 /path/to/openband/scripts/claude_hook.py", "async": true}]}],
+  "Stop": [{"hooks": [{"type": "command", "command": "python3 /path/to/openband/scripts/claude_hook.py", "async": true}]}]
+}
+```
+
+The hook talks to `listen` over a local socket, so it works from Warp or an IDE too, where
+Bluetooth itself would be refused.
+
+## iPhone app
+
+`ios/` holds the app: [Freeband](https://github.com/cobanov/freeband)'s screens, scores and
+storage on top of a Swift port of Openband's protocol (`ios/Openband/Band/Huawei`).
+
+```bash
+brew install xcodegen
+cd ios && xcodegen generate && open Openband.xcodeproj
+```
+
+In Xcode pick your Apple ID under Signing & Capabilities (a free account works; the app then runs
+for 7 days before Xcode has to install it again), plug in the iPhone and run. To keep using the
+Mac's pairing, choose "Use my Mac's key" when pairing and paste the line `openband key` prints.
+
 ## More
 
 - [docs/PROTOCOL.md](docs/PROTOCOL.md): frames, TLV, handshake, data commands.
 - `uv run pytest`: the test suite, including the Gadgetbridge cross-check.
+- `cd ios/tests/protocol && swiftc ../../Openband/Band/Huawei/*.swift FakeBand.swift main.swift -o /tmp/hw && /tmp/hw`:
+  the same checks for the Swift port.
 - `uv run openband -vv <command>`: every byte on the wire, for bug reports.
 
 ## License
 
 MIT. The protocol knowledge comes from [Gadgetbridge](https://codeberg.org/Freeyourgadget/Gadgetbridge)'s
-Huawei support; Openband's code is its own.
+Huawei support; the protocol code is Openband's own. The iPhone app is built on
+[Freeband](https://github.com/cobanov/freeband) (MIT, Mert Cobanov); its notice is in LICENSE.

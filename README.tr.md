@@ -30,6 +30,8 @@ uv run openband probe      # bağlantı parametrelerini oku; hiçbir şeyi deği
 uv run openband pair       # banda kendi anahtarımızı ver (önce aşağıdaki notu oku)
 uv run openband status     # pil, bugünkü adım, yazılım sürümü
 uv run openband sync --days 7 --format csv
+uv run openband listen     # bağlı kal: banttaki dokunuşlar, her kabuktan bildirim
+uv run openband notify "Claude" "testler geçti" --no-bluetooth
 ```
 
 Başlamadan önce bandın eşli olduğu telefonda Bluetooth'u kapat (yalnızca Kontrol Merkezi'nden değil,
@@ -67,8 +69,11 @@ banttan hiçbir şey silme.
 | Dakika dakika geçmiş: adım, kalori, mesafe, nabız, SpO2, dinlenik nabız | hazır |
 | Uyku: hafif ve derin uyku aralıkları | hazır |
 | TruSleep evreleri (REM, uyanık), antrenmanlar, stres | henüz yok (dosya aktarım servisi) |
-| Bildirimler, alarmlar, ayarlar | henüz yok |
-| iPhone uygulaması | planlandı; protokol gerçek bir bantta doğrulandıktan sonra |
+| Bilgisayardan bildirim (`notify`), çalışan `listen` üzerinden | hazır, gerçek bantta çalışıyor |
+| Banttaki dokunuşlar ("Telefonumu bul", müzik tuşları) olay ve komut olarak (`listen --exec`) | hazır; "Telefonumu bul" gerçek bantta çalışıyor |
+| Claude Code hook'ları: Claude seni beklerken ya da işi bitince bant titrer | hazır (`scripts/claude_hook.py`) |
+| iPhone uygulaması (Freeband'in ekranları ve skorları, Huawei protokolüyle) | simülatörde derlenip çalışıyor; henüz telefonda denenmedi |
+| Alarmlar, ayarlar, antrenmanlar | henüz yok |
 
 "Hazır" olan her satır testlerle kapsanıyor. Şimdiye kadar gerçek bir Band 6'da denenenler: normal
 modda eşleştirme, yeniden bağlanma, pil, yazılım sürümü, bugünkü toplamlar, saati ayarlama.
@@ -82,13 +87,44 @@ modda eşleştirme, yeniden bağlanma, pil, yazılım sürümü, bugünkü topla
 - Banttan hiçbir şey silinmez. Openband geçmişi yalnızca okur.
 - Anahtar `~/.config/openband/bands.json` dosyasında durur ve yalnızca sen okuyabilirsin.
 
+## Claude Code bileğinde
+
+`openband listen` Terminal'de açık kalsın, sonra `~/.claude/settings.json` dosyasına iki hook ekle:
+
+```json
+"hooks": {
+  "Notification": [{"hooks": [{"type": "command", "command": "python3 /path/to/openband/scripts/claude_hook.py", "async": true}]}],
+  "Stop": [{"hooks": [{"type": "command", "command": "python3 /path/to/openband/scripts/claude_hook.py", "async": true}]}]
+}
+```
+
+Hook, `listen` ile yerel bir soket üzerinden konuşur; bu yüzden Bluetooth'un reddedildiği Warp ya
+da IDE kabuklarında da çalışır.
+
+## iPhone uygulaması
+
+`ios/` klasöründe: [Freeband](https://github.com/cobanov/freeband)'in ekranları, skorları ve
+depolaması; altında Openband protokolünün Swift'e taşınmış hâli (`ios/Openband/Band/Huawei`).
+
+```bash
+brew install xcodegen
+cd ios && xcodegen generate && open Openband.xcodeproj
+```
+
+Xcode'da Signing & Capabilities altında Apple ID'ni seç (ücretsiz hesap yeter; uygulama 7 gün
+çalışır, sonra Xcode'dan yeniden kurulur), iPhone'u bağla ve çalıştır. Mac'teki eşleştirmeyi
+korumak için eşleştirirken "Use my Mac's key"i seç ve `openband key` çıktısını yapıştır.
+
 ## Daha fazlası
 
 - [docs/PROTOCOL.md](docs/PROTOCOL.md): çerçeveler, TLV, el sıkışma, veri komutları (İngilizce).
 - `uv run pytest`: Gadgetbridge çapraz kontrolü dahil test paketi.
+- `cd ios/tests/protocol && swiftc ../../Openband/Band/Huawei/*.swift FakeBand.swift main.swift -o /tmp/hw && /tmp/hw`:
+  Swift tarafı için aynı kontroller.
 - `uv run openband -vv <komut>`: hata bildirimleri için hattaki her bayt.
 
 ## Lisans
 
 MIT. Protokol bilgisi [Gadgetbridge](https://codeberg.org/Freeyourgadget/Gadgetbridge)'in Huawei
-desteğinden geliyor; Openband'in kodu kendine ait.
+desteğinden geliyor; protokol kodu Openband'in kendi kodu. iPhone uygulaması
+[Freeband](https://github.com/cobanov/freeband) (MIT, Mert Cobanov) üzerine kurulu; telif notu LICENSE'ta.

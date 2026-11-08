@@ -16,3 +16,14 @@ jobs:
       - uses: astral-sh/setup-uv@v5
       - run: uv sync --python ${{ matrix.python }}
       - run: uv run pytest -q
+
+  swift:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Protocol port (Gadgetbridge vectors, fake band)
+        working-directory: ios/tests/protocol
+        run: swiftc ../../Openband/Band/Huawei/*.swift FakeBand.swift main.swift -o hwproto && ./hwproto
+      - name: Scores (Freeband analytics)
+        working-directory: ios/tests/analytics
+        run: swiftc ../../Openband/Analytics/*.swift main.swift -o analytics && ./analytics

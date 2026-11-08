@@ -7,6 +7,9 @@
   openband sync --days 7     per-minute activity, heart rate and sleep, as JSON or CSV
   openband set-time          set the band's clock from this computer
   openband forget            drop what Openband remembers about a band
+  openband key               print the pairing key for the iPhone app
+  openband notify TITLE TEXT show a notification on the band
+  openband listen            react to the band's music buttons (--exec runs a command per press)
 """
 
 from __future__ import annotations
@@ -17,6 +20,7 @@ import csv
 import datetime as dt
 import json
 import logging
+import os
 import sys
 import time
 from dataclasses import asdict
@@ -24,10 +28,13 @@ from pathlib import Path
 
 from . import __version__
 from . import commands as cmd
+from . import controls
 from .auth import AuthError, authenticate, describe, read_link_params
 from .link import SERVICE_UUID, Band, BandError, Connection, find_band
 from .store import BandRecord, Store
 from .sync import fetch_history
+
+log = logging.getLogger("openband")
 
 PAIR_WARNING = """\
 Pairing writes a new key to the band. After this:
@@ -172,6 +179,182 @@ async def do_status(args, store: Store) -> int:
     return 0
 
 
+def socket_path() -> Path:
+    from .store import home
+
+    return home() / "listen.sock"
+
+
+async def _notify_via_listener(payload: dict) -> str | None:
+    """Hand the notification to a running `openband listen`; None when none is running."""
+    path = socket_path()
+    if not path.exists():
+        return None
+    try:
+        reader, writer = await asyncio.open_unix_connection(str(path))
+    except (ConnectionRefusedError, FileNotFoundError, OSError):
+        return None
+    writer.write((json.dumps(payload) + "\n").encode())
+    await writer.drain()
+    answer = (await asyncio.wait_for(reader.readline(), 30.0)).decode().strip()
+    writer.close()
+    return answer or "error: no answer"
+
+
+async def do_notify(args, store: Store) -> int:
+    payload = {"title": args.title, "text": args.text or "", "sender": args.sender}
+    answer = await _notify_via_listener(payload)
+    if answer is not None:
+        if answer != "ok":
+            out(answer)
+            return 2
+        out("Sent.")
+        return 0
+    if args.no_bluetooth:
+        out("error: `openband listen` is not running")
+        return 2
+    conn, band, _ = await _connect_authed(args, store)
+    try:
+        await _notify(band, payload)
+    finally:
+        await conn.__aexit__(None, None, None)
+    out("Sent.")
+    return 0
+
+
+async def _notify(band: Band, payload: dict) -> None:
+    req = controls.notification(int(time.time() * 10) & 0xFFFF, payload.get("title", ""), payload.get("text", ""),
+                                payload.get("sender") or "Openband")
+    try:
+        await band.request(req, timeout=4.0)
+    except BandError as e:
+        # The band shows the notification whether or not it answers.
+        log.info("notification: %s", e)
+
+
+async def do_listen(args, store: Store) -> int:
+    """Stay connected: music-screen presses become lines (and commands), and `openband notify`
+    from any shell reaches the band through a local socket, without Bluetooth of its own."""
+    loop = asyncio.get_running_loop()
+    tasks: set[asyncio.Task] = set()
+    inbox: asyncio.Queue[tuple[dict, asyncio.Future]] = asyncio.Queue()
+
+    async def on_client(reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
+        try:
+            payload = json.loads((await reader.readline()).decode() or "{}")
+            done: asyncio.Future = loop.create_future()
+            await inbox.put((payload, done))
+            answer = await asyncio.wait_for(done, 120.0)
+        except Exception as e:  # noqa: BLE001 - report anything back to the caller
+            answer = f"error: {e}"
+        writer.write((answer + "\n").encode())
+        await writer.drain()
+        writer.close()
+
+    path = socket_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.unlink(missing_ok=True)
+    server = await asyncio.start_unix_server(on_client, path=str(path))
+    os.chmod(path, 0o600)
+
+    async def run(press: controls.ButtonPress, band: Band) -> None:
+        line = json.dumps({"ts": int(time.time()), "button": press.name, "code": press.code, "volume": press.volume})
+        out(line)
+        label = press.name
+        if args.exec:
+            env = {**os.environ, "OPENBAND_BUTTON": press.name, "OPENBAND_EVENT": line}
+            proc = await asyncio.create_subprocess_shell(args.exec, env=env, stdout=asyncio.subprocess.PIPE)
+            stdout, _ = await proc.communicate()
+            reply = stdout.decode(errors="replace").strip().splitlines()
+            if reply:
+                label = reply[-1]
+            elif proc.returncode:
+                label = f"{press.name}: exit {proc.returncode}"
+        if press.name == "find":
+            # No music screen to write on: show what the command printed as a notification.
+            if args.exec and label != press.name:
+                await _notify(band, {"title": args.title, "text": label, "sender": args.title})
+        else:
+            await band.send(controls.music_info(args.title, label))
+
+    try:
+        while True:
+            try:
+                conn, band, _ = await _connect_authed(args, store)
+            except BandError as e:
+                out(f"{e}; trying again (wake the band's screen).")
+                await asyncio.sleep(2.0)
+                continue
+            out("Listening. Tap \"Find phone\" on the band (or use its music screen); "
+                "`openband notify` from any shell goes through here. Ctrl+C to stop.")
+
+            def on_message(service: int, command: int, body, band=band) -> None:
+                if service == controls.FIND_PHONE and command == controls.FIND_PHONE_EVENT:
+                    if not controls.find_phone_started(body):
+                        return
+                    press = controls.ButtonPress(0, "find")
+                    t = loop.create_task(_find_then(band, run(press, band)))
+                    tasks.add(t)
+                    t.add_done_callback(tasks.discard)
+                    return
+                if service != controls.MUSIC:
+                    return
+                if command == controls.MUSIC_STATUS:
+                    t = loop.create_task(_send_all(band, controls.music_ack(command), controls.music_info(args.title, "ready")))
+                elif command == controls.MUSIC_CONTROL:
+                    press = controls.parse_button(body)
+                    if press is None:
+                        return
+                    if press.code not in controls.BUTTONS:
+                        # 100 arrives when the band connects or opens its music screen: not a press.
+                        t = loop.create_task(_send_all(band, controls.music_ack(command), controls.music_info(args.title, "ready")))
+                    else:
+                        t = loop.create_task(_ack_then(band, command, run(press, band)))
+                else:
+                    return
+                tasks.add(t)
+                t.add_done_callback(tasks.discard)
+
+            band.listen(on_message)
+            try:
+                await band.send(controls.music_info(args.title, "ready"))
+                while conn.client is not None and conn.client.is_connected:
+                    try:
+                        payload, done = await asyncio.wait_for(inbox.get(), 1.0)
+                    except asyncio.TimeoutError:
+                        continue
+                    try:
+                        await _notify(band, payload)
+                        out(f"notified: {payload.get('title', '')}")
+                        if not done.done():
+                            done.set_result("ok")
+                    except Exception as e:  # noqa: BLE001
+                        if not done.done():
+                            done.set_result(f"error: {e}")
+            finally:
+                await conn.__aexit__(None, None, None)
+            out("The band disconnected; reconnecting (wake its screen).")
+    finally:
+        server.close()
+        path.unlink(missing_ok=True)
+
+
+async def _send_all(band: Band, *reqs) -> None:
+    for r in reqs:
+        await band.send(r)
+
+
+async def _find_then(band: Band, then) -> None:
+    # Stop the band's "finding" screen first, so the next tap counts again.
+    await band.send(controls.find_phone_stop())
+    await then
+
+
+async def _ack_then(band: Band, command: int, then) -> None:
+    await band.send(controls.music_ack(command))
+    await then
+
+
 async def do_set_time(args, store: Store) -> int:
     conn, band, _ = await _connect_authed(args, store)
     try:
@@ -233,6 +416,17 @@ async def do_sync(args, store: Store) -> int:
     return 0
 
 
+async def do_key(args, store: Store) -> int:
+    """Print the pairing record as one line, for the iPhone app ("Use my Mac's key")."""
+    recs = [r for r in store.all() if r.bonded and (not args.address or r.address == args.address)]
+    if not recs:
+        out("No paired band. Run `openband pair` first.")
+        return 1
+    r = recs[0]
+    out(f"openband-key:v1:{r.secret_key}:{r.client_mac}:{r.device_uuid}:{r.band_mac}")
+    return 0
+
+
 async def do_forget(args, store: Store) -> int:
     known = {r.address: r for r in store.all()}
     target = args.address or (next(iter(known)) if len(known) == 1 else None)
@@ -278,6 +472,19 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--format", choices=("json", "csv"), default="json")
 
     sub.add_parser("forget", help="drop what Openband remembers about a band")
+    sub.add_parser("key", help="print the pairing key as one line, to share it with the iPhone app (keep it private)")
+
+    s = sub.add_parser("notify", help="show a notification on the band")
+    s.add_argument("title")
+    s.add_argument("text", nargs="?", default="")
+    s.add_argument("--sender", default="Openband")
+    s.add_argument("--no-bluetooth", action="store_true",
+                   help="only hand it to a running `openband listen`; never open Bluetooth (for hooks run in Warp or an IDE)")
+
+    s = sub.add_parser("listen", help="react to taps on the band (find phone, music buttons) and pass on `openband notify`")
+    s.add_argument("--exec", help="shell command run on every press; $OPENBAND_BUTTON holds the button, "
+                   "the last line it prints is shown on the band")
+    s.add_argument("--title", default="Openband", help="what the band's music screen shows as the artist")
     return p
 
 
@@ -289,6 +496,9 @@ COMMANDS = {
     "set-time": do_set_time,
     "sync": do_sync,
     "forget": do_forget,
+    "key": do_key,
+    "notify": do_notify,
+    "listen": do_listen,
 }
 
 
