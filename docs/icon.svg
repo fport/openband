@@ -1,5 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="strap" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#262626"/><stop offset=".5" stop-color="#383838"/><stop offset="1" stop-color="#262626"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4c4c4c"/><stop offset="1" stop-color="#2a2a2a"/>
+    </linearGradient>
+    <clipPath id="tile"><rect width="128" height="128" rx="28"/></clipPath>
+  </defs>
   <rect width="128" height="128" rx="28" fill="#1c1c1c"/>
-  <rect x="44" y="18" width="40" height="92" rx="20" fill="none" stroke="#ededed" stroke-width="8"/>
-  <path d="M64 46 a18 18 0 1 1 -12.7 5.3" fill="none" stroke="#ff7a1a" stroke-width="8" stroke-linecap="round"/>
+  <g clip-path="url(#tile)">
+    <path d="M46 0 H82 L80 30 H48 Z" fill="url(#strap)"/>
+    <path d="M48 98 H80 L82 128 H46 Z" fill="url(#strap)"/>
+    <circle cx="64" cy="112" r="2.2" fill="#1c1c1c"/>
+    <circle cx="64" cy="121" r="2.2" fill="#1c1c1c"/>
+  </g>
+  <rect x="38" y="24" width="52" height="80" rx="18" fill="url(#body)"/>
+  <rect x="42" y="28" width="44" height="72" rx="14" fill="#0b0b0b"/>
+  <!-- the open ring: Freeband's arc, on a Huawei band -->
+  <path d="M53.4 75.6 A15 15 0 1 1 74.6 75.6" fill="none" stroke="#ff7a1a" stroke-width="6" stroke-linecap="round"/>
 </svg>
