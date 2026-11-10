@@ -30,10 +30,19 @@ final class MinuteDay {
     /// Metres per minute.
     var distance: Data = Data()
     var energy: Data = Data()
+    /// Steps the iPhone counted for the minutes the band has nothing for (Settings › Apple
+    /// Health), packed like `steps`. A column of its own because `ActivityIngest.rebuildMinuteDays`
+    /// rebuilds `steps` from the parsed files alone: anything merged into that series is wiped the
+    /// next time a file touching this day is parsed. `series` merges the two at read time.
+    var phoneSteps: Data? = nil
     /// The minute files merged into this day, in file order.
     var sourceFileIDs: [String] = []
     var recordCount: Int = 0
     var updatedAt: Date = Date()
+
+    /// What `sourceFileIDs` carries for a day that has phone-filled minutes. Not a file id: it
+    /// never has bytes behind it, so ingest must not look for a blob under it.
+    static let phoneSource = "apple-health"
 
     init(bandID: UUID, draft: MinuteDayDraft) {
         self.bandID = bandID
@@ -59,7 +68,21 @@ final class MinuteDay {
 
     var dayKey: DayKey { DayKey(index: dayIndex) }
 
+    /// What the screens and the scores read: the band's own minutes, with the iPhone's steps
+    /// filling the minutes the band has nothing for. The band always wins, so a minute the band
+    /// fills in later needs no cleanup of the phone column.
     var series: MinuteSeries {
+        var s = fileSeries
+        guard let phoneSteps else { return s }
+        let phone = Packed.unpack16(phoneSteps, count: MinuteSeries.slots)
+        for i in 0 ..< MinuteSeries.slots where s.steps[i] == nil { s.steps[i] = phone[i] }
+        return s
+    }
+
+    /// Only what the band's files and live syncs wrote, which is what `update(from:)` writes back:
+    /// a writer that round-trips through `series` would bake the phone's steps into `steps` and
+    /// lose them at the next rebuild.
+    var fileSeries: MinuteSeries {
         var s = MinuteSeries(day: dayKey, tzOffsetMinutes: tzOffsetMinutes)
         let n = MinuteSeries.slots
         s.steps = Packed.unpack16(steps, count: n)
@@ -72,7 +95,23 @@ final class MinuteDay {
         return s
     }
 
-    var draft: MinuteDayDraft { MinuteDayDraft(series: series, sourceFileIDs: sourceFileIDs) }
+    /// The phone-filled minutes on their own, nil where the phone had nothing either.
+    var phoneStepSeries: [Int?] {
+        guard let phoneSteps else { return [Int?](repeating: nil, count: MinuteSeries.slots) }
+        return Packed.unpack16(phoneSteps, count: MinuteSeries.slots)
+    }
+
+    /// Replaces the phone-filled minutes. The source tag goes on once however often gaps are
+    /// filled, and old rows that collected one tag per press are cleaned up on the way through.
+    func setPhoneSteps(_ values: [Int?]) {
+        let any = values.contains { $0 != nil }
+        phoneSteps = any ? Packed.pack16(values) : nil
+        sourceFileIDs.removeAll { $0 == Self.phoneSource }
+        if any { sourceFileIDs.append(Self.phoneSource) }
+        updatedAt = Date()
+    }
+
+    var draft: MinuteDayDraft { MinuteDayDraft(series: fileSeries, sourceFileIDs: sourceFileIDs) }
 }
 
 /// The band's own daily summary for one day.

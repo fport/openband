@@ -17,10 +17,12 @@ enum FBTokenTable {
         let name: String
         let size: CGFloat
         let lineHeight: CGFloat
-        /// 400 or 500; Bold Text maps them to 500 and 600.
+        /// 400, 500 or 600; Bold Text steps each one up.
         let weight: Int
         let relativeTo: Font.TextStyle
         let isFigure: Bool
+        /// Technical readouts (timer, pace, splits) are set in the mono face.
+        let isMono: Bool
     }
 
     struct MotionEntry: Sendable {
@@ -31,41 +33,43 @@ enum FBTokenTable {
         let duration: Double
     }
 
+
     enum Colors {
-        static let canvas = ColorEntry(name: "canvas", light: 0xFFFFFF, dark: 0x0E0F12, lightContrast: 0xFFFFFF, darkContrast: 0x0E0F12)
-        static let surface = ColorEntry(name: "surface", light: 0xF4F4F4, dark: 0x171A20, lightContrast: 0xF4F4F4, darkContrast: 0x171A20)
-        static let raised = ColorEntry(name: "raised", light: 0xFFFFFF, dark: 0x22252C, lightContrast: 0xFFFFFF, darkContrast: 0x22252C)
-        static let hairline = ColorEntry(name: "hairline", light: 0xEEEEEE, dark: 0x2C2F36, lightContrast: 0xC9CACC, darkContrast: 0x3A3E46)
-        static let hairlineStrong = ColorEntry(name: "hairlineStrong", light: 0xD0D1D2, dark: 0x393C41, lightContrast: 0x86888C, darkContrast: 0x686C74)
-        static let textPrimary = ColorEntry(name: "textPrimary", light: 0x171A20, dark: 0xF4F4F4, lightContrast: 0x171A20, darkContrast: 0xF4F4F4)
-        static let textBody = ColorEntry(name: "textBody", light: 0x393C41, dark: 0xD0D1D2, lightContrast: 0x393C41, darkContrast: 0xD0D1D2)
-        static let textSecondary = ColorEntry(name: "textSecondary", light: 0x5C5E62, dark: 0xA2A4A9, lightContrast: 0x45474B, darkContrast: 0xC4C6CA)
-        static let textTertiary = ColorEntry(name: "textTertiary", light: 0x8E8E8E, dark: 0x6E7178, lightContrast: 0x6E7075, darkContrast: 0x8B8E95)
-        static let action = ColorEntry(name: "action", light: 0x3E6AE1, dark: 0x3E6AE1, lightContrast: 0x3E6AE1, darkContrast: 0x3E6AE1)
-        static let actionPressed = ColorEntry(name: "actionPressed", light: 0x3457B1, dark: 0x3457B1, lightContrast: 0x3457B1, darkContrast: 0x3457B1)
-        static let onAction = ColorEntry(name: "onAction", light: 0xFFFFFF, dark: 0xFFFFFF, lightContrast: 0xFFFFFF, darkContrast: 0xFFFFFF)
-        static let destructive = ColorEntry(name: "destructive", light: 0xA8261B, dark: 0xF0675B, lightContrast: 0xA8261B, darkContrast: 0xF0675B)
-        static let good = ColorEntry(name: "good", light: 0x1A9A5C, dark: 0x3CCB7F, lightContrast: 0x1A9A5C, darkContrast: 0x3CCB7F)
-        static let fair = ColorEntry(name: "fair", light: 0xA87000, dark: 0xF2B33D, lightContrast: 0xA87000, darkContrast: 0xF2B33D)
-        static let low = ColorEntry(name: "low", light: 0xA8261B, dark: 0xE5483B, lightContrast: 0xA8261B, darkContrast: 0xE5483B)
-        static let sleep = ColorEntry(name: "sleep", light: 0x7A4AD6, dark: 0xA98FFF, lightContrast: 0x7A4AD6, darkContrast: 0xA98FFF)
-        static let activity = ColorEntry(name: "activity", light: 0x08819A, dark: 0x3EC6DE, lightContrast: 0x08819A, darkContrast: 0x3EC6DE)
-        static let heart = ColorEntry(name: "heart", light: 0xC8287A, dark: 0xFF6FB3, lightContrast: 0xC8287A, darkContrast: 0xFF6FB3)
-        static let stageDeep = ColorEntry(name: "stageDeep", light: 0x4B2AA8, dark: 0x7B5CFF, lightContrast: 0x4B2AA8, darkContrast: 0x7B5CFF)
-        static let stageLight = ColorEntry(name: "stageLight", light: 0x7A4AD6, dark: 0xA98FFF, lightContrast: 0x7A4AD6, darkContrast: 0xA98FFF)
-        static let stageRem = ColorEntry(name: "stageRem", light: 0x9B78E8, dark: 0xD4C8FF, lightContrast: 0x9B78E8, darkContrast: 0xD4C8FF)
-        static let stageAwake = ColorEntry(name: "stageAwake", light: 0x5C5E62, dark: 0xA2A4A9, lightContrast: 0x45474B, darkContrast: 0xC4C6CA)
-        static let zone1 = ColorEntry(name: "zone1", light: 0xE7B7CF, dark: 0x683853, lightContrast: 0xE7B7CF, darkContrast: 0x683853)
-        static let zone2 = ColorEntry(name: "zone2", light: 0xE098BD, dark: 0x8B446A, lightContrast: 0xE098BD, darkContrast: 0x8B446A)
-        static let zone3 = ColorEntry(name: "zone3", light: 0xDA7AAB, dark: 0xAE5180, lightContrast: 0xDA7AAB, darkContrast: 0xAE5180)
-        static let zone4 = ColorEntry(name: "zone4", light: 0xD15192, dark: 0xD56099, lightContrast: 0xD15192, darkContrast: 0xD56099)
-        static let zone5 = ColorEntry(name: "zone5", light: 0xC8287A, dark: 0xFF6FB3, lightContrast: 0xC8287A, darkContrast: 0xFF6FB3)
-        static let bandStrap = ColorEntry(name: "bandStrap", light: 0x2C2F36, dark: 0x33363D, lightContrast: 0x2C2F36, darkContrast: 0x33363D)
-        static let bandBody = ColorEntry(name: "bandBody", light: 0x171A20, dark: 0x4A4E57, lightContrast: 0x171A20, darkContrast: 0x4A4E57)
-        static let bandFramePro = ColorEntry(name: "bandFramePro", light: 0xA9ACB2, dark: 0xB4B7BD, lightContrast: 0xA9ACB2, darkContrast: 0xB4B7BD)
+        static let canvas = ColorEntry(name: "canvas", light: 0xF5F4EF, dark: 0x121310, lightContrast: 0xF5F4EF, darkContrast: 0x121310)
+        static let surface = ColorEntry(name: "surface", light: 0xECEAE2, dark: 0x1C1D1A, lightContrast: 0xECEAE2, darkContrast: 0x1C1D1A)
+        static let raised = ColorEntry(name: "raised", light: 0xFFFFFF, dark: 0x262724, lightContrast: 0xFFFFFF, darkContrast: 0x262724)
+        static let hairline = ColorEntry(name: "hairline", light: 0xE2E0D7, dark: 0x2E2F2B, lightContrast: 0xC2C0B6, darkContrast: 0x44453F)
+        static let hairlineStrong = ColorEntry(name: "hairlineStrong", light: 0xC8CBC5, dark: 0x44453F, lightContrast: 0x8C8E88, darkContrast: 0x6E7068)
+        static let textPrimary = ColorEntry(name: "textPrimary", light: 0x20211F, dark: 0xF5F4EF, lightContrast: 0x20211F, darkContrast: 0xF5F4EF)
+        static let textBody = ColorEntry(name: "textBody", light: 0x3C3E3A, dark: 0xD5D4CC, lightContrast: 0x3C3E3A, darkContrast: 0xD5D4CC)
+        static let textSecondary = ColorEntry(name: "textSecondary", light: 0x5E605B, dark: 0xA3A49C, lightContrast: 0x454743, darkContrast: 0xC5C4BC)
+        static let textTertiary = ColorEntry(name: "textTertiary", light: 0x8E9089, dark: 0x71736C, lightContrast: 0x6E706A, darkContrast: 0x8D8F87)
+        static let action = ColorEntry(name: "action", light: 0xE0541F, dark: 0xFF6535, lightContrast: 0xE0541F, darkContrast: 0xFF6535)
+        static let actionPressed = ColorEntry(name: "actionPressed", light: 0xC34514, dark: 0xE0541F, lightContrast: 0xC34514, darkContrast: 0xE0541F)
+        static let actionSoft = ColorEntry(name: "actionSoft", light: 0xFBE4D8, dark: 0x33211A, lightContrast: 0xFBE4D8, darkContrast: 0x33211A)
+        static let onAction = ColorEntry(name: "onAction", light: 0xFFFFFF, dark: 0x20211F, lightContrast: 0xFFFFFF, darkContrast: 0x20211F)
+        static let destructive = ColorEntry(name: "destructive", light: 0xB3261E, dark: 0xFF7A6B, lightContrast: 0xB3261E, darkContrast: 0xFF7A6B)
+        static let good = ColorEntry(name: "good", light: 0x1F7A4C, dark: 0x3FCB84, lightContrast: 0x1F7A4C, darkContrast: 0x3FCB84)
+        static let fair = ColorEntry(name: "fair", light: 0x9A6508, dark: 0xF2B33D, lightContrast: 0x9A6508, darkContrast: 0xF2B33D)
+        static let low = ColorEntry(name: "low", light: 0xB3261E, dark: 0xFF7A6B, lightContrast: 0xB3261E, darkContrast: 0xFF7A6B)
+        static let sleep = ColorEntry(name: "sleep", light: 0x3846E8, dark: 0x8691FF, lightContrast: 0x3846E8, darkContrast: 0x8691FF)
+        static let activity = ColorEntry(name: "activity", light: 0xE0541F, dark: 0xFF6535, lightContrast: 0xE0541F, darkContrast: 0xFF6535)
+        static let heart = ColorEntry(name: "heart", light: 0xB02A24, dark: 0xFF5A5A, lightContrast: 0xB02A24, darkContrast: 0xFF5A5A)
+        static let stageDeep = ColorEntry(name: "stageDeep", light: 0x2430B8, dark: 0x5C68F0, lightContrast: 0x2430B8, darkContrast: 0x5C68F0)
+        static let stageLight = ColorEntry(name: "stageLight", light: 0x3846E8, dark: 0x8691FF, lightContrast: 0x3846E8, darkContrast: 0x8691FF)
+        static let stageRem = ColorEntry(name: "stageRem", light: 0x6E79F0, dark: 0xB9C0FF, lightContrast: 0x6E79F0, darkContrast: 0xB9C0FF)
+        static let stageAwake = ColorEntry(name: "stageAwake", light: 0x5E605B, dark: 0xA3A49C, lightContrast: 0x454743, darkContrast: 0xC5C4BC)
+        static let zone1 = ColorEntry(name: "zone1", light: 0xC8CBC5, dark: 0x3A3B36, lightContrast: 0xC8CBC5, darkContrast: 0x3A3B36)
+        static let zone2 = ColorEntry(name: "zone2", light: 0xDFBC97, dark: 0x6B5137, lightContrast: 0xDFBC97, darkContrast: 0x6B5137)
+        static let zone3 = ColorEntry(name: "zone3", light: 0xE8853F, dark: 0xB06A33, lightContrast: 0xE8853F, darkContrast: 0xB06A33)
+        static let zone4 = ColorEntry(name: "zone4", light: 0xE0541F, dark: 0xFF6535, lightContrast: 0xE0541F, darkContrast: 0xFF6535)
+        static let zone5 = ColorEntry(name: "zone5", light: 0xA62219, dark: 0xFF5A5A, lightContrast: 0xA62219, darkContrast: 0xFF5A5A)
+        static let bandStrap = ColorEntry(name: "bandStrap", light: 0x2E2F2B, dark: 0x33342F, lightContrast: 0x2E2F2B, darkContrast: 0x33342F)
+        static let bandBody = ColorEntry(name: "bandBody", light: 0x20211F, dark: 0x4A4B45, lightContrast: 0x20211F, darkContrast: 0x4A4B45)
+        static let bandFramePro = ColorEntry(name: "bandFramePro", light: 0xA9ACA5, dark: 0xB4B7B0, lightContrast: 0xA9ACA5, darkContrast: 0xB4B7B0)
         static let bandScreen = ColorEntry(name: "bandScreen", light: 0x000000, dark: 0x000000, lightContrast: 0x000000, darkContrast: 0x000000)
-        static let bandScreenText = ColorEntry(name: "bandScreenText", light: 0xF4F4F4, dark: 0xF4F4F4, lightContrast: 0xF4F4F4, darkContrast: 0xF4F4F4)
-        static let bandScreenDim = ColorEntry(name: "bandScreenDim", light: 0x8E9198, dark: 0x8E9198, lightContrast: 0x8E9198, darkContrast: 0x8E9198)
+        static let bandScreenText = ColorEntry(name: "bandScreenText", light: 0xF5F4EF, dark: 0xF5F4EF, lightContrast: 0xF5F4EF, darkContrast: 0xF5F4EF)
+        static let bandScreenDim = ColorEntry(name: "bandScreenDim", light: 0x8E9089, dark: 0x8E9089, lightContrast: 0x8E9089, darkContrast: 0x8E9089)
 
         static let all: [ColorEntry] = [
             canvas,
@@ -79,6 +83,7 @@ enum FBTokenTable {
             textTertiary,
             action,
             actionPressed,
+            actionSoft,
             onAction,
             destructive,
             good,
@@ -112,7 +117,7 @@ enum FBTokenTable {
         static let m: CGFloat = 24
         static let l: CGFloat = 32
         static let xl: CGFloat = 48
-        static let gutter: CGFloat = 16
+        static let gutter: CGFloat = 20
         static let cardPadding: CGFloat = 16
         static let section: CGFloat = 32
 
@@ -130,14 +135,16 @@ enum FBTokenTable {
     }
 
     enum Radius {
-        static let chart: CGFloat = 0
-        static let control: CGFloat = 4
-        static let card: CGFloat = 12
+        static let chart: CGFloat = 3
+        static let control: CGFloat = 14
+        static let card: CGFloat = 20
+        static let pill: CGFloat = 999
 
         static let all: [(name: String, value: CGFloat)] = [
             ("chart", chart),
             ("control", control),
             ("card", card),
+            ("pill", pill),
         ]
     }
 
@@ -145,14 +152,15 @@ enum FBTokenTable {
         static let hairline: CGFloat = 1
         static let track: CGFloat = 1
         static let notch: CGFloat = 2
-        static let arcHome: CGFloat = 3
-        static let arcDetail: CGFloat = 4
+        static let arcHome: CGFloat = 6
+        static let arcDetail: CGFloat = 10
         static let chartLine: CGFloat = 2
         static let sparkline: CGFloat = 1.5
         static let sliderTrack: CGFloat = 2
-        static let contributorBar: CGFloat = 4
-        static let zoneBar: CGFloat = 8
+        static let contributorBar: CGFloat = 6
+        static let zoneBar: CGFloat = 10
         static let gap: CGFloat = 2
+        static let route: CGFloat = 5
 
         static let all: [(name: String, value: CGFloat)] = [
             ("hairline", hairline),
@@ -166,19 +174,20 @@ enum FBTokenTable {
             ("contributorBar", contributorBar),
             ("zoneBar", zoneBar),
             ("gap", gap),
+            ("route", route),
         ]
     }
 
     enum Size {
         static let minTarget: CGFloat = 44
-        static let button: CGFloat = 44
-        static let hubButton: CGFloat = 40
-        static let row: CGFloat = 52
-        static let segment: CGFloat = 36
+        static let button: CGFloat = 52
+        static let hubButton: CGFloat = 44
+        static let row: CGFloat = 56
+        static let segment: CGFloat = 38
         static let quickAction: CGFloat = 56
         static let quickActionColumn: CGFloat = 76
         static let quickActionIcon: CGFloat = 22
-        static let closeButton: CGFloat = 30
+        static let closeButton: CGFloat = 32
         static let contextCard: CGFloat = 56
         static let sliderThumb: CGFloat = 24
         static let scoreArcHome: CGFloat = 104
@@ -190,6 +199,7 @@ enum FBTokenTable {
         static let rowIcon: CGFloat = 20
         static let emptyIcon: CGFloat = 24
         static let statusGlyph: CGFloat = 8
+        static let shareCard: CGFloat = 1080
 
         static let all: [(name: String, value: CGFloat)] = [
             ("minTarget", minTarget),
@@ -212,32 +222,39 @@ enum FBTokenTable {
             ("rowIcon", rowIcon),
             ("emptyIcon", emptyIcon),
             ("statusGlyph", statusGlyph),
+            ("shareCard", shareCard),
         ]
     }
 
     enum TypeScale {
-        static let figureXL = TypeEntry(name: "figureXL", size: 56, lineHeight: 56, weight: 500, relativeTo: .largeTitle, isFigure: true)
-        static let figureL = TypeEntry(name: "figureL", size: 40, lineHeight: 44, weight: 500, relativeTo: .largeTitle, isFigure: true)
-        static let title = TypeEntry(name: "title", size: 28, lineHeight: 34, weight: 500, relativeTo: .title, isFigure: false)
-        static let figureM = TypeEntry(name: "figureM", size: 28, lineHeight: 32, weight: 500, relativeTo: .title2, isFigure: true)
-        static let headline = TypeEntry(name: "headline", size: 17, lineHeight: 22, weight: 500, relativeTo: .headline, isFigure: false)
-        static let body = TypeEntry(name: "body", size: 16, lineHeight: 23, weight: 400, relativeTo: .body, isFigure: false)
-        static let button = TypeEntry(name: "button", size: 15, lineHeight: 20, weight: 500, relativeTo: .body, isFigure: false)
-        static let figureS = TypeEntry(name: "figureS", size: 16, lineHeight: 20, weight: 500, relativeTo: .body, isFigure: true)
-        static let subhead = TypeEntry(name: "subhead", size: 14, lineHeight: 20, weight: 400, relativeTo: .subheadline, isFigure: false)
-        static let caption = TypeEntry(name: "caption", size: 12, lineHeight: 16, weight: 400, relativeTo: .caption, isFigure: false)
+        static let figureXL = TypeEntry(name: "figureXL", size: 56, lineHeight: 58, weight: 600, relativeTo: .largeTitle, isFigure: true, isMono: false)
+        static let figureL = TypeEntry(name: "figureL", size: 40, lineHeight: 44, weight: 600, relativeTo: .largeTitle, isFigure: true, isMono: false)
+        static let title = TypeEntry(name: "title", size: 28, lineHeight: 34, weight: 600, relativeTo: .title, isFigure: false, isMono: false)
+        static let figureM = TypeEntry(name: "figureM", size: 28, lineHeight: 32, weight: 600, relativeTo: .title2, isFigure: true, isMono: false)
+        static let headline = TypeEntry(name: "headline", size: 17, lineHeight: 22, weight: 500, relativeTo: .headline, isFigure: false, isMono: false)
+        static let body = TypeEntry(name: "body", size: 16, lineHeight: 24, weight: 400, relativeTo: .body, isFigure: false, isMono: false)
+        static let button = TypeEntry(name: "button", size: 16, lineHeight: 20, weight: 500, relativeTo: .body, isFigure: false, isMono: false)
+        static let figureS = TypeEntry(name: "figureS", size: 16, lineHeight: 20, weight: 500, relativeTo: .body, isFigure: true, isMono: false)
+        static let subhead = TypeEntry(name: "subhead", size: 14, lineHeight: 20, weight: 400, relativeTo: .subheadline, isFigure: false, isMono: false)
+        static let caption = TypeEntry(name: "caption", size: 12, lineHeight: 16, weight: 400, relativeTo: .caption, isFigure: false, isMono: false)
+        static let timer = TypeEntry(name: "timer", size: 56, lineHeight: 58, weight: 400, relativeTo: .largeTitle, isFigure: true, isMono: true)
+        static let monoM = TypeEntry(name: "monoM", size: 17, lineHeight: 22, weight: 400, relativeTo: .body, isFigure: true, isMono: true)
+        static let monoS = TypeEntry(name: "monoS", size: 12, lineHeight: 16, weight: 400, relativeTo: .caption, isFigure: true, isMono: true)
     }
 
     enum FontName {
-        static let family = "Open Sauce Sans"
-        static let regular = "OpenSauceSans-Regular"
-        static let medium = "OpenSauceSans-Medium"
-        static let semibold = "OpenSauceSans-SemiBold"
+        static let family = "Plus Jakarta Sans"
+        static let regular = "PlusJakartaSans-Regular"
+        static let medium = "PlusJakartaSans-Medium"
+        static let semibold = "PlusJakartaSans-SemiBold"
+        static let monoFamily = "IBM Plex Mono"
+        static let mono = "IBMPlexMono-Regular"
     }
 
     enum Motion {
-        static let standard = MotionEntry(c0x: 0.5, c0y: 0, c1x: 0, c1y: 0.75, duration: 0.33)
-        static let arcReveal = MotionEntry(c0x: 0.5, c0y: 0, c1x: 0, c1y: 0.75, duration: 0.66)
+        static let standard = MotionEntry(c0x: 0.33, c0y: 0, c1x: 0, c1y: 1, duration: 0.32)
+        static let arcReveal = MotionEntry(c0x: 0.33, c0y: 0, c1x: 0, c1y: 1, duration: 0.7)
+        static let enter = MotionEntry(c0x: 0.2, c0y: 0, c1x: 0, c1y: 1, duration: 0.5)
     }
 
     enum Bands {

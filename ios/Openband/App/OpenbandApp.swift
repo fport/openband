@@ -25,6 +25,7 @@ struct OpenbandApp: App {
             .environmentObject(session)
             .environmentObject(session.model)
             .environmentObject(session.model.link)
+            .environmentObject(session.recorder)
             .modelContainer(session.container)
             .id(session.generation)
     }
@@ -37,6 +38,7 @@ struct RootView: View {
     @EnvironmentObject private var model: AppModel
     @EnvironmentObject private var link: BandLink
     @EnvironmentObject private var session: AppSession
+    @EnvironmentObject private var recorder: WorkoutRecorder
     @StateObject private var router = AppRouter()
     @Environment(\.scenePhase) private var scenePhase
     @Query(sort: \Band.addedAt) private var bands: [Band]
@@ -53,15 +55,15 @@ struct RootView: View {
                         TodayView()
                             .tabItem { Label("Today", systemImage: "circle.dashed") }
                             .tag(AppTab.today)
+                        WorkoutsView()
+                            .tabItem { Label("Move", systemImage: "figure.run") }
+                            .tag(AppTab.move)
                         SleepView()
                             .tabItem { Label("Sleep", systemImage: "moon") }
                             .tag(AppTab.sleep)
-                        TrendsView()
-                            .tabItem { Label("Trends", systemImage: "chart.xyaxis.line") }
-                            .tag(AppTab.trends)
-                        RobotView()
-                            .tabItem { Label("Robot", systemImage: "hand.raised") }
-                            .tag(AppTab.robot)
+                        CoachView()
+                            .tabItem { Label("Coach", systemImage: "sparkles") }
+                            .tag(AppTab.coach)
                         BandView()
                             .tabItem { Label("Band", systemImage: "rectangle.portrait") }
                             .tag(AppTab.band)
@@ -74,6 +76,9 @@ struct RootView: View {
                 .sheet(isPresented: $router.addingBand) {
                     AddBandSheet { _ in router.addingBand = false }
                 }
+                .fullScreenCover(isPresented: $router.showsLiveWorkout) {
+                    LiveWorkoutView()
+                }
             } else {
                 OnboardingView()
             }
@@ -84,7 +89,7 @@ struct RootView: View {
         .onOpenURL { model.handle($0) }
         .onChange(of: scenePhase) { _, phase in
             // Live mode keeps the band measuring; never leave it running in the background.
-            if phase == .background { model.stop() }
+            if phase == .background, !recorder.isRunning { model.stop() }
             if phase == .active { autoSync() }
         }
         .onChange(of: link.bluetooth) { _, state in
@@ -122,9 +127,11 @@ struct RootView: View {
         switch screen {
         case .today: router.tab = .today
         case .sleep: router.tab = .sleep
-        case .trends: router.tab = .trends
+        case .trends: router.tab = .today; router.todayPath = [.trends]
         case .band: router.tab = .band
-        case .robot: router.tab = .robot
+        case .robot: router.tab = .band; router.bandPath = [.robot]
+        case .move: router.tab = .move
+        case .coach: router.tab = .coach
         case .scoreRecovery: router.tab = .today; router.todayPath = [.score(.recovery, day: today)]
         case .scoreSleep: router.tab = .today; router.todayPath = [.score(.sleep, day: today)]
         case .scoreStrain: router.tab = .today; router.todayPath = [.score(.strain, day: today)]
@@ -138,7 +145,7 @@ struct RootView: View {
 
 /// DEBUG `-openband-screen <name>` jumps to a screen for screenshots.
 enum DebugScreen: String {
-    case today, sleep, trends, robot, band, settings, onboarding, live
+    case today, move, sleep, coach, trends, robot, band, settings, onboarding, live
     case scoreRecovery = "score-recovery"
     case scoreSleep = "score-sleep"
     case scoreStrain = "score-strain"

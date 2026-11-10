@@ -73,7 +73,11 @@ banttan hiçbir şey silme.
 | Banttaki dokunuşlar ("Telefonumu bul", müzik tuşları) olay ve komut olarak (`listen --exec`) | hazır; "Telefonumu bul" gerçek bantta çalışıyor |
 | Claude Code hook'ları: Claude seni beklerken ya da işi bitince bant titrer | hazır (`scripts/claude_hook.py`) |
 | iPhone uygulaması (Freeband'in ekranları ve skorları, Huawei protokolüyle) | simülatörde derlenip çalışıyor; henüz telefonda denenmedi |
-| Alarmlar, ayarlar, antrenmanlar | henüz yok |
+| Telefonda antrenman: koşu, bisiklet, yüzme, yürüyüş ve yedi tane daha, GPS rotasıyla | uygulamada hazır; rota iPhone'dan geliyor, çünkü Band 6'da GPS yok |
+| Paylaşım kartı: rotanın şekli, üç rakam, kare ya da story, çıkartma için şeffaf zemin | uygulamada hazır |
+| Apple Health iki yönlü, antrenmanlar ve rotaları dahil | uygulamada hazır; notlar `ios/Openband/Integrations/AppleHealth.swift` içinde |
+| Coach: yemek fotoğrafı ya da vücut analizi, kendi API anahtarınla | uygulamada hazır; anahtar telefonun keychain'inde kalıyor |
+| Alarmlar, bant ayarları, bandın kendi kaydettiği antrenmanlar | henüz yok |
 
 "Hazır" olan her satır testlerle kapsanıyor. Şimdiye kadar gerçek bir Band 6'da denenenler: normal
 modda eşleştirme, yeniden bağlanma, pil, yazılım sürümü, bugünkü toplamlar, saati ayarlama.
@@ -115,12 +119,47 @@ Xcode'da Signing & Capabilities altında Apple ID'ni seç (ücretsiz hesap yeter
 çalışır, sonra Xcode'dan yeniden kurulur), iPhone'u bağla ve çalıştır. Mac'teki eşleştirmeyi
 korumak için eşleştirirken "Use my Mac's key"i seç ve `openband key` çıktısını yapıştır.
 
+Beş sekme. **Today** günün özeti ve üç skor. **Move** antrenman kaydeder — koşu, bisiklet, yüzme,
+yürüyüş, menüde yedi tane daha — rotayı telefonun GPS'iyle takip eder ve biten antrenmanı
+paylaşılacak bir karta dönüştürür: gittiğin yolun şekli, üç rakam, kare ya da story, istersen
+kendi fotoğrafının üstüne yapıştırabileceğin şeffaf zeminli hâli. **Sleep** gece. **Coach** yemek
+fotoğrafını ya da vücut analizini okur. **Band** cihaz ve ayarlar.
+
+Antrenmanlar Apple Health'e rotasıyla birlikte gerçek `HKWorkout` olarak gider; halkalara sayılır
+ve Fitness'ta görünür. Bandın ölçtükleri de gider — adım, nabız, kandaki oksijen, uyku — telefona
+değil banda atfedilerek ve kayıt başına bir eşitleme kimliğiyle, böylece tekrar eşitlemek
+çoğaltmak yerine yerine koyar.
+
+### Coach ve kendi API anahtarın
+
+Coach, Openband'in bir sunucuyla konuştuğu tek yer — ve o sunucu Openband'in değil. Anthropic ya
+da OpenAI anahtarını yapıştırıyorsun; anahtar bu telefonun keychain'inde duruyor, `UserDefaults`'ta
+değil, iCloud'da değil, yedekte değil. Yemek fotoğrafı ya da vücut analizi telefondan doğrudan
+seçtiğin sağlayıcıya, senin hesabınla gidiyor ve cevap doğrudan geri geliyor. Openband'in yapay
+zekâ hesabı yok, ne fotoğrafı ne anahtarı görüyor; uygulama fotoğraftan konum ve kamera bilgisini
+gitmeden önce siliyor.
+
+Gelen şey bir tahmin ve öyle de etiketleniyor: kalori tek bir sayı değil bir aralık olarak
+geliyor, vücut yağı birkaç puanlık bir bant olarak veriliyor ve Coach'tan çıkan hiçbir şey Apple
+Health'e yazılmıyor. Tıbbi tavsiye değil; ekranlar bunu söylüyor.
+
+### Tasarım
+
+[docs/DESIGN.md](docs/DESIGN.md) tasarım dilini anlatıyor (İngilizce): tek vurgu rengi, sıcak nötr
+zemin, Plus Jakarta Sans ve okumalar için IBM Plex Mono, tek kap ve tek hareket eğrisi. Kaynak
+Swift değil, token'lar:
+
+```bash
+python3 -I scripts/gen_tokens.py   # design/tokens.json -> Tokens.generated.swift
+```
+
 ## Daha fazlası
 
 - [docs/PROTOCOL.md](docs/PROTOCOL.md): çerçeveler, TLV, el sıkışma, veri komutları (İngilizce).
 - `uv run pytest`: Gadgetbridge çapraz kontrolü dahil test paketi.
 - `cd ios/tests/protocol && swiftc ../../Openband/Band/Huawei/*.swift FakeBand.swift main.swift -o /tmp/hw && /tmp/hw`:
-  Swift tarafı için aynı kontroller.
+  Swift tarafı için aynı kontroller. `ios/tests/analytics` skorları, `ios/tests/workouts` rota
+  geometrisini, split'leri ve tempoyu kontrol ediyor.
 - `uv run openband -vv <komut>`: hata bildirimleri için hattaki her bayt.
 
 ## Lisans

@@ -7,13 +7,23 @@ enum BandFeatures {
     static let controls = false
 }
 
+/// Five tabs, which is the most a tab bar can hold without a "More" drawer: the day, training,
+/// the night, the coach and the band. Trends hang off Today and the robot arm off Band — both
+/// are destinations, not places you live in.
 enum AppTab: String, Hashable, CaseIterable {
-    case today, sleep, trends, robot, band
+    case today, move, sleep, coach, band
 }
 
 /// Every pushed screen. Days travel as `DayKey.index` so routes stay plain values.
 enum Route: Hashable {
     case score(ScoreKind, day: Int)
+    case workout(UUID)
+    case workoutHistory
+    case bodyScan(UUID)
+    case mealHistory
+    case aiKey
+    case trends
+    case robot
     case scoreMethod(ScoreKind, day: Int)
     case trend(TrendMetric, day: Int)
     case night(day: Int)
@@ -34,9 +44,12 @@ enum Route: Hashable {
 final class AppRouter: ObservableObject {
     @Published var tab: AppTab = .today
     @Published var todayPath: [Route] = []
+    @Published var movePath: [Route] = []
     @Published var sleepPath: [Route] = []
-    @Published var trendsPath: [Route] = []
+    @Published var coachPath: [Route] = []
     @Published var bandPath: [Route] = []
+    /// The live workout screen, which covers everything while it is up.
+    @Published var showsLiveWorkout = false
     @Published var showsLive = false
     @Published var addingBand = false
     /// When the running live session ends (BandLink stops live after `liveLimit`).
@@ -49,10 +62,10 @@ final class AppRouter: ObservableObject {
     func path(_ tab: AppTab) -> Binding<[Route]> {
         switch tab {
         case .today: Binding(get: { self.todayPath }, set: { self.todayPath = $0 })
+        case .move: Binding(get: { self.movePath }, set: { self.movePath = $0 })
         case .sleep: Binding(get: { self.sleepPath }, set: { self.sleepPath = $0 })
-        case .trends: Binding(get: { self.trendsPath }, set: { self.trendsPath = $0 })
+        case .coach: Binding(get: { self.coachPath }, set: { self.coachPath = $0 })
         case .band: Binding(get: { self.bandPath }, set: { self.bandPath = $0 })
-        case .robot: Binding(get: { [] }, set: { _ in })
         }
     }
 
@@ -120,6 +133,13 @@ private struct RouteView: View {
         case .diagnostics: DiagnosticsView()
         case .about: AboutView()
         case .aboutBand(let id): AboutBandView(bandID: id)
+        case .workout(let id): WorkoutDetailView(workoutID: id)
+        case .workoutHistory: WorkoutHistoryView()
+        case .bodyScan(let id): BodyScanDetailView(scanID: id)
+        case .mealHistory: MealHistoryView()
+        case .aiKey: AIKeyView()
+        case .trends: TrendsView()
+        case .robot: RobotView()
         default:
             SelectedBand { band in
                 if let band {

@@ -55,7 +55,9 @@ struct SettingsView: View {
                              value: AppleHealth.shared.writeEnabled || AppleHealth.shared.readEnabled ? String(localized: "On") : String(localized: "Off"),
                              icon: "heart.text.square")
                         link(.webhooks, String(localized: "Webhooks"), value: webhookSummary, icon: "arrow.up.forward.app")
-                        link(.shortcuts, String(localized: "Shortcuts & Siri"), icon: "square.2.layers.3d", last: true)
+                        link(.shortcuts, String(localized: "Shortcuts & Siri"), icon: "square.2.layers.3d")
+                        link(.aiKey, String(localized: "AI key"), value: AIClient.shared.hasKey ? String(localized: "Set") : String(localized: "Not set"), icon: "key")
+                        link(.robot, String(localized: "Robot arm"), icon: "hand.raised", last: true)
                     }
                 }
 

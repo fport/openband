@@ -1,9 +1,11 @@
 import SwiftUI
 import UIKit
 
-/// The v3 type scale: Open Sauce Sans in two weights (400, 500), sentence case, tracking 0.
-/// Sizes scale with Dynamic Type relative to a system text style; line height comes from
-/// `.lineSpacing`; figures use tabular digits. Bold Text maps 400 → 500 and 500 → 600.
+/// The v4 type scale (docs/DESIGN.md). Two faces: Plus Jakarta Sans in three weights (400, 500,
+/// 600) carries the interface, and IBM Plex Mono carries technical readouts — the workout clock,
+/// pace, splits. Sentence case, tracking 0. Sizes scale with Dynamic Type relative to a system
+/// text style; line height comes from `.lineSpacing`; figures use tabular digits. Bold Text steps
+/// each weight up once.
 enum FBTextStyle: String, CaseIterable, Identifiable, Sendable {
     /// 56/56 · 500 · detail arc, live HR
     case figureXL
@@ -25,6 +27,12 @@ enum FBTextStyle: String, CaseIterable, Identifiable, Sendable {
     case subhead
     /// 12/16 · 400 · axes, units, quick-action labels
     case caption
+    /// 56/58 · mono · the running workout clock
+    case timer
+    /// 17/22 · mono · split and lap values, share-card figures
+    case monoM
+    /// 12/16 · mono · technical captions: dates, coordinates, the share-card footer
+    case monoS
 
     var id: String { rawValue }
 
@@ -41,6 +49,9 @@ enum FBTextStyle: String, CaseIterable, Identifiable, Sendable {
         case .figureS: return T.figureS
         case .subhead: return T.subhead
         case .caption: return T.caption
+        case .timer: return T.timer
+        case .monoM: return T.monoM
+        case .monoS: return T.monoS
         }
     }
 
@@ -48,15 +59,17 @@ enum FBTextStyle: String, CaseIterable, Identifiable, Sendable {
     var lineHeight: CGFloat { token.lineHeight }
     var weight: Int { token.weight }
     var isFigure: Bool { token.isFigure }
+    var isMono: Bool { token.isMono }
     var relativeTo: Font.TextStyle { token.relativeTo }
 
-    /// PostScript name for this style's weight; `bold` is the Bold Text accessibility setting.
+    /// PostScript name for this style's weight; `bold` is the Bold Text accessibility setting,
+    /// which steps the weight up once. The mono face ships in one weight, so it ignores both.
     func fontName(bold: Bool = false) -> String {
-        switch (weight >= 500, bold) {
-        case (false, false): return FBTokenTable.FontName.regular
-        case (false, true): return FBTokenTable.FontName.medium
-        case (true, false): return FBTokenTable.FontName.medium
-        case (true, true): return FBTokenTable.FontName.semibold
+        if isMono { return FBTokenTable.FontName.mono }
+        switch min(600, weight + (bold ? 100 : 0)) {
+        case ...400: return FBTokenTable.FontName.regular
+        case 500: return FBTokenTable.FontName.medium
+        default: return FBTokenTable.FontName.semibold
         }
     }
 
@@ -90,7 +103,10 @@ enum FBTextStyle: String, CaseIterable, Identifiable, Sendable {
 
     /// A UIKit font scaled for the given traits (navigation bars, attributed strings).
     func uiFont(bold: Bool = false, compatibleWith traits: UITraitCollection? = nil) -> UIFont {
-        let base = UIFont(name: fontName(bold: bold), size: size) ?? .systemFont(ofSize: size, weight: weight >= 500 ? .medium : .regular)
+        let fallback: UIFont = isMono
+            ? .monospacedSystemFont(ofSize: size, weight: .regular)
+            : .systemFont(ofSize: size, weight: weight >= 600 ? .semibold : (weight >= 500 ? .medium : .regular))
+        let base = UIFont(name: fontName(bold: bold), size: size) ?? fallback
         return UIFontMetrics(forTextStyle: uiTextStyle).scaledFont(for: base, compatibleWith: traits)
     }
 

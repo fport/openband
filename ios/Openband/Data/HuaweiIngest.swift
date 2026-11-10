@@ -72,7 +72,9 @@ enum HuaweiIngest {
             return part
         }
         for extra in rows.dropFirst() { context.delete(extra) }
-        var series = row.series
+        // The band's own minutes only: merging the phone-filled column in here would write it back
+        // into `steps`, where the next file rebuild wipes it.
+        var series = row.fileSeries
         let new = part.series
         for i in 0 ..< MinuteSeries.slots {
             if let v = new.steps[i] { series.steps[i] = v }
@@ -83,6 +85,7 @@ enum HuaweiIngest {
         }
         let merged = MinuteDayDraft(series: series, sourceFileIDs: [source])
         row.update(from: merged)
+        if row.phoneSteps != nil { row.sourceFileIDs.append(MinuteDay.phoneSource) }
         return merged
     }
 

@@ -299,6 +299,15 @@ private struct TodayContent: View {
             .padding(.horizontal, FBSpace.s)
             .fbCardBackground()
             Footnote(String(localized: "Compared with your 7-day average."))
+            NavigationLink(value: Route.trends) {
+                HStack(spacing: FBSpace.xxs) {
+                    Text("Trends")
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .semibold))
+                        .accessibilityHidden(true)
+                }
+            }
+            .buttonStyle(.fbTertiary)
         }
     }
 }

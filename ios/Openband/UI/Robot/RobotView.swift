@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// The Robot tab: so101-remote's ESP32 screen on the phone. Live joint angles, jog a joint, play a
+/// The robot arm, pushed from Band: so101-remote's ESP32 screen on the phone. Live joint angles, jog a joint, play a
 /// gesture, step the band's sequence, and STOP on top of it all. The Mac runs
 /// `so101-band run --phone` and drives the arm; this only sends what the screen would.
 struct RobotView: View {
@@ -11,30 +11,28 @@ struct RobotView: View {
     private static let gestures = ["wave", "dance", "yes", "no", "ready", "rest"]
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: FBSpace.l) {
-                    header
-                    switch robot.link {
-                    case .searching:
-                        searching
-                    case .needsCode:
-                        codeEntry
-                    case .failed(let message):
-                        failed(message)
-                    case .found, .connected:
-                        controls
-                    }
+        ScrollView {
+            VStack(alignment: .leading, spacing: FBSpace.l) {
+                header
+                switch robot.link {
+                case .searching:
+                    searching
+                case .needsCode:
+                    codeEntry
+                case .failed(let message):
+                    failed(message)
+                case .found, .connected:
+                    controls
                 }
-                .padding(.horizontal, FBSpace.gutter)
-                .padding(.bottom, 120)
             }
-            .fbScreen()
-            .navigationTitle(String(localized: "Robot"))
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                if robot.link == .connected {
-                    stopBar
-                }
+            .padding(.horizontal, FBSpace.gutter)
+            .padding(.bottom, 120)
+        }
+        .fbScreen()
+        .navigationTitle(String(localized: "Robot"))
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if robot.link == .connected {
+                stopBar
             }
         }
         .onAppear { robot.start() }

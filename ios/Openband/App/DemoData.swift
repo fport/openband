@@ -54,6 +54,7 @@ enum DemoData {
             band.lastSyncAt = now.addingTimeInterval(-90)
             try? context.save()
             DailyRollup.recompute(context: context, bandID: band.id, from: DayKey.current(now).adding(days: -29), now: now)
+            DemoWorkouts.seed(context, bandID: band.id, now: now)
         }
     }
 

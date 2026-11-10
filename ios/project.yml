@@ -25,15 +25,18 @@ targets:
       path: Openband/Info.plist
       properties:
         CFBundleDisplayName: Openband
-        UIAppFonts: [OpenSauceSans-Regular.otf, OpenSauceSans-Medium.otf, OpenSauceSans-SemiBold.otf]
+        UIAppFonts: [PlusJakartaSans-Regular.ttf, PlusJakartaSans-Medium.ttf, PlusJakartaSans-SemiBold.ttf, IBMPlexMono-Regular.ttf]
         CFBundleDevelopmentRegion: en
         CFBundleLocalizations: [en, tr]
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         NSBluetoothAlwaysUsageDescription: Openband uses Bluetooth to talk directly to the band on your wrist.
+        NSCameraUsageDescription: Openband uses the camera for meal and body check-in photos. They go to the AI provider you chose, with your own key, and nowhere else.
+        NSLocationWhenInUseUsageDescription: Openband follows your route while you train, so a run, ride or walk gets its distance, pace and map. The route stays on your phone.
+        UIBackgroundModes: [location]
         NSLocalNetworkUsageDescription: Openband talks to so101-band on your Mac over the local network to drive the robot arm.
         NSBonjourServices: [_so101band._tcp]
-        NSHealthShareUsageDescription: Openband reads the steps your iPhone counted to fill the minutes your band has nothing for.
+        NSHealthShareUsageDescription: Openband reads the steps your iPhone counted to fill the minutes your band has nothing for. This data stays on your iPhone and is never sent to an AI provider or anywhere else.
         NSHealthUpdateUsageDescription: Openband saves what your band measured (steps, heart rate, blood oxygen, sleep) to Apple Health.
         ITSAppUsesNonExemptEncryption: false
         LSApplicationCategoryType: public.app-category.healthcare-fitness
