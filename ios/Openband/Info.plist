@@ -46,6 +46,8 @@
 	<array>
 		<string>_so101band._tcp</string>
 	</array>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Openband saves the card it makes from your workout to Photos, so you can post it. It never reads your library.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Openband uses the camera for meal and body check-in photos. They go to the AI provider you chose, with your own key, and nowhere else.</string>
 	<key>NSHealthShareUsageDescription</key>

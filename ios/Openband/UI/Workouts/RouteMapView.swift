@@ -9,6 +9,9 @@ import SwiftUI
 struct RouteMapView: View {
     let points: [RoutePoint]
     var interactive = false
+    /// While a workout is running the camera follows the runner and the blue dot is shown,
+    /// because the interesting part of the map is where you are, not where you have been.
+    var live = false
 
     @State private var camera: MapCameraPosition = .automatic
 
@@ -29,14 +32,21 @@ struct RouteMapView: View {
             if let first = coordinates.first {
                 Annotation("", coordinate: first) { endDot(filled: false) }
             }
-            if let last = coordinates.last, coordinates.count > 1 {
+            if let last = coordinates.last, coordinates.count > 1, !live {
                 Annotation("", coordinate: last) { endDot(filled: true) }
             }
+            if live { UserAnnotation() }
         }
         .mapStyle(.standard(elevation: .flat, emphasis: .muted, pointsOfInterest: .excludingAll, showsTraffic: false))
         .mapControlVisibility(.hidden)
-        .onAppear { camera = .rect(Self.fitted(coordinates)) }
+        .onAppear { frame() }
+        .onChange(of: points.count) { _, _ in if !live { frame() } }
         .accessibilityLabel(Text("Route map"))
+    }
+
+    private func frame() {
+        camera = live ? .userLocation(followsHeading: false, fallback: .automatic)
+                      : .rect(Self.fitted(coordinates))
     }
 
     private func endDot(filled: Bool) -> some View {

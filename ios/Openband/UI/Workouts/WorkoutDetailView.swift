@@ -1,3 +1,4 @@
+import Photos
 import SwiftData
 import SwiftUI
 
@@ -13,6 +14,7 @@ struct WorkoutDetailView: View {
     @State private var rendering = false
     @State private var transparent = false
     @State private var shape = ShareCard.Shape.square
+    @State private var saveNote: String?
 
     init(workoutID: UUID) {
         self.workoutID = workoutID
@@ -152,10 +154,22 @@ struct WorkoutDetailView: View {
                     Text("Share the card")
                 }
                 .buttonStyle(.fbPrimary)
+                // Instagram's share sheet refuses an image handed to it directly and says to
+                // open it in Instagram instead. Saving to Photos is the route that works, for
+                // Instagram and for every other app that only takes a picture from the library.
+                Button(String(localized: "Save to Photos")) { save(card.image) }
+                    .buttonStyle(.fbSecondary(fullWidth: true))
                 Button(String(localized: "Copy the image")) {
                     UIPasteboard.general.image = card.image
+                    saveNote = String(localized: "Copied. Paste it wherever you like.")
                 }
-                .buttonStyle(.fbSecondary(fullWidth: true))
+                .buttonStyle(.fbTertiary(fullWidth: true))
+                if let saveNote {
+                    Text(saveNote)
+                        .textStyle(.subhead)
+                        .foregroundStyle(.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
             Footnote(String(localized: "A clear background makes a sticker you can drop onto your own photo in Instagram or wherever else."))
             FBDestructiveButton(title: String(localized: "Delete workout"),
@@ -185,6 +199,29 @@ struct WorkoutDetailView: View {
         .frame(height: shape == .square ? 260 : 380)
         .clipShape(RoundedRectangle(cornerRadius: FBRadius.card, style: .continuous))
         .accessibilityLabel(Text("Share card preview"))
+    }
+
+    /// Writes the card to the photo library with add-only access, which is all this needs:
+    /// Openband never reads the library.
+    private func save(_ image: UIImage) {
+        saveNote = nil
+        PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+            guard status == .authorized || status == .limited else {
+                Task { @MainActor in
+                    saveNote = String(localized: "Openband can't add to Photos. Turn it on in Settings › Openband › Photos.")
+                }
+                return
+            }
+            PHPhotoLibrary.shared().performChanges {
+                PHAssetCreationRequest.forAsset().addResource(with: .photo, data: image.pngData() ?? Data(), options: nil)
+            } completionHandler: { done, error in
+                Task { @MainActor in
+                    saveNote = done
+                        ? String(localized: "Saved to Photos. Post it from Instagram, or wherever you like.")
+                        : (error?.localizedDescription ?? String(localized: "Couldn't save it."))
+                }
+            }
+        }
     }
 
     private func make(_ workout: Workout) {
