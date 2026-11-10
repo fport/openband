@@ -67,7 +67,7 @@ final class RouteRecorder: NSObject, ObservableObject {
         if authorization == .notDetermined {
             manager.requestWhenInUseAuthorization()
         } else if !isAuthorized {
-            problem = String(localized: "Openband can't see your location. Turn it on in Settings to map a workout.")
+            problem = String(localized: "Openband can't see your location. Check Location Services, and Openband's own location permission, in Settings.")
         }
     }
 
@@ -84,10 +84,11 @@ final class RouteRecorder: NSObject, ObservableObject {
         startedAt = date
         wantsUpdates = true
         problem = nil
-        guard CLLocationManager.locationServicesEnabled() else {
-            problem = String(localized: "Location services are off, so this workout has no map.")
-            return
-        }
+        // `CLLocationManager.locationServicesEnabled()` is deliberately not called here: it
+        // blocks, and Core Location warns that asking it on the main thread can freeze the UI.
+        // The authorization status says everything that can be known up front, and Location
+        // Services being switched off arrives the same way a refusal does — as kCLErrorDenied
+        // from the delegate, which `problem` already reports.
         guard isAuthorized else { requestAccess(); return }
         beginUpdates()
     }
@@ -146,7 +147,7 @@ extension RouteRecorder: CLLocationManagerDelegate {
         // A transient "unknown location" is normal indoors; only a denial is worth saying.
         guard (error as? CLError)?.code == .denied else { return }
         Task { @MainActor in
-            self.problem = String(localized: "Openband can't see your location. Turn it on in Settings to map a workout.")
+            self.problem = String(localized: "Openband can't see your location. Check Location Services, and Openband's own location permission, in Settings.")
         }
     }
 
