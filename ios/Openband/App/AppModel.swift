@@ -234,14 +234,26 @@ final class AppModel: ObservableObject {
     }
 
     /// iPhone steps into the minutes the band left empty (Settings › Apple Health), then scores.
-    func fillGapsFromHealth(bandID: UUID? = nil) async {
+    ///
+    /// The read is anchored: `stepChanges` asks Health what has moved since the last pass, so a
+    /// sync works through those minutes instead of the last 90 days over again, and a sample
+    /// deleted in Health stops filling its minute. `DailyRollup.maxDays` is only the bound now —
+    /// as far back as a day is kept at all. `full` ignores the anchor and asks for the whole
+    /// window, which is what "Fill gaps now" in Settings does.
+    func fillGapsFromHealth(bandID: UUID? = nil, full: Bool = false) async {
         guard !isDemo, AppleHealth.shared.readEnabled else { return }
         let ids = bandID.map { [$0] } ?? ((try? context.fetch(FetchDescriptor<Band>())) ?? []).map(\.id)
-        let from = Date().addingTimeInterval(-Double(DailyRollup.maxDays) * 86_400)
+        // Nothing to fill means nothing to anchor either: a pass with no band would move the
+        // anchor past minutes the first band added later would then never see.
+        guard !ids.isEmpty else { return }
+        let retention = Date().addingTimeInterval(-Double(DailyRollup.maxDays) * 86_400)
+        guard let pass = await AppleHealth.shared.stepChanges(retention: retention, full: full) else { return }
         for id in ids {
-            let days = await AppleHealth.shared.fillGaps(bandID: id, context: context, from: from)
+            let days = await AppleHealth.shared.fillGaps(bandID: id, context: context, pass: pass)
             if let first = days.min() { pendingRollup[id] = min(pendingRollup[id] ?? first, first) }
         }
+        // One anchor covers every band, so it moves only now that they all have their minutes.
+        AppleHealth.shared.commit(pass)
         runPendingRollups()
     }
 
@@ -266,6 +278,13 @@ final class AppModel: ObservableObject {
                 first.model = band.model
             }
             first.lastSyncAt = [first.lastSyncAt, band.lastSyncAt].compactMap { $0 }.max()
+            // The export mark goes back to the earlier of the two, and to nothing at all when one
+            // of them never exported: the merged band has to re-send whatever only one side sent.
+            if let a = first.lastExportedTo, let b = band.lastExportedTo {
+                first.lastExportedTo = min(a, b)
+            } else {
+                first.lastExportedTo = nil
+            }
             if first.lastBattery == nil { first.lastBattery = band.lastBattery }
             if UserDefaults.standard.string(forKey: "selectedBand") == from.uuidString {
                 UserDefaults.standard.set(first.id.uuidString, forKey: "selectedBand")

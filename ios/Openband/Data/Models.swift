@@ -11,6 +11,9 @@ final class Band {
     var mac: String?
     var addedAt: Date
     var lastSyncAt: Date?
+    /// How far `AppleHealth.export` has already sent this band's minutes. A default so the
+    /// existing store migrates lightweight; nil means nothing has gone to Health yet.
+    var lastExportedTo: Date? = nil
     var lastBattery: Int?
     var firmware: String?
     var hardwareModel: String?

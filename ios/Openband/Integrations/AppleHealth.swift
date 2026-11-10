@@ -233,7 +233,7 @@ final class AppleHealth: ObservableObject {
         }
         let device = device(for: band, fallbackName: bandName)
         let nights = exportNights(history, band: band, context: context)
-        let minutes = history.minutes
+        let minutes = Self.minutesToExport(history.minutes, exportedTo: band?.lastExportedTo, now: now)
         // Every revision needs a higher sync version than the copy Health holds, or the save is a
         // silent no-op (a corrected minute or a revised wake time would never land). The export's
         // own second is monotonic and needs nothing stored.
@@ -264,7 +264,39 @@ final class AppleHealth: ObservableObject {
                    needsHealthApp: Self.isPermissionProblem(failure))
         } else {
             report(String(localized: "Saved \(saved) records to Apple Health."))
+            advance(band, context: context, through: minutes)
         }
+    }
+
+    /// The minutes worth sending: everything past the band's export mark, and today over again.
+    ///
+    /// `export` used to send its whole window every sync — `lastSyncAt − 24 h`, a week on a first
+    /// sync — which was a harmless no-op while every sample carried version 1. Against a version
+    /// that grows with each pass it is a real rewrite of those minutes in Health instead, so the
+    /// mark is what keeps a sync to what is new. Today is the exception, and also the bound: the
+    /// band is still appending to today's files, so a minute sent an hour ago can still gain the
+    /// values the band had not written down yet, and the re-export is never wider than one day.
+    nonisolated private static func minutesToExport(_ minutes: [HuaweiMinuteSample], exportedTo: Date?,
+                                                    now: Date, timeZone: TimeZone = .current) -> [HuaweiMinuteSample] {
+        guard let exportedTo else { return minutes }
+        let offset = timeZone.secondsFromGMT(for: now) / 60
+        let midnight = DayKey(date: now, offsetMinutes: offset).start(offsetMinutes: offset)
+        let cutoff = min(exportedTo, midnight)
+        return minutes.filter { $0.timestamp >= cutoff }
+    }
+
+    /// Moves the band's export mark up to the last minute that went out.
+    ///
+    /// Only on a clean pass, and only as far as the data itself reached: a chunk that failed has to
+    /// go again next time, and the band is rarely caught up to `now`. Nights are deliberately not
+    /// part of the mark — `exportNights` reconciles them against the stored records, and a sleep
+    /// details file parsed days later genuinely revises an old night, so nights stay worth
+    /// re-sending. There are at most a handful of them per sync; the minutes are the thousands.
+    private func advance(_ band: Band?, context: ModelContext?, through minutes: [HuaweiMinuteSample]) {
+        guard let band, let reached = minutes.map({ $0.timestamp.addingTimeInterval(60) }).max(),
+              band.lastExportedTo.map({ reached > $0 }) ?? true else { return }
+        band.lastExportedTo = reached
+        try? context?.save()
     }
 
     /// The nights to export. The stored records win where ingest has them: `isPrimary` picks the
@@ -447,18 +479,140 @@ final class AppleHealth: ObservableObject {
         Date(timeIntervalSince1970: (date.timeIntervalSince1970 / 60).rounded(.down) * 60)
     }
 
+    // MARK: anchors
+
+    /// One anchored pass over Health's step samples: the stretch of time whose minutes have to be
+    /// worked out again, and the anchor that marks it done.
+    struct StepPass {
+        let from: Date
+        let to: Date
+        /// Whether minutes inside the window may be emptied as well as filled. Only a pass that
+        /// watched Health delete something clears; `changedSteps` says why.
+        let clears: Bool
+        let anchor: HKQueryAnchor?
+    }
+
+    /// What has changed in Health's step samples since the last pass, or nil when nothing has.
+    ///
+    /// `retention` bounds the work: it is as far back as the app keeps a day at all, and the first
+    /// pass — the one with no anchor yet — recomputes the whole of it. `full` ignores the stored
+    /// anchor, which is what Settings' "Fill gaps now" does, so a user who suspects the fill can
+    /// always ask for the window again.
+    ///
+    /// Returning nil stores the new anchor on the way out: there is nothing left that could fail.
+    func stepChanges(retention: Date, now: Date = Date(), full: Bool = false) async -> StepPass? {
+        guard readEnabled, store != nil, now > retention else { return nil }
+        let type = HKQuantityType(.stepCount)
+        let stored = full ? nil : anchor(for: type)
+        let delta = await changedSteps(since: stored, window: retention, now: now)
+        // A first or forced pass has no change list worth narrowing by, so it redoes the window. A
+        // pass that found deletions redoes it too, and is the only kind allowed to empty a minute.
+        if stored == nil || delta.deletions {
+            return StepPass(from: retention, to: now, clears: delta.deletions, anchor: delta.anchor)
+        }
+        let from = delta.first.map { max(retention, $0) }
+        let to = delta.last.map { min(now, $0) }
+        guard let from, let to, to > from else {
+            if let anchor = delta.anchor { setAnchor(anchor, for: type) }
+            return nil
+        }
+        return StepPass(from: from, to: to, clears: false, anchor: delta.anchor)
+    }
+
+    /// Stores the pass's anchor, once its days are written. Kept apart from `stepChanges` because
+    /// one anchor covers every band: it may only move after the last band's minutes are in, or the
+    /// second band would be told nothing had changed.
+    func commit(_ pass: StepPass) {
+        guard let anchor = pass.anchor else { return }
+        setAnchor(anchor, for: HKQuantityType(.stepCount))
+    }
+
+    private struct StepDelta {
+        var first: Date?
+        var last: Date?
+        var deletions = false
+        var anchor: HKQueryAnchor?
+    }
+
+    /// `HKAnchoredObjectQuery` over step counts: what was added and whether anything was deleted
+    /// since `anchor`, which is a cursor into Health's own sequence rather than a date, so each
+    /// pass sees only what arrived after the last one.
+    ///
+    /// The predicate is the retained window, not the whole store: without it a first pass has to
+    /// materialise every step sample this phone has ever recorded just to come away with an anchor.
+    /// Openband's own samples are dropped by source — `export` writes step counts too, and a pass
+    /// that recomputed the days it had itself just written would never settle.
+    ///
+    /// A deletion arrives as an `HKDeletedObject`: a uuid, and no date, value or source with it.
+    /// There is no way to learn which minute it used to fill, so `stepChanges` answers one by
+    /// recomputing the whole retained window from what Health reports now. A pass that saw nothing
+    /// never clears, because HealthKit makes a refused read look exactly like an empty one.
+    private func changedSteps(since anchor: HKQueryAnchor?, window: Date, now: Date) async -> StepDelta {
+        guard let store else { return StepDelta() }
+        let ours = HKSource.default().bundleIdentifier
+        let predicate = HKQuery.predicateForSamples(withStart: window, end: nil)
+        return await withCheckedContinuation { continuation in
+            let query = HKAnchoredObjectQuery(type: HKQuantityType(.stepCount), predicate: predicate,
+                                              anchor: anchor,
+                                              limit: HKObjectQueryNoLimit) { query, added, deleted, newAnchor, error in
+                store.stop(query)
+                if let error {
+                    Task { @MainActor in self.report(Self.message(for: error),
+                                                     needsHealthApp: Self.isPermissionProblem(error)) }
+                    continuation.resume(returning: StepDelta())
+                    return
+                }
+                var delta = StepDelta()
+                delta.anchor = newAnchor
+                delta.deletions = !(deleted ?? []).isEmpty
+                for sample in added ?? [] where sample.sourceRevision.source.bundleIdentifier != ours {
+                    delta.first = min(delta.first ?? sample.startDate, sample.startDate)
+                    delta.last = max(delta.last ?? sample.endDate, sample.endDate)
+                }
+                continuation.resume(returning: delta)
+            }
+            store.execute(query)
+        }
+    }
+
+    /// The anchor of the last anchored read of `type`, archived into UserDefaults.
+    ///
+    /// One key per type: an anchor is a position in Health's object sequence and says nothing about
+    /// another type. `HKQueryAnchor` is `NSSecureCoding`, so it archives with secure coding on, and
+    /// bytes that will not decode count as no anchor at all — one full pass, and no data lost.
+    private func anchor(for type: HKSampleType) -> HKQueryAnchor? {
+        guard let data = UserDefaults.standard.data(forKey: Self.anchorKey(type)) else { return nil }
+        return try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: data)
+    }
+
+    private func setAnchor(_ anchor: HKQueryAnchor, for type: HKSampleType) {
+        guard let data = try? NSKeyedArchiver.archivedData(withRootObject: anchor,
+                                                           requiringSecureCoding: true) else { return }
+        UserDefaults.standard.set(data, forKey: Self.anchorKey(type))
+    }
+
+    private static func anchorKey(_ type: HKSampleType) -> String { "health.anchor.\(type.identifier)" }
+
+    // MARK: filling
+
     /// Puts iPhone steps into the minutes the band left empty; returns the days it changed.
     ///
     /// They go into `MinuteDay.phoneSteps`, a column of their own, because `ActivityIngest`
     /// rebuilds `steps` from the parsed files alone: anything merged into that series is wiped the
     /// next time a file touching the day is parsed. `MinuteDay.series` merges the two at read
     /// time, with the band's own minutes always winning.
-    func fillGaps(bandID: UUID, context: ModelContext, from: Date) async -> Set<DayKey> {
-        let steps = await phoneSteps(from: from)
-        guard !steps.isEmpty else { return [] }
+    ///
+    /// The values come from the statistics query, never from the anchored pass's raw samples:
+    /// Health merges the iPhone and a paired Watch, and adding raw samples up counts the steps
+    /// they share twice over. `pass` only says which stretch of time to ask about.
+    func fillGaps(bandID: UUID, context: ModelContext, pass: StepPass) async -> Set<DayKey> {
+        let steps = await phoneSteps(from: pass.from, to: pass.to)
+        guard !steps.isEmpty || pass.clears else { return [] }
         let tz = TimeZone.current
-        let guesses = steps.map { DayKey(date: $0.0, offsetMinutes: tz.secondsFromGMT(for: $0.0) / 60).index }
-        guard let lo = guesses.min().map({ $0 - 1 }), let hi = guesses.max().map({ $0 + 1 }) else { return [] }
+        // Every day the window can touch, and one either side: a day's stored offset is the band's
+        // own and can put a minute on the day before or after the one the phone would guess.
+        let lo = DayKey(date: pass.from, offsetMinutes: tz.secondsFromGMT(for: pass.from) / 60).index - 1
+        let hi = DayKey(date: pass.to, offsetMinutes: tz.secondsFromGMT(for: pass.to) / 60).index + 1
         let rows = (try? context.fetch(FetchDescriptor<MinuteDay>(predicate: #Predicate {
             $0.bandID == bandID && $0.dayIndex >= lo && $0.dayIndex <= hi
         }))) ?? []
@@ -488,14 +642,32 @@ final class AppleHealth: ObservableObject {
             offsets[guess] = phoneOffset
         }
 
+        // A clearing pass visits every stored day the window covers, not only the days Health still
+        // reports steps for: a day whose samples were all deleted has to end up empty too.
+        var days = Set(byDay.keys)
+        if pass.clears { days.formUnion(rows.map(\.dayKey)) }
+
         var changed = Set<DayKey>()
-        for (day, slots) in byDay {
+        for day in days {
             let row = rowByIndex[day.index]
             let offset = row?.tzOffsetMinutes ?? offsets[day] ?? 0
             let band = row?.fileSeries.steps ?? [Int?](repeating: nil, count: MinuteSeries.slots)
             var phone = row?.phoneStepSeries ?? [Int?](repeating: nil, count: MinuteSeries.slots)
             var touched = false
-            for (slot, value) in slots where band[slot] == nil && phone[slot] != value {
+            if pass.clears {
+                // Empty the minutes inside the window first, then put back what Health reports now.
+                // A sample deleted in there has to stop filling its minute, and the deletion itself
+                // never said which minute that was. Only minutes inside the window are touched, so
+                // a narrow pass cannot reach a day's other steps.
+                let midnight = day.start(offsetMinutes: offset)
+                for slot in 0 ..< MinuteSeries.slots where phone[slot] != nil {
+                    let at = midnight.addingTimeInterval(Double(slot) * 60)
+                    guard at >= pass.from, at < pass.to else { continue }
+                    phone[slot] = nil
+                    touched = true
+                }
+            }
+            for (slot, value) in byDay[day] ?? [] where band[slot] == nil && phone[slot] != value {
                 phone[slot] = value
                 touched = true
             }
