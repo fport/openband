@@ -132,6 +132,7 @@ struct RootView: View {
         case .robot: router.tab = .band; router.bandPath = [.robot]
         case .move: router.tab = .move
         case .coach: router.tab = .coach
+        case .learn: router.tab = .coach; router.coachPath = [.learn]
         case .scoreRecovery: router.tab = .today; router.todayPath = [.score(.recovery, day: today)]
         case .scoreSleep: router.tab = .today; router.todayPath = [.score(.sleep, day: today)]
         case .scoreStrain: router.tab = .today; router.todayPath = [.score(.strain, day: today)]
@@ -145,7 +146,7 @@ struct RootView: View {
 
 /// DEBUG `-openband-screen <name>` jumps to a screen for screenshots.
 enum DebugScreen: String {
-    case today, move, sleep, coach, trends, robot, band, settings, onboarding, live
+    case today, move, sleep, coach, trends, robot, band, settings, onboarding, live, learn
     case scoreRecovery = "score-recovery"
     case scoreSleep = "score-sleep"
     case scoreStrain = "score-strain"

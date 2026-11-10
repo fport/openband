@@ -28,6 +28,7 @@ struct CoachView: View {
                     actions
                     if let scan = scans.first { latestScan(scan) }
                     if !meals.isEmpty { recentMeals }
+                    learn
                     disclaimer
                 }
                 .padding(.horizontal, FBSpace.gutter)
@@ -126,6 +127,26 @@ struct CoachView: View {
             }
             if meals.count > 6 {
                 NavigationLink(value: Route.mealHistory) { Text("All \(meals.count) meals") }
+                    .buttonStyle(.fbTertiary)
+            }
+        }
+    }
+
+    /// Reference reading. The one part of Coach that needs no key, and the reason the library
+    /// sits behind this tab rather than taking a sixth one.
+    private var learn: some View {
+        VStack(alignment: .leading, spacing: FBSpace.xs) {
+            SectionHeader(title: String(localized: "Learn"))
+            ListCard {
+                ForEach(Array(Knowledge.articles.prefix(3).enumerated()), id: \.element.id) { index, article in
+                    NavigationLink(value: Route.article(article.id)) {
+                        ArticleRow(article: article, showsDivider: index < 2)
+                    }
+                    .buttonStyle(.fbRow)
+                }
+            }
+            if Knowledge.articles.count > 3 {
+                NavigationLink(value: Route.learn) { Text("All \(Knowledge.articles.count) articles") }
                     .buttonStyle(.fbTertiary)
             }
         }

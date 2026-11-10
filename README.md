@@ -78,6 +78,7 @@ values, keep the key local, never delete anything from the band.
 | A share card: the shape of your route, three figures, square or story, clear background for a sticker | done in the app |
 | Apple Health both ways, including workouts and their routes | done in the app; see the notes in `ios/Openband/Integrations/AppleHealth.swift` |
 | Coach: a meal photo or a body check-in read by a model, with your own API key | done in the app; the key stays in the phone's keychain |
+| Learn: seven sourced articles on fat loss, muscle, weight, endurance, recovery, nutrition and habit | done in the app, English and Turkish; every claim cites a paper or a health body |
 | Alarms, band settings, workouts recorded on the band itself | not built yet |
 
 Each row marked done is covered by tests. Checked on a real Band 6 so far: normal-mode pairing,
