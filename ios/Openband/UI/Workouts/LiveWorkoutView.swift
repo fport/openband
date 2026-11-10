@@ -128,8 +128,11 @@ struct LiveWorkoutView: View {
     private var map: some View {
         Card(padding: FBSpace.xs) {
             Group {
-                if recorder.route.points.count > 2 {
-                    RouteTrace(points: recorder.route.points)
+                // The map comes up with the first fix. Waiting for a route to draw means a
+                // runner standing at the start line sees nothing at all.
+                if recorder.route.accuracy != nil {
+                    RouteMapView(points: recorder.route.points, live: true)
+                        .clipShape(RoundedRectangle(cornerRadius: FBRadius.control, style: .continuous))
                 } else {
                     VStack(spacing: FBSpace.xs) {
                         Image(systemName: "location")
