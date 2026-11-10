@@ -82,7 +82,7 @@ struct WorkoutDetailView: View {
                         let d = WorkoutFormat.distance(workout.distance)
                         StatBlock(value: d.value, unit: d.unit, label: String(localized: "Distance"))
                     }
-                    StatBlock(value: WorkoutFormat.clock(workout.elapsed), label: String(localized: "Time"))
+                    StatBlock(value: WorkoutFormat.clock(workout.elapsed), label: String(localized: "workout.time", defaultValue: "Time", comment: "How long a workout lasted, not a clock time"))
                     if let tempo = WorkoutFormat.tempo(workout.tempo, sport: workout.sport) {
                         StatBlock(value: tempo.value, unit: tempo.unit, label: String(localized: "Pace"))
                     }

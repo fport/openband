@@ -109,7 +109,7 @@ struct LiveWorkoutView: View {
         Card {
             HStack(spacing: 0) {
                 if recorder.sport.tracksDistance {
-                    StatBlock(value: WorkoutFormat.clock(recorder.elapsed), label: String(localized: "Time"),
+                    StatBlock(value: WorkoutFormat.clock(recorder.elapsed), label: String(localized: "workout.time", defaultValue: "Time", comment: "How long a workout lasted, not a clock time"),
                               style: .monoM, alignment: .center)
                 }
                 if let tempo = WorkoutFormat.tempo(recorder.tempo, sport: recorder.sport) {

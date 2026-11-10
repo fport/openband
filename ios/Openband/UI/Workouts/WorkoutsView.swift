@@ -48,7 +48,7 @@ struct WorkoutsView: View {
                     let distance = WorkoutFormat.distance(week.reduce(0) { $0 + $1.distance }, fraction: 1)
                     StatBlock(value: distance.value, unit: distance.unit, label: String(localized: "Distance"))
                     StatBlock(value: WorkoutFormat.clock(week.reduce(0) { $0 + $1.elapsed }),
-                              label: String(localized: "Time"))
+                              label: String(localized: "workout.time", defaultValue: "Time", comment: "How long a workout lasted, not a clock time"))
                     StatBlock(value: WorkoutFormat.energy(week.reduce(0) { $0 + $1.energyKcal }), unit: "kcal",
                               label: String(localized: "Energy"))
                 }

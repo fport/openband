@@ -1,96 +1,168 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "CFBundleDisplayName" : {
-      "comment" : "Bundle display name",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Openband"
+  "sourceLanguage": "en",
+  "strings": {
+    "CFBundleDisplayName": {
+      "comment": "Bundle display name",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Openband"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Openband"
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Openband"
           }
         }
       }
     },
-    "CFBundleName" : {
-      "comment" : "Bundle name",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Openband"
+    "CFBundleName": {
+      "comment": "Bundle name",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Openband"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Openband"
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Openband"
           }
         }
       }
     },
-    "NSBluetoothAlwaysUsageDescription" : {
-      "comment" : "Privacy - Bluetooth Always Usage Description",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Openband uses Bluetooth to talk directly to the band on your wrist."
+    "NSBluetoothAlwaysUsageDescription": {
+      "comment": "Privacy - Bluetooth Always Usage Description",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Openband uses Bluetooth to talk directly to the band on your wrist."
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Openband, bileğindeki bantla doğrudan konuşmak için Bluetooth kullanır."
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Openband, bileğindeki bantla doğrudan konuşmak için Bluetooth kullanır."
           }
         }
       }
     },
-    "NSHealthShareUsageDescription" : {
-      "comment" : "Privacy - Health Share Usage Description",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Openband reads the steps your iPhone counted to fill the minutes your band has nothing for."
+    "NSCameraUsageDescription": {
+      "comment": "Privacy - Camera Usage Description",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Openband uses the camera for meal and body check-in photos. They go to the AI provider you chose, with your own key, and nowhere else."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Openband, analiz etmeyi seçtiğin öğün ve vücut fotoğraflarını çekmek için kamerayı kullanır. İzninle her fotoğraf bu iPhone'dan, kendi API anahtarınla, yapılandırdığın yapay zekâ sağlayıcısına (OpenAI ya da Anthropic) gönderilir. Openband'in sunucusu yoktur ve fotoğraflarını saklamaz."
           }
         }
       }
     },
-    "NSHealthUpdateUsageDescription" : {
-      "comment" : "Privacy - Health Update Usage Description",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Openband saves what your band measured (steps, heart rate, blood oxygen, sleep) to Apple Health."
+    "NSHealthShareUsageDescription": {
+      "comment": "Privacy - Health Share Usage Description",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Openband reads the steps your iPhone counted to fill the minutes your band has nothing for. This data stays on your iPhone and is never sent to an AI provider or anywhere else."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Openband, bandının veri tutmadığı dakikaları doldurmak için iPhone'unun saydığı adımları okur. Bu veri iPhone'unda kalır ve hiçbir yapay zekâ sağlayıcısına ya da başka bir yere gönderilmez."
           }
         }
       }
     },
-    "NSLocalNetworkUsageDescription" : {
-      "comment" : "Privacy - Local Network Usage Description",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Openband talks to so101-band on your Mac over the local network to drive the robot arm."
+    "NSHealthUpdateUsageDescription": {
+      "comment": "Privacy - Health Update Usage Description",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Openband saves what your band measured (steps, heart rate, blood oxygen, sleep) to Apple Health."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Openband, bandının ölçtüklerini (adım, nabız, kandaki oksijen, uyku) Apple Health'e kaydeder."
+          }
+        }
+      }
+    },
+    "NSLocalNetworkUsageDescription": {
+      "comment": "Privacy - Local Network Usage Description",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Openband talks to so101-band on your Mac over the local network to drive the robot arm."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Openband, robot kolu sürmek için Mac'indeki so101-band ile yerel ağ üzerinden konuşur."
+          }
+        }
+      }
+    },
+    "NSLocationWhenInUseUsageDescription": {
+      "comment": "Privacy - Location When In Use Usage Description",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Openband follows your route while you train, so a run, ride or walk gets its distance, pace and map. The route stays on your phone."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Openband antrenman boyunca rotanı takip eder; böylece koşu, bisiklet ya da yürüyüş mesafesini, temposunu ve haritasını alır. Rota telefonunda kalır."
+          }
+        }
+      }
+    },
+    "NSPhotoLibraryAddUsageDescription": {
+      "comment": "Privacy - Photo Library Additions Usage Description",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Openband saves the card it makes from your workout to Photos, so you can post it. It never reads your library."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Openband, antrenmanından ürettiği kartı paylaşabilmen için Fotoğraflar'a kaydeder. Galerini hiçbir zaman okumaz."
           }
         }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }
