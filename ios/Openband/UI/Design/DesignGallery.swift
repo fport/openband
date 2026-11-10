@@ -576,6 +576,9 @@ private struct TypeSection: View {
         case .figureS: "6,412"
         case .subhead: "Band 10 Pro · 82% · Synced 2 min ago"
         case .caption: "Mon  Tue  Wed · İğdır ışık"
+        case .timer: "34:12"
+        case .monoM: "5:12 /km"
+        case .monoS: "10 Nov 2026 · 36.88, 30.70"
         }
     }
 

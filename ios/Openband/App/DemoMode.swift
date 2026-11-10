@@ -10,11 +10,15 @@ final class AppSession: ObservableObject {
     @Published private(set) var container: ModelContainer
     @Published private(set) var model: AppModel
     @Published private(set) var generation = 0
+    /// The running workout, if any. It lives on the session so leaving the Move tab — or the
+    /// app — does not end it.
+    let recorder = WorkoutRecorder()
 
     var isDemo: Bool { model.isDemo }
 
     init() {
         (container, model) = Self.make(demo: DemoMode.isOn)
+        model.onLiveHeartRate = { [recorder] bpm in recorder.record(heartRate: bpm) }
     }
 
     /// Demo mode never touches the real store or the onboarding flag; leaving it returns to the
@@ -23,6 +27,7 @@ final class AppSession: ObservableObject {
         model.stop()
         DemoMode.isOn = on
         (container, model) = Self.make(demo: on)
+        model.onLiveHeartRate = { [recorder] bpm in recorder.record(heartRate: bpm) }
         if !on, ((try? container.mainContext.fetchCount(FetchDescriptor<Band>())) ?? 0) > 0 {
             UserDefaults.standard.set(true, forKey: "onboarded")
         }
@@ -31,7 +36,8 @@ final class AppSession: ObservableObject {
 
     static let models: [any PersistentModel.Type] = [Band.self, Sample.self, Webhook.self, ActivityBlob.self,
                                                      MinuteDay.self, DaySummary.self, SleepRecord.self, SleepRR.self,
-                                                     ManualReading.self, DailyScore.self]
+                                                     ManualReading.self, DailyScore.self,
+                                                     Workout.self, MealEntry.self, BodyScan.self]
 
     private static func make(demo: Bool) -> (ModelContainer, AppModel) {
         let container: ModelContainer

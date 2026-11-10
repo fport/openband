@@ -1,6 +1,166 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Cancelled." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İptal edildi."
+          }
+        }
+      }
+    },
+    "Health allows %lld of %lld record types; the rest are in Health › Sources › Openband." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health, %2$lld kayıt türünden %1$lld tanesine izin veriyor; gerisi Health › Kaynaklar › Openband'de."
+          }
+        }
+      }
+    },
+    "Health already has an answer for Openband and won't ask again. Turn saving on in Health › Sources › Openband." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health, Openband için kararını vermiş ve bir daha sormayacak. Kaydetmeyi Health › Kaynaklar › Openband'den açın."
+          }
+        }
+      }
+    },
+    "Health didn't allow saving. You can change that in Health › Sources › Openband." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health kaydetmeye izin vermedi. Bunu Health › Kaynaklar › Openband'den değiştirebilirsiniz."
+          }
+        }
+      }
+    },
+    "Health didn't allow this. Turn Openband's categories on in Health › Sources › Openband." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health buna izin vermedi. Openband'in kategorilerini Health › Kaynaklar › Openband'den açın."
+          }
+        }
+      }
+    },
+    "Health doesn't allow Openband to save. Turn saving on in Health › Sources › Openband." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health, Openband'in kaydetmesine izin vermiyor. Kaydetmeyi Health › Kaynaklar › Openband'den açın."
+          }
+        }
+      }
+    },
+    "Health has nothing for this stretch of time." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health'te bu zaman aralığı için veri yok."
+          }
+        }
+      }
+    },
+    "Health hasn't been asked yet. Turn the switch on again to see Apple's permission sheet." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health'e henüz sorulmadı. Apple'ın izin ekranını görmek için anahtarı yeniden açın."
+          }
+        }
+      }
+    },
+    "Health is locked. Unlock the iPhone and sync again." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health kilitli. iPhone'un kilidini açıp yeniden eşitleyin."
+          }
+        }
+      }
+    },
+    "Health is turned off for this iPhone by a profile or by Screen Time." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu iPhone'da Health bir profil veya Ekran Süresi tarafından kapatılmış."
+          }
+        }
+      }
+    },
+    "Health isn't available in guest mode." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health konuk modunda kullanılamıyor."
+          }
+        }
+      }
+    },
+    "Health no longer allows Openband to save. Turn saving on in Health › Sources › Openband." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health artık Openband'in kaydetmesine izin vermiyor. Kaydetmeyi Health › Kaynaklar › Openband'den açın."
+          }
+        }
+      }
+    },
+    "Health refused a record as out of range." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health bir kaydı aralık dışı bulup reddetti."
+          }
+        }
+      }
+    },
+    "If no iPhone steps turn up, Health isn't letting Openband read them: Health › Sources › Openband." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone adımları görünmezse Health, Openband'in bunları okumasına izin vermiyordur: Health › Kaynaklar › Openband."
+          }
+        }
+      }
+    },
+    "Open Health" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health'i aç"
+          }
+        }
+      }
+    },
+    "Saved %lld of %lld records to Apple Health. %@" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$lld kaydın %1$lld tanesi Apple Health'e kaydedildi. %3$@"
+          }
+        }
+      }
+    },
     "–" : {
       "localizations" : {
         "tr" : {

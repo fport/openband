@@ -72,7 +72,11 @@ values, keep the key local, never delete anything from the band.
 | Taps on the band ("Find phone", music buttons) as events and commands (`listen --exec`) | done; "Find phone" works on a real band |
 | Claude Code hooks: the band buzzes when Claude needs you or finishes | done (`scripts/claude_hook.py`) |
 | iPhone app (Freeband's screens and scores on the Huawei protocol) | builds and runs in the simulator; not yet tried on a phone |
-| Alarms, settings, workouts | not built yet |
+| Workouts on the phone: run, ride, swim, walk and seven more, with a GPS route | done in the app; the route comes from the iPhone, since the Band 6 has no GPS |
+| A share card: the shape of your route, three figures, square or story, clear background for a sticker | done in the app |
+| Apple Health both ways, including workouts and their routes | done in the app; see the notes in `ios/Openband/Integrations/AppleHealth.swift` |
+| Coach: a meal photo or a body check-in read by a model, with your own API key | done in the app; the key stays in the phone's keychain |
+| Alarms, band settings, workouts recorded on the band itself | not built yet |
 
 Each row marked done is covered by tests. Checked on a real Band 6 so far: normal-mode pairing,
 reconnecting, battery, firmware, today's totals, setting the clock.
@@ -105,6 +109,40 @@ Bluetooth itself would be refused.
 `ios/` holds the app: [Freeband](https://github.com/cobanov/freeband)'s screens, scores and
 storage on top of a Swift port of Openband's protocol (`ios/Openband/Band/Huawei`).
 
+Five tabs. **Today** is the day's verdict and the three scores. **Move** records a workout — run,
+ride, swim, walk, and seven more behind a menu — follows the route on the phone's GPS, and turns
+the finished one into a card you can post: the shape of where you went, three figures, square or
+story, and a clear background when you want it as a sticker over your own photo. **Sleep** is the
+night. **Coach** reads a meal photo or a body check-in. **Band** is the device and the settings.
+
+Workouts go to Apple Health as real `HKWorkout`s with their route attached, so they count towards
+the rings and show up in Fitness. What the band measured goes out too — steps, heart rate, blood
+oxygen, sleep — attributed to the band rather than to the phone, with a sync identifier per record
+so syncing again replaces instead of duplicating.
+
+### Coach, and your own API key
+
+Coach is the one part of Openband that talks to a server, and it is not Openband's server. You
+paste an Anthropic or OpenAI key; it is kept in this phone's keychain, not in `UserDefaults`, not
+in iCloud and not in a backup. A meal photo or a body check-in goes from the phone straight to the
+provider you chose, on your account, and the answer comes straight back. Openband has no AI
+account, sees neither the photo nor the key, and the app strips the location and camera details
+from a photo before it goes.
+
+What comes back is an estimate and is labelled as one: calories arrive as a range, not a figure,
+a body-fat read is a span of several points, and nothing from Coach is written to Apple Health.
+It is not medical advice, and the screens say so.
+
+### Design
+
+[docs/DESIGN.md](docs/DESIGN.md) is the design language: one accent, a warm neutral ground, Plus
+Jakarta Sans with IBM Plex Mono for readouts, one container and one motion curve. The tokens are
+the source, not the Swift:
+
+```bash
+python3 -I scripts/gen_tokens.py   # design/tokens.json -> Tokens.generated.swift
+```
+
 ```bash
 brew install xcodegen
 cd ios && xcodegen generate && open Openband.xcodeproj
@@ -119,7 +157,8 @@ Mac's pairing, choose "Use my Mac's key" when pairing and paste the line `openba
 - [docs/PROTOCOL.md](docs/PROTOCOL.md): frames, TLV, handshake, data commands.
 - `uv run pytest`: the test suite, including the Gadgetbridge cross-check.
 - `cd ios/tests/protocol && swiftc ../../Openband/Band/Huawei/*.swift FakeBand.swift main.swift -o /tmp/hw && /tmp/hw`:
-  the same checks for the Swift port.
+  the same checks for the Swift port. `ios/tests/analytics` does the scores, `ios/tests/workouts`
+  the route geometry, splits and pace.
 - `uv run openband -vv <command>`: every byte on the wire, for bug reports.
 
 ## License

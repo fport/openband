@@ -32,6 +32,9 @@ final class AppModel: ObservableObject {
     /// Fires with the new day's midnight when the day changes while the app runs.
     let dayChanged = PassthroughSubject<Date, Never>()
 
+    /// Every live heart rate, for whoever is recording a workout.
+    var onLiveHeartRate: ((Int) -> Void)?
+
     struct Invite: Identifiable, Equatable {
         let code: String
         let hub: URL
@@ -170,6 +173,7 @@ final class AppModel: ObservableObject {
 
     private func record(_ id: UUID, _ draft: SampleDraft) {
         sessionDrafts.append(draft)
+        if draft.kind == "live", draft.heartRate > 0 { onLiveHeartRate?(draft.heartRate) }
         context.insert(Sample(bandID: id, draft: draft))
         if draft.kind == "battery", let band = band(id) { band.lastBattery = draft.level }
         try? context.save()
@@ -219,9 +223,12 @@ final class AppModel: ObservableObject {
         sessionIngest.touchedDays[id, default: []].formUnion(result.touchedDays)
         sessionIngest.minuteDays[id] = result.minuteDays
         sessionIngest.sleeps += result.sleeps
-        let name = band(id)?.displayName ?? "Huawei Band"
+        // Pass the band itself and the store: Health then attributes the records to the band
+        // rather than to the phone, and the nights come from the reconciled records.
+        let target = band(id)
+        let name = target?.displayName ?? "Huawei Band"
         Task {
-            await AppleHealth.shared.export(history, bandName: name)
+            await AppleHealth.shared.export(history, bandName: name, band: target, context: context)
             await fillGapsFromHealth(bandID: id)
         }
     }
@@ -394,6 +401,13 @@ final class AppModel: ObservableObject {
             ingestAgain = false
             scheduleIngest()
         }
+    }
+
+    /// The band a workout is tagged with: the chosen one, else the only one there is.
+    var firstBandID: UUID? {
+        let chosen = UserDefaults.standard.string(forKey: "selectedBand").flatMap(UUID.init(uuidString:))
+        let bands = (try? context.fetch(FetchDescriptor<Band>(sortBy: [SortDescriptor(\Band.addedAt)]))) ?? []
+        return bands.first { $0.id == chosen }?.id ?? bands.first?.id
     }
 
     func band(_ id: UUID) -> Band? {

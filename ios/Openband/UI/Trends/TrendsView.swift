@@ -2,8 +2,8 @@ import SwiftData
 import SwiftUI
 
 /// Trends: one range for every card; each card opens the full chart with scrubbing and a day list.
+/// Pushed from Today — it is a place you visit, not one of the five you live in.
 struct TrendsView: View {
-    @EnvironmentObject private var router: AppRouter
     @EnvironmentObject private var model: AppModel
     @AppStorage("trendRange") private var rangeValue = TrendRange.month.rawValue
 
@@ -14,48 +14,45 @@ struct TrendsView: View {
     }
 
     var body: some View {
-        NavigationStack(path: $router.trendsPath) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: FBSpace.m) {
-                    SegmentedPicker(String(localized: "Range"), selection: range, options: TrendRange.allCases) { $0.title }
-                    SelectedBand { band in
-                        if let band {
-                            BandHealthReader(band: band) { history in
-                                let today = DayKey.current(model.today)
-                                ForEach(Self.metrics) { metric in
-                                    NavigationLink(value: Route.trend(metric, day: today.index)) {
-                                        Card {
-                                            TrendChart(metric: metric, points: history.points(metric, ending: today),
-                                                       range: range, showsRangePicker: false, style: .compact)
-                                                .padding(.trailing, FBSpace.xs)
-                                        }
-                                        .overlay(alignment: .topTrailing) {
-                                            Image(systemName: "chevron.right")
-                                                .font(.system(size: 12, weight: .medium))
-                                                .foregroundStyle(.textTertiary)
-                                                .padding(.top, FBSpace.m)
-                                                .padding(.trailing, FBSpace.s - 2)
-                                                .accessibilityHidden(true)
-                                        }
-                                        .contentShape(Rectangle())
+        ScrollView {
+            VStack(alignment: .leading, spacing: FBSpace.m) {
+                SegmentedPicker(String(localized: "Range"), selection: range, options: TrendRange.allCases) { $0.title }
+                SelectedBand { band in
+                    if let band {
+                        BandHealthReader(band: band) { history in
+                            let today = DayKey.current(model.today)
+                            ForEach(Self.metrics) { metric in
+                                NavigationLink(value: Route.trend(metric, day: today.index)) {
+                                    Card {
+                                        TrendChart(metric: metric, points: history.points(metric, ending: today),
+                                                   range: range, showsRangePicker: false, style: .compact)
+                                            .padding(.trailing, FBSpace.xs)
                                     }
-                                    .buttonStyle(.plain)
+                                    .overlay(alignment: .topTrailing) {
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 12, weight: .medium))
+                                            .foregroundStyle(.textTertiary)
+                                            .padding(.top, FBSpace.m)
+                                            .padding(.trailing, FBSpace.s - 2)
+                                            .accessibilityHidden(true)
+                                    }
+                                    .contentShape(Rectangle())
                                 }
+                                .buttonStyle(.plain)
                             }
-                        } else {
-                            EmptyState(systemImage: "chart.xyaxis.line", title: String(localized: "No band yet"),
-                                       message: String(localized: "Add your band to see how your days compare."))
                         }
+                    } else {
+                        EmptyState(systemImage: "chart.xyaxis.line", title: String(localized: "No band yet"),
+                                   message: String(localized: "Add your band to see how your days compare."))
                     }
                 }
-                .padding(.horizontal, FBSpace.gutter)
-                .padding(.bottom, FBSpace.xl)
             }
-            .fbScreen()
-            .navigationTitle(String(localized: "Trends"))
-            .navigationBarTitleDisplayMode(.large)
-            .routeDestinations()
+            .padding(.horizontal, FBSpace.gutter)
+            .padding(.bottom, FBSpace.xl)
         }
+        .fbScreen()
+        .navigationTitle(String(localized: "Trends"))
+        .navigationBarTitleDisplayMode(.large)
     }
 }
 
@@ -97,25 +94,25 @@ struct TrendDetailView: View {
         let points = history.points(metric, ending: day, override: overrides)
         let days = points.suffix(range.wrappedValue.rawValue).reversed().filter { $0.value != nil }
         ScrollView {
-            VStack(alignment: .leading, spacing: FBSpace.l) {
-                Card { TrendChart(metric: metric, points: points, range: range) }
-                VStack(alignment: .leading, spacing: FBSpace.xs) {
-                    SectionHeader(title: String(localized: "Days"))
-                    if days.isEmpty {
-                        Footnote(String(localized: "No data for these days."))
-                    } else {
-                        ListCard {
-                            ForEach(Array(days.enumerated()), id: \.element.id) { i, point in
-                                ListRow(title: FBFormat.shortDay(point.date.addingTimeInterval(12 * 3600)),
-                                        value: point.value.map { metric.display($0) }, accessory: .none,
-                                        showsDivider: i < days.count - 1)
-                            }
+        VStack(alignment: .leading, spacing: FBSpace.l) {
+            Card { TrendChart(metric: metric, points: points, range: range) }
+            VStack(alignment: .leading, spacing: FBSpace.xs) {
+                SectionHeader(title: String(localized: "Days"))
+                if days.isEmpty {
+                    Footnote(String(localized: "No data for these days."))
+                } else {
+                    ListCard {
+                        ForEach(Array(days.enumerated()), id: \.element.id) { i, point in
+                            ListRow(title: FBFormat.shortDay(point.date.addingTimeInterval(12 * 3600)),
+                                    value: point.value.map { metric.display($0) }, accessory: .none,
+                                    showsDivider: i < days.count - 1)
                         }
                     }
                 }
             }
-            .padding(.horizontal, FBSpace.gutter)
-            .padding(.bottom, FBSpace.xl)
+        }
+        .padding(.horizontal, FBSpace.gutter)
+        .padding(.bottom, FBSpace.xl)
         }
         .fbScreen()
         .navigationTitle(metric.title)

@@ -47,6 +47,7 @@ enum FBUIColor {
     static let textTertiary = UIColor(token: T.textTertiary)
     static let action = UIColor(token: T.action)
     static let actionPressed = UIColor(token: T.actionPressed)
+    static let actionSoft = UIColor(token: T.actionSoft)
     static let onAction = UIColor(token: T.onAction)
     static let destructive = UIColor(token: T.destructive)
     static let good = UIColor(token: T.good)
@@ -95,9 +96,13 @@ extension ShapeStyle where Self == Color {
     /// Placeholder and disabled only: it fails 4.5:1 on purpose.
     static var textTertiary: Color { Color(uiColor: FBUIColor.textTertiary) }
 
-    // Action: primary buttons and on-state toggles only. Never text, never data.
+    // Action: Gun dogumu, the one accent. Filled blocks of it are buttons and on-state toggles
+    // only; it also tints activity data (see `activity`), which is the same idea said twice:
+    // orange is you, moving. Never body text.
     static var action: Color { Color(uiColor: FBUIColor.action) }
     static var actionPressed: Color { Color(uiColor: FBUIColor.actionPressed) }
+    /// Tinted fill behind a chip, badge or selected row. Never behind body text.
+    static var actionSoft: Color { Color(uiColor: FBUIColor.actionSoft) }
     static var onAction: Color { Color(uiColor: FBUIColor.onAction) }
     /// Destructive button labels.
     static var destructive: Color { Color(uiColor: FBUIColor.destructive) }
@@ -155,7 +160,8 @@ enum FBSpace {
     static let section = FBTokenTable.Space.section
 }
 
-/// Corner radii. No pills: full circles only for quick actions, the close button and status dots.
+/// Corner radii. Pills are for chips and the sport picker; full circles stay with quick actions,
+/// the close button and status dots.
 enum FBRadius {
     /// Charts, bars, dividers.
     static let chart = FBTokenTable.Radius.chart
@@ -163,6 +169,8 @@ enum FBRadius {
     static let control = FBTokenTable.Radius.control
     /// Cards, list cards, context cards, sheet top corners.
     static let card = FBTokenTable.Radius.card
+    /// Chips, badges and the sport picker only.
+    static let pill = FBTokenTable.Radius.pill
 }
 
 enum FBStroke {
@@ -178,6 +186,8 @@ enum FBStroke {
     static let zoneBar = FBTokenTable.Stroke.zoneBar
     /// Surface gap between touching marks.
     static let gap = FBTokenTable.Stroke.gap
+    /// The route line on a map and on a share card.
+    static let route = FBTokenTable.Stroke.route
 }
 
 typealias FBSize = FBTokenTable.Size

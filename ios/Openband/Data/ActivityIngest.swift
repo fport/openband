@@ -255,12 +255,16 @@ final class ActivityIngest {
         for day in days.sorted() {
             let existing = byDay[day.index] ?? []
             var all = newParts[day] ?? []
-            let others = Set(existing.flatMap(\.sourceFileIDs)).subtracting(batch)
+            // The phone-fill tag is not a file id, so it is never looked up as one.
+            let others = Set(existing.flatMap(\.sourceFileIDs)).subtracting(batch).subtracting([MinuteDay.phoneSource])
             for hex in others.sorted() { all += parts(of: hex).filter { $0.day == day } }
             let merged = IngestMapper.mergeMinuteParts(all)
             for (i, row) in existing.enumerated() {
                 if i == 0, let merged {
                     row.update(from: merged)
+                    // `update(from:)` rewrites the file-derived series and its source list. The
+                    // phone-filled minutes sit in their own column and survive; their tag doesn't.
+                    if row.phoneSteps != nil { row.sourceFileIDs.append(MinuteDay.phoneSource) }
                 } else {
                     context.delete(row)
                 }
