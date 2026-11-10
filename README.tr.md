@@ -128,7 +128,13 @@ fotoğrafını ya da vücut analizini okur. **Band** cihaz ve ayarlar.
 Antrenmanlar Apple Health'e rotasıyla birlikte gerçek `HKWorkout` olarak gider; halkalara sayılır
 ve Fitness'ta görünür. Bandın ölçtükleri de gider — adım, nabız, kandaki oksijen, uyku — telefona
 değil banda atfedilerek ve kayıt başına bir eşitleme kimliğiyle, böylece tekrar eşitlemek
-çoğaltmak yerine yerine koyar.
+çoğaltmak yerine yerine koyar. Her bant nereye kadar dışa aktardığını hatırlar: bir eşitleme yeni
+dakikaları ve bir de bugünü gönderir, her seferinde kesişen aralığı baştan yazmaz.
+
+Adımlar ters yöne de akar, bandın boş bıraktığı dakikaları doldurmak için; o okuma artık bir çıpaya
+bağlı: Health'e sabit bir 90 gün değil, son geçişten bu yana ne değiştiği sorulur ve Health'te
+silinen bir adım örneği doldurduğu dakikayı doldurmayı bırakır. Çıpanın kendisi ancak gerçek bir
+iPhone'da sınanabilir — simülatörün Health deposu boştur.
 
 ### Coach ve kendi API anahtarın
 
