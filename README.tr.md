@@ -20,6 +20,8 @@ Bluetooth LE üzerinden, bilgisayarından. Verin sende kalır.</p>
 anahtarla yeniden bağlanma, pil, yazılım sürümü, bugünkü toplamlar ve saati ayarlama. Dakika dakika
 geçmiş ve uyku, Gadgetbridge vektörleri ve simüle bantla geçiyor; takılmış bir bantta denenmeyi bekliyor.
 
+**Yazı:** [Bileğimdeki Bir Dokunuş Robot Kolu Oynatıyor](https://getporti.com/tr/paper/band-to-robot-arm) — Openband, so101-remote ve so101-band nasıl birleşiyor.
+
 ## Başla
 
 ```bash
