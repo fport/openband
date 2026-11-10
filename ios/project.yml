@@ -21,6 +21,11 @@ targets:
       - path: Openband
         excludes:
           - "**/*.old"
+    dependencies:
+      # The Live Activity and Dynamic Island. A widget extension is the only place iOS will
+      # render them from, which is why the app ships one.
+      - target: OpenbandWidgets
+        embed: true
     info:
       path: Openband/Info.plist
       properties:
@@ -34,6 +39,7 @@ targets:
         NSCameraUsageDescription: Openband uses the camera for meal and body check-in photos. They go to the AI provider you chose, with your own key, and nowhere else.
         NSLocationWhenInUseUsageDescription: Openband follows your route while you train, so a run, ride or walk gets its distance, pace and map. The route stays on your phone.
         UIBackgroundModes: [location]
+        NSSupportsLiveActivities: true
         NSLocalNetworkUsageDescription: Openband talks to so101-band on your Mac over the local network to drive the robot arm.
         NSBonjourServices: [_so101band._tcp]
         NSHealthShareUsageDescription: Openband reads the steps your iPhone counted to fill the minutes your band has nothing for. This data stays on your iPhone and is never sent to an AI provider or anywhere else.
@@ -59,3 +65,45 @@ targets:
         TARGETED_DEVICE_FAMILY: "1"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ENABLE_USER_SCRIPT_SANDBOXING: YES
+
+  OpenbandWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: OpenbandWidgets
+      # The app's own design language and workout formatting, compiled into the extension as
+      # well: a Live Activity set in system type and colours is not the same app. The files are
+      # listed one by one rather than by folder, so the extension stays out of the band, the
+      # store and everything else it has no business with.
+      - path: Openband/Workouts/WorkoutActivity.swift
+      - path: Openband/Workouts/WorkoutActivityIntents.swift
+      - path: Openband/Workouts/Sport.swift
+      - path: Openband/Workouts/Splits.swift
+      - path: Openband/Workouts/RouteGeometry.swift
+      - path: Openband/UI/Workouts/WorkoutFormat.swift
+      - path: Openband/UI/Common/Formatting.swift
+      - path: Openband/Analytics/Confidence.swift
+      - path: Openband/UI/Design/Tokens.swift
+      - path: Openband/UI/Design/Tokens.generated.swift
+      - path: Openband/UI/Design/Typography.swift
+      # Both faces of type, and the one string catalogue both bundles translate from.
+      - path: Openband/Resources/Fonts
+      - path: Openband/Resources/Localizable.xcstrings
+    info:
+      path: OpenbandWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Openband
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en, tr]
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UIAppFonts: [PlusJakartaSans-Regular.ttf, PlusJakartaSans-Medium.ttf, PlusJakartaSans-SemiBold.ttf, IBMPlexMono-Regular.ttf]
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.fport.openband.widgets
+        PRODUCT_NAME: OpenbandWidgets
+        TARGETED_DEVICE_FAMILY: "1"
+        ENABLE_USER_SCRIPT_SANDBOXING: YES
+        SKIP_INSTALL: YES
