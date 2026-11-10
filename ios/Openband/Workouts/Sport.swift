@@ -14,17 +14,17 @@ enum Sport: String, CaseIterable, Identifiable, Codable, Sendable {
 
     var name: String {
         switch self {
-        case .run: String(localized: "Run", comment: "Sport")
-        case .ride: String(localized: "Ride", comment: "Sport")
-        case .swim: String(localized: "Swim", comment: "Sport")
-        case .walk: String(localized: "Walk", comment: "Sport")
-        case .trailRun: String(localized: "Trail run", comment: "Sport")
-        case .treadmill: String(localized: "Treadmill", comment: "Sport")
-        case .indoorRide: String(localized: "Indoor ride", comment: "Sport")
-        case .openWaterSwim: String(localized: "Open water", comment: "Sport")
-        case .hike: String(localized: "Hike", comment: "Sport")
-        case .strength: String(localized: "Strength", comment: "Sport")
-        case .other: String(localized: "Other", comment: "Sport")
+        case .run: String(localized: "sport.run", defaultValue: "Run", comment: "Sport")
+        case .ride: String(localized: "sport.ride", defaultValue: "Ride", comment: "Sport")
+        case .swim: String(localized: "sport.swim", defaultValue: "Swim", comment: "Sport")
+        case .walk: String(localized: "sport.walk", defaultValue: "Walk", comment: "Sport")
+        case .trailRun: String(localized: "sport.trailRun", defaultValue: "Trail run", comment: "Sport")
+        case .treadmill: String(localized: "sport.treadmill", defaultValue: "Treadmill", comment: "Sport")
+        case .indoorRide: String(localized: "sport.indoorRide", defaultValue: "Indoor ride", comment: "Sport")
+        case .openWaterSwim: String(localized: "sport.openWater", defaultValue: "Open water", comment: "Sport")
+        case .hike: String(localized: "sport.hike", defaultValue: "Hike", comment: "Sport")
+        case .strength: String(localized: "sport.strength", defaultValue: "Strength", comment: "Sport")
+        case .other: String(localized: "sport.other", defaultValue: "Other", comment: "Sport")
         }
     }
 
