@@ -987,6 +987,16 @@
         }
       }
     },
+    "All %lld articles": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm %lld yazı"
+          }
+        }
+      }
+    },
     "All %lld meals": {
       "localizations": {
         "tr": {
@@ -2244,6 +2254,16 @@
         }
       }
     },
+    "Each one says what is known, what is a population average and what is still argued about. Reference material, not advice about you.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Her biri neyin bilindiğini, neyin nüfus ortalaması olduğunu ve neyin hâlâ tartışıldığını söylüyor. Başvuru malzemesi; sizinle ilgili bir tavsiye değil."
+          }
+        }
+      }
+    },
     "Eaten": {
       "localizations": {
         "tr": {
@@ -3446,6 +3466,16 @@
         }
       }
     },
+    "Learn": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öğren"
+          }
+        }
+      }
+    },
     "Learning your normal": {
       "localizations": {
         "tr": {
@@ -4481,6 +4511,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Takılı değil"
+          }
+        }
+      }
+    },
+    "Nothing here is medical advice. Ask a doctor or a dietitian before changing how you eat or train.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buradakilerin hiçbiri tıbbi tavsiye değil. Nasıl beslendiğinizi ya da çalıştığınızı değiştirmeden önce bir doktora veya diyetisyene danışın."
           }
         }
       }
@@ -6039,6 +6079,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bazı kayıtlar okunamadı. Bir sonraki senkronda gelecekler."
+          }
+        }
+      }
+    },
+    "Sources": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaynaklar"
           }
         }
       }
