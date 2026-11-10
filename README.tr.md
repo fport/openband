@@ -77,6 +77,7 @@ banttan hiçbir şey silme.
 | Paylaşım kartı: rotanın şekli, üç rakam, kare ya da story, çıkartma için şeffaf zemin | uygulamada hazır |
 | Apple Health iki yönlü, antrenmanlar ve rotaları dahil | uygulamada hazır; notlar `ios/Openband/Integrations/AppleHealth.swift` içinde |
 | Coach: yemek fotoğrafı ya da vücut analizi, kendi API anahtarınla | uygulamada hazır; anahtar telefonun keychain'inde kalıyor |
+| Öğren: yağ kaybı, kas, kilo, dayanıklılık, toparlanma, beslenme ve alışkanlık üzerine kaynaklı yedi yazı | uygulamada hazır, İngilizce ve Türkçe; her iddia bir makaleye ya da sağlık kurumuna dayanıyor |
 | Alarmlar, bant ayarları, bandın kendi kaydettiği antrenmanlar | henüz yok |
 
 "Hazır" olan her satır testlerle kapsanıyor. Şimdiye kadar gerçek bir Band 6'da denenenler: normal

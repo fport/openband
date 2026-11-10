@@ -19,6 +19,9 @@ enum Route: Hashable {
     case score(ScoreKind, day: Int)
     case workout(UUID)
     case workoutHistory
+    /// The health library, and one article in it.
+    case learn
+    case article(String)
     case bodyScan(UUID)
     case mealHistory
     case aiKey
@@ -135,6 +138,8 @@ private struct RouteView: View {
         case .aboutBand(let id): AboutBandView(bandID: id)
         case .workout(let id): WorkoutDetailView(workoutID: id)
         case .workoutHistory: WorkoutHistoryView()
+        case .learn: LearnView()
+        case .article(let id): ArticleView(articleID: id)
         case .bodyScan(let id): BodyScanDetailView(scanID: id)
         case .mealHistory: MealHistoryView()
         case .aiKey: AIKeyView()

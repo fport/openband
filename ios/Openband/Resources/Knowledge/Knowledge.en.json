@@ -1,0 +1,306 @@
+{
+  "language": "en",
+  "articles": [
+    {
+      "id": "fat-loss",
+      "icon": "flame",
+      "title": "Fat loss",
+      "subtitle": "Calorie deficit, NEAT, metabolic rate",
+      "body": [
+        "## Energy in, energy out, and both of them move",
+        "Fat loss happens when your body uses more energy than it takes in. That part is arithmetic. The difficulty is that neither side of it holds still.",
+        "The old rule — 3,500 kcal is a pound of fat, so cut 500 a day and lose a pound a week — treats what you burn as a constant. It is not. As you get lighter you burn less, and the gap closes behind you. A dynamic model fitted to controlled feeding studies predicts far smaller long-run change than the straight line does, and the difference grows the longer you project it.",
+        "## Where the energy actually goes",
+        "Three places. Resting metabolism, which is the largest share for most people. Digesting what you eat, which costs between 5 and 15% of daily expenditure and is highest on a diet high in protein or alcohol. And movement — all of it, not only the part you call training.",
+        "That last part is larger than it looks. Sixteen volunteers were fed 1,000 kcal a day above maintenance for eight weeks. Two-thirds of the extra energy they burned came from non-exercise activity thermogenesis: fidgeting, posture, walking about. How much a person's NEAT rose predicted how little fat they stored, and fat gain differed tenfold between them.",
+        "## A session does not simply add to the total",
+        "Among 1,754 adults measured with doubly labelled water, about 28% of the energy spent on activity was offset by a fall in basal expenditure, and the offset was larger in people carrying more fat. Training is still worth doing, for the heart and the head and the muscle. But the calories a watch credits you are a gross estimate, and some of that cost is quietly paid back elsewhere in the day.",
+        "## What is contested",
+        "Whether dieting damages a metabolism. Six years after a televised weight-loss competition, 14 of its contestants still had resting rates around 500 kcal a day below what their body composition predicted — and the ones who had kept the most weight off showed the most slowing. A 2020 trial argued the effect appears mainly while people are still in a deficit and is otherwise a measurement artefact; the field is split roughly down the middle. What no study supports is the gym-floor version, that a past diet makes future fat loss impossible.",
+        "Every number in this area is an estimate: your maintenance, your deficit, the burn on your wrist. The direction is reliable. The digits are not."
+      ],
+      "sources": [
+        {
+          "text": "Hall KD, Sacks G, Chandramohan D, et al. Quantification of the effect of energy imbalance on bodyweight. The Lancet 2011;378:826–837.",
+          "url": "https://doi.org/10.1016/S0140-6736(11)60812-X"
+        },
+        {
+          "text": "Levine JA, Eberhardt NL, Jensen MD. Role of nonexercise activity thermogenesis in resistance to fat gain in humans. Science 1999;283:212–214.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/9880251/"
+        },
+        {
+          "text": "Westerterp KR. Diet induced thermogenesis. Nutrition & Metabolism 2004;1:5.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/15507147/"
+        },
+        {
+          "text": "Careau V, Halsey LG, Pontzer H, et al. Energy compensation and adiposity in humans. Current Biology 2021;31:4659–4666.",
+          "url": "https://doi.org/10.1016/j.cub.2021.08.016"
+        },
+        {
+          "text": "Fothergill E, Guo J, Howard L, et al. Persistent metabolic adaptation 6 years after “The Biggest Loser” competition. Obesity 2016;24:1612–1619.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27136388/"
+        },
+        {
+          "text": "Martins C, Gower BA, Hill JO, Hunter GR. Metabolic adaptation is an illusion, only present when participants are in negative energy balance. The American Journal of Clinical Nutrition 2020;112:1212–1218.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32844188/"
+        }
+      ]
+    },
+    {
+      "id": "muscle",
+      "icon": "dumbbell",
+      "title": "Building muscle",
+      "subtitle": "Progressive overload, hypertrophy, protein",
+      "body": [
+        "## The signal and the supply",
+        "Muscle grows when you repeatedly ask it to do more than it is used to, and eat enough to build with. Split, machine and tempo are details arranged around those two things.",
+        "## Load matters less than effort",
+        "Twenty-one trials were pooled by load: light, meaning 60% of a one-rep maximum or less, against heavy, meaning more than that, with sets taken to failure in both. Heavy won clearly for maximal strength. For muscle size the two were about the same. Growth is available across a wide range of loads, as long as the set ends near the point where form goes.",
+        "Strength is the more specific adaptation. If the goal is a heavier single, the training has to be heavy.",
+        "## Volume, up to a point",
+        "Across 15 studies, weekly sets per muscle group predicted growth: more sets, more size. The data supported that trend to around ten or more sets a week and then ran out — too few studies went higher to say where the curve turns over, and most participants were untrained. Read it as the shape of a dose–response, not a prescription. Once weekly volume is matched, how you spread it over the week makes little difference.",
+        "## Protein has a ceiling, lower than the shelves suggest",
+        "Forty-nine randomised trials, 1,863 participants: protein added on top of resistance training does increase lean mass and strength, and the benefit plateaus at about 1.6 g per kilogram of bodyweight a day. The confidence interval reaches 2.2, and almost no trial tested above 2.25, so the exact breakpoint is soft. For scale, the European reference intake for an adult who does not train is 0.83 g/kg. Roughly double it, not ten times it.",
+        "The effect was smaller in older participants and larger in people who already trained.",
+        "## What is settled",
+        "That strength work belongs in a week, for everybody. The WHO recommends muscle-strengthening activity on two or more days a week for all adults, alongside aerobic activity, and lists it for older adults as well. How fast a particular person responds, and how much, is not something a table can tell them."
+      ],
+      "sources": [
+        {
+          "text": "Schoenfeld BJ, Grgic J, Ogborn D, Krieger JW. Strength and hypertrophy adaptations between low- vs. high-load resistance training: a systematic review and meta-analysis. Journal of Strength and Conditioning Research 2017;31:3508–3523.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28834797/"
+        },
+        {
+          "text": "Schoenfeld BJ, Ogborn D, Krieger JW. Dose-response relationship between weekly resistance training volume and increases in muscle mass: a systematic review and meta-analysis. Journal of Sports Sciences 2017;35:1073–1082.",
+          "url": "https://doi.org/10.1080/02640414.2016.1210197"
+        },
+        {
+          "text": "Morton RW, Murphy KT, McKellar SR, et al. A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults. British Journal of Sports Medicine 2018;52:376–384.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28698222/"
+        },
+        {
+          "text": "EFSA Panel on Dietetic Products, Nutrition and Allergies. Scientific opinion on dietary reference values for protein (2012): population reference intake 0.83 g/kg body weight per day.",
+          "url": "https://www.efsa.europa.eu/en/press/news/120209"
+        },
+        {
+          "text": "Bull FC, Al-Ansari SS, Biddle S, et al. World Health Organization 2020 guidelines on physical activity and sedentary behaviour. British Journal of Sports Medicine 2020;54:1451–1462.",
+          "url": "https://doi.org/10.1136/bjsports-2020-102955"
+        }
+      ]
+    },
+    {
+      "id": "weight",
+      "icon": "scalemass",
+      "title": "Keeping weight off",
+      "subtitle": "Why regain is the norm, and what travels with success",
+      "body": [
+        "## The hard part is not the losing",
+        "Most methods take weight off for a while; few keep it off. Pooling long-term studies, more than half of the lost weight is back within two years and over 80% within five. That is the baseline any approach should be measured against — and most of the comparisons you will read stop at twelve weeks.",
+        "## The body argues back, modestly and for a long time",
+        "For each kilogram lost, energy expenditure falls by roughly 20 to 30 kcal a day while appetite rises by around 100 kcal a day's worth of drive. Those are averages drawn from controlled studies, and they do not fade quickly. Maintenance is not the absence of effort, then; it is a smaller, much longer version of it.",
+        "## Which diet? Largely the one that survives contact with your life",
+        "609 adults were randomised for twelve months to a healthy low-fat or a healthy low-carbohydrate diet, with no calorie target. Average loss: 5.3 kg against 6.0 kg, no meaningful difference. Neither the genotype patterns nor the insulin-secretion measure the researchers had bet on predicted who would do better on which. Inside each group, individual results ran from large losses to small gains.",
+        "## What travels with the people who keep it off",
+        "About 20% of people who lose a tenth of their bodyweight hold that loss for at least a year. Members of the US National Weight Control Registry — who average 33 kg lost and more than five years holding it — report continued diet and activity habits, regular self-weighing, low levels of depression and disinhibition, and often a medical event that triggered the attempt. They are a self-selected group describing themselves, so read it as a portrait of what success looked like rather than a recipe that produces it.",
+        "## The unglamorous reading",
+        "The evidence points at the repeatable: measuring often enough to notice drift, food you would still choose next month, activity you do not dread. It points away from whichever diet is currently being argued about. And none of these studies tested a person — they tested averages of people, around which individual results vary enormously."
+      ],
+      "sources": [
+        {
+          "text": "Hall KD, Kahan S. Maintenance of lost weight and long-term management of obesity. Medical Clinics of North America 2018;102:183–197.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/29156185/"
+        },
+        {
+          "text": "Gardner CD, Trepanowski JF, Del Gobbo LC, et al. Effect of low-fat vs low-carbohydrate diet on 12-month weight loss in overweight adults: the DIETFITS randomized clinical trial. JAMA 2018;319:667–679.",
+          "url": "https://doi.org/10.1001/jama.2018.0245"
+        },
+        {
+          "text": "Wing RR, Phelan S. Long-term weight loss maintenance. The American Journal of Clinical Nutrition 2005;82:222S–225S.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16002825/"
+        }
+      ]
+    },
+    {
+      "id": "endurance",
+      "icon": "figure.run",
+      "title": "Running and endurance",
+      "subtitle": "VO₂ max, zone training, intervals",
+      "body": [
+        "## What VO₂ max is",
+        "The most oxygen your body can take in and use in a minute. It sets a ceiling on sustained aerobic work. It is not the same thing as being fast, which also depends on how economically you move and on how much of that ceiling you can hold for an hour.",
+        "It improves with training, unevenly. In the HERITAGE Family Study, 481 sedentary adults completed the same 20-week programme. The average gain was 384 ml of oxygen per minute, with a standard deviation of 202: some barely moved, some gained twice the average. Responses clustered in families, with about two and a half times more variance between families than within them. Trainability is partly inherited, and nobody's rate of improvement can be read off a chart.",
+        "## Easy miles and hard intervals both work",
+        "Pooling 28 studies, continuous endurance training and high-intensity intervals both produced large gains against untrained controls — about 4.9 and 5.5 ml/kg/min respectively. Intervals held a small edge, and a larger one in people who started less fit. The difference is small enough that which is better is a weaker question than which will still be happening in three months.",
+        "## Where zones come from, and what they cannot know",
+        "A zone is a share of your maximum heart rate, or of the reserve between resting and maximum. The maximum is usually guessed rather than measured: the familiar 220 − age is worse than 208 − 0.7 × age, which comes from a meta-analysis of 351 studies, and even that carries a standard error of about 10 beats a minute. Ten beats can move a boundary. A zone chart you did not measure is a rough map — useful, as long as it is read as one. Openband uses the second formula until you enter a maximum you have measured.",
+        "## 80/20 is an observation, not a law",
+        "Elite endurance athletes, watched rather than assigned, spend roughly 80% of their sessions at low intensity. Where intensity distribution has actually been randomised the picture is thinner: a 2024 review of 17 studies found a small advantage for polarised training on VO₂ peak, a standardised mean difference of 0.24, and no clear advantage on time trials or other performance measures. The uncontested part is modest — most of the volume easy, some of it genuinely hard, less of it stranded in the middle.",
+        "For anyone not training for an event, the public-health floor is 150 to 300 minutes of moderate activity a week, or 75 to 150 vigorous, plus strength work on two days."
+      ],
+      "sources": [
+        {
+          "text": "Bouchard C, An P, Rice T, et al. Familial aggregation of VO₂max response to exercise training: results from the HERITAGE Family Study. Journal of Applied Physiology 1999;87:1003–1008.",
+          "url": "https://doi.org/10.1152/jappl.1999.87.3.1003"
+        },
+        {
+          "text": "Milanović Z, Sporiš G, Weston M. Effectiveness of high-intensity interval training and continuous endurance training for VO₂max improvements: a systematic review and meta-analysis. Sports Medicine 2015;45:1469–1481.",
+          "url": "https://doi.org/10.1007/s40279-015-0365-0"
+        },
+        {
+          "text": "Tanaka H, Monahan KD, Seals DR. Age-predicted maximal heart rate revisited. Journal of the American College of Cardiology 2001;37:153–156.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11153730/"
+        },
+        {
+          "text": "Seiler S. What is best practice for training intensity and duration distribution in endurance athletes? International Journal of Sports Physiology and Performance 2010;5:276–291.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/20861519/"
+        },
+        {
+          "text": "Silva Oliveira G, Boppre G, Fonseca H. Comparison of polarized versus other types of endurance training intensity distribution on athletes' endurance performance: a systematic review with meta-analysis. Sports Medicine 2024;54:2071–2095.",
+          "url": "https://doi.org/10.1007/s40279-024-02034-z"
+        },
+        {
+          "text": "Bull FC, Al-Ansari SS, Biddle S, et al. World Health Organization 2020 guidelines on physical activity and sedentary behaviour. British Journal of Sports Medicine 2020;54:1451–1462.",
+          "url": "https://doi.org/10.1136/bjsports-2020-102955"
+        }
+      ]
+    },
+    {
+      "id": "recovery",
+      "icon": "lungs",
+      "title": "Recovery and breathing",
+      "subtitle": "Sleep, slow breathing, stress",
+      "body": [
+        "## Sleep is the recovery intervention with the most behind it",
+        "After a year of structured consensus work, the American Academy of Sleep Medicine and the Sleep Research Society recommended seven or more hours a night for adults aged 18 to 60. They set no upper bound, and said need varies between people for genetic, medical and behavioural reasons. Regularly sleeping less than that is associated with weight gain, diabetes, hypertension, heart disease and depression.",
+        "Sleeping more than you need is much less studied. Eleven college basketball players who aimed for ten hours in bed for five to seven weeks ran a timed sprint about 0.7 s faster and improved free-throw accuracy by roughly 9%. Eleven people, no control group: suggestive, not settled.",
+        "## Slow breathing does something measurable",
+        "Breathing slowly — about six breaths a minute, near 0.1 Hz — raises vagally mediated heart-rate variability during the practice, immediately after it, and after a course of sessions. That held across 223 studies. What it does for stress, sleep or performance beyond that measurement is far less clear, and the review's authors offer it as a low-cost adjunct rather than a treatment.",
+        "## Heart-rate variability is a trend, not a verdict",
+        "HRV moves with sleep, alcohol, illness, training load and the hour you measured it. Work on monitoring endurance athletes concluded that an average of at least three readings a week tracks adaptation better than any single morning does. One low number is mostly noise; a week of them is information.",
+        "## The dull part is the part with evidence",
+        "The NHS self-help list for sleeping badly is a set of unremarkable instructions: go to bed only when sleepy, get up at the same time every day, wind down for an hour first, keep the room dark and quiet, exercise during the day but not in the four hours before bed, and keep caffeine and alcohol six hours clear of it. Nothing on that list photographs well, which is part of why it gets skipped."
+      ],
+      "sources": [
+        {
+          "text": "Watson NF, Badr MS, Belenky G, et al. Recommended amount of sleep for a healthy adult: a joint consensus statement of the American Academy of Sleep Medicine and Sleep Research Society. SLEEP 2015;38:843–844.",
+          "url": "https://doi.org/10.5665/sleep.4716"
+        },
+        {
+          "text": "Mah CD, Mah KE, Kezirian EJ, Dement WC. The effects of sleep extension on the athletic performance of collegiate basketball players. Sleep 2011;34:943–950.",
+          "url": "https://doi.org/10.5665/SLEEP.1132"
+        },
+        {
+          "text": "Laborde S, Allen MS, Borges U, et al. Effects of voluntary slow breathing on heart rate and heart rate variability: a systematic review and meta-analysis. Neuroscience & Biobehavioral Reviews 2022;138:104711.",
+          "url": "https://doi.org/10.1016/j.neubiorev.2022.104711"
+        },
+        {
+          "text": "Plews DJ, Laursen PB, Le Meur Y, et al. Monitoring training with heart-rate variability: how much compliance is needed for valid assessment? International Journal of Sports Physiology and Performance 2014;9:783–790.",
+          "url": "https://doi.org/10.1123/ijspp.2013-0455"
+        },
+        {
+          "text": "NHS. Insomnia: self-help for sleeping badly.",
+          "url": "https://www.nhs.uk/conditions/insomnia/"
+        }
+      ]
+    },
+    {
+      "id": "nutrition",
+      "icon": "fork.knife",
+      "title": "Nutrition",
+      "subtitle": "Macros, micros, and what the numbers mean",
+      "body": [
+        "## The numbers health bodies actually set",
+        "Most of the macro ratios on the internet have no official basis. These do. They are population guidance, not a personal prescription.",
+        "- Total fat at or below 30% of energy, saturated fat below 10%, trans fat below 1% (WHO, 2023).",
+        "- Free sugars below 10% of energy — sugars added to food plus those in juice, syrup and honey, not the sugar in whole fruit or milk. Below 5% is a weaker, conditional recommendation (WHO, 2015).",
+        "- At least 25 g of naturally occurring dietary fibre a day from the age of ten, and at least 400 g of vegetables and fruit (WHO, 2023).",
+        "- Below 2 g of sodium a day, which is about 5 g of salt, just under a teaspoon (WHO).",
+        "- Protein 0.83 g per kilogram of bodyweight for an adult who does not train (EFSA, 2012). Roughly double that is where the training benefit plateaus.",
+        "## Fibre is the one most people miss",
+        "A series of reviews commissioned by the WHO, covering about 40 years of trials and cohort studies, found higher fibre intake associated with lower incidence of and mortality from coronary heart disease, stroke, type 2 diabetes and colorectal cancer, with the association still improving at 25 to 29 g a day. Certainty was graded moderate for fibre and low to very low for glycaemic index and glycaemic load — which is why fibre gets a number here and glycaemic index does not.",
+        "## Micronutrients worth knowing by name",
+        "At northern latitudes there is not enough UVB in autumn and winter to make vitamin D from sunlight, so the NHS advises considering 10 µg (400 IU) a day through those months, with 100 µg as the adult upper limit. A diet with no animal products needs a reliable source of B12. Past that, with a varied and adequate diet, most supplements have no measurable effect — and of the sports ones, the IOC's consensus finds good evidence for only a few: caffeine, creatine, nitrate and some buffering agents.",
+        "## What is contested",
+        "Meal timing. A meta-analysis of 13 breakfast trials found that people assigned to eat it took in about 260 kcal more a day and finished about 0.44 kg heavier than those assigned to skip it. Every trial carried a risk of bias and follow-up averaged weeks, so the authors asked for better trials rather than issuing a rule. Fasted training is similar: it shifts fuel use toward fat during the session, eating first helps performance in longer efforts, and an effect on body fat over months has not been established."
+      ],
+      "sources": [
+        {
+          "text": "WHO. Saturated fatty acid and trans-fatty acid intake for adults and children (2023); Carbohydrate intake for adults and children (2023).",
+          "url": "https://www.who.int/news/item/17-07-2023-who-updates-guidelines-on-fats-and-carbohydrates"
+        },
+        {
+          "text": "WHO. Guideline: sugars intake for adults and children (2015).",
+          "url": "https://www.who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children"
+        },
+        {
+          "text": "WHO. Sodium reduction fact sheet.",
+          "url": "https://www.who.int/news-room/fact-sheets/detail/sodium-reduction"
+        },
+        {
+          "text": "Reynolds A, Mann J, Cummings J, et al. Carbohydrate quality and human health: a series of systematic reviews and meta-analyses. The Lancet 2019;393:434–445.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/30638909/"
+        },
+        {
+          "text": "NHS. Vitamin D: how much you need, and the autumn and winter supplement advice.",
+          "url": "https://www.nhs.uk/conditions/vitamins-and-minerals/vitamin-d/"
+        },
+        {
+          "text": "EFSA Panel on Dietetic Products, Nutrition and Allergies. Scientific opinion on dietary reference values for protein (2012).",
+          "url": "https://www.efsa.europa.eu/en/press/news/120209"
+        },
+        {
+          "text": "Maughan RJ, Burke LM, Dvorak J, et al. IOC consensus statement: dietary supplements and the high-performance athlete. British Journal of Sports Medicine 2018;52:439–455.",
+          "url": "https://doi.org/10.1136/bjsports-2018-099027"
+        },
+        {
+          "text": "Sievert K, Hussain SM, Page MJ, et al. Effect of breakfast on weight and energy intake: systematic review and meta-analysis of randomised controlled trials. BMJ 2019;364:l42.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/30700403/"
+        },
+        {
+          "text": "Aird TP, Davies RW, Carson BP. Effects of fasted vs fed-state exercise on performance and post-exercise metabolism: a systematic review and meta-analysis. Scandinavian Journal of Medicine & Science in Sports 2018;28:1476–1493.",
+          "url": "https://doi.org/10.1111/sms.13054"
+        }
+      ]
+    },
+    {
+      "id": "mind",
+      "icon": "brain.head.profile",
+      "title": "Mind and habit",
+      "subtitle": "Focus, discipline, how a routine sticks",
+      "body": [
+        "## Repetition in a steady context, not willpower",
+        "A habit is a behaviour that a cue sets off without a decision. Ninety-six people each adopted one new daily health behaviour and rated how automatic it felt for 84 days. Automaticity rose along a curve that flattened: the modelled average time to near-plateau was 66 days, with individuals ranging from 18 days to a projected 254. The popular 21 days is not in this study — and neither, really, is 66, because the spread was the finding.",
+        "Two details are more useful than the average. Missing a single day did not measurably bend the curve; being chronically inconsistent did. And more complex behaviours — exercise rather than a glass of water — took longer.",
+        "## Decide the when and the where in advance",
+        "Naming the cue beforehand — after this, in this place, I will do that — is the most-tested behavioural lever there is. A 2006 meta-analysis of 94 tests put the effect at d = 0.65, medium to large. A 2024 update across 642 tests put it at 0.36 overall, 0.27 for behaviour specifically, and as low as 0.15 under one bias correction. Smaller than first advertised, still there, and free.",
+        "## Exercise and the mind",
+        "For depression, a network meta-analysis of 218 trials found that walking or jogging, strength training, yoga and tai chi each produced moderate reductions against active controls, with larger effects where the prescribed intensity was higher. Confidence was graded low to very low: of those 218 trials, one met the Cochrane bar for low risk of bias.",
+        "For cognition in healthy people, the honest answer is thinner than the marketing. An umbrella review of 24 meta-analyses — 109 trials, 11,266 participants — found a small pooled effect, d = 0.22, which shrank substantially once moderators and publication bias were accounted for. Its authors asked for caution about the claim that exercise makes healthy people sharper. Mood has better support than cognition, and neither result says anything about people with a diagnosis, who were not in these trials.",
+        "## What discipline turns out to be",
+        "Mostly design. The evidence that holds up is about context: a fixed time, a fixed place, a cue you did not have to remember, a behaviour simple enough to repeat while tired. The evidence for trying harder is scarce."
+      ],
+      "sources": [
+        {
+          "text": "Lally P, van Jaarsveld CHM, Potts HWW, Wardle J. How are habits formed: modelling habit formation in the real world. European Journal of Social Psychology 2010;40:998–1009.",
+          "url": "https://doi.org/10.1002/ejsp.674"
+        },
+        {
+          "text": "Gollwitzer PM, Sheeran P. Implementation intentions and goal achievement: a meta-analysis of effects and processes. Advances in Experimental Social Psychology 2006;38:69–119.",
+          "url": "https://doi.org/10.1016/S0065-2601(06)38002-1"
+        },
+        {
+          "text": "Sheeran P, Listrom O, Gollwitzer PM. The when and how of planning: meta-analysis of the scope and components of implementation intentions. European Review of Social Psychology 2024.",
+          "url": "https://doi.org/10.1080/10463283.2024.2334563"
+        },
+        {
+          "text": "Noetel M, Sanders T, Gallardo-Gómez D, et al. Effect of exercise for depression: systematic review and network meta-analysis of randomised controlled trials. BMJ 2024;384:e075847.",
+          "url": "https://doi.org/10.1136/bmj-2023-075847"
+        },
+        {
+          "text": "Ciria LF, Román-Caballero R, Vadillo MA, et al. An umbrella review of randomized control trials on the effects of physical exercise on cognition. Nature Human Behaviour 2023;7:928–941.",
+          "url": "https://doi.org/10.1038/s41562-023-01554-4"
+        }
+      ]
+    }
+  ]
+}

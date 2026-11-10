@@ -1,0 +1,306 @@
+{
+  "language": "tr",
+  "articles": [
+    {
+      "id": "fat-loss",
+      "icon": "flame",
+      "title": "Yağ kaybı",
+      "subtitle": "Kalori açığı, NEAT, metabolik hız",
+      "body": [
+        "## Giren enerji, çıkan enerji — ve ikisi de yerinde durmuyor",
+        "Yağ kaybı, vücudunuz aldığından fazla enerji harcadığında olur. Bu kısmı aritmetik. Zor olan, denklemin iki tarafının da sabit durmaması.",
+        "Eski kural — 3.500 kcal'lik bir açık bir libre (0,45 kg) yağ eder, günde 500 kıs, haftada bir libre ver — harcadığınız enerjiyi sabit sayar. Sabit değil. Hafifledikçe daha az harcarsınız ve açık arkanızdan kapanır. Kontrollü beslenme çalışmalarına oturtulmuş dinamik bir model, uzun vadede düz çizginin söylediğinden çok daha küçük bir değişim öngörüyor; projeksiyon uzadıkça da fark büyüyor.",
+        "## Enerji gerçekte nereye gidiyor",
+        "Üç yere. Dinlenme metabolizması, ki çoğu insanda en büyük pay. Yediğinizi sindirmek, ki günlük harcamanın %5 ile %15'ine mal olur ve protein ya da alkolün yüksek olduğu bir beslenmede en yüksektir. Ve hareket — hepsi, yalnızca antrenman dediğiniz kısmı değil.",
+        "Bu son kısım göründüğünden büyük. On altı gönüllüye sekiz hafta boyunca, kilosunu koruyacağı miktarın üzerine günde 1.000 kcal verildi. Harcadıkları fazla enerjinin üçte ikisi antrenman dışı aktivite termojenezinden geldi: kıpırdanma, duruş, ortalıkta yürümek. Bir kişinin NEAT'i ne kadar yükseldiyse o kadar az yağ depoladı; aralarındaki yağ artışı on kat fark etti.",
+        "## Bir antrenman toplama basitçe eklenmiyor",
+        "Çift etiketli suyla ölçülen 1.754 yetişkinde, aktiviteye harcanan enerjinin yaklaşık %28'i bazal harcamadaki düşüşle karşılandı; karşılama, daha fazla yağ taşıyan kişilerde daha büyüktü. Antrenman yine de değer — kalp için, kafa için, kas için. Ama saatin hesabınıza yazdığı kalori brüt bir tahmin ve o maliyetin bir kısmı günün başka bir yerinde sessizce geri ödeniyor.",
+        "## Tartışmalı olan",
+        "Diyetin metabolizmayı bozup bozmadığı. Televizyondaki bir kilo verme yarışmasından altı yıl sonra, 14 yarışmacının dinlenme harcaması hâlâ vücut kompozisyonlarının öngördüğünün günde yaklaşık 500 kcal altındaydı — ve en çok kiloyu koruyanlarda yavaşlama en fazlaydı. 2020'de bir çalışma, etkinin esas olarak insanlar hâlâ açıktayken göründüğünü, gerisinin ölçüm yöntemiyle ilgili olduğunu savundu; alan aşağı yukarı ortadan bölünmüş durumda. Hiçbir çalışmanın desteklemediği şey, salon katındaki hâli: geçmişte yapılmış bir diyetin bundan sonra yağ kaybını imkânsız kıldığı.",
+        "Bu alandaki her sayı bir tahmin: kilonuzu koruma eşiğiniz, açığınız, kolunuzdaki yakım. Yön güvenilir, haneler değil."
+      ],
+      "sources": [
+        {
+          "text": "Hall KD, Sacks G, Chandramohan D, et al. Quantification of the effect of energy imbalance on bodyweight. The Lancet 2011;378:826–837.",
+          "url": "https://doi.org/10.1016/S0140-6736(11)60812-X"
+        },
+        {
+          "text": "Levine JA, Eberhardt NL, Jensen MD. Role of nonexercise activity thermogenesis in resistance to fat gain in humans. Science 1999;283:212–214.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/9880251/"
+        },
+        {
+          "text": "Westerterp KR. Diet induced thermogenesis. Nutrition & Metabolism 2004;1:5.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/15507147/"
+        },
+        {
+          "text": "Careau V, Halsey LG, Pontzer H, et al. Energy compensation and adiposity in humans. Current Biology 2021;31:4659–4666.",
+          "url": "https://doi.org/10.1016/j.cub.2021.08.016"
+        },
+        {
+          "text": "Fothergill E, Guo J, Howard L, et al. Persistent metabolic adaptation 6 years after “The Biggest Loser” competition. Obesity 2016;24:1612–1619.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27136388/"
+        },
+        {
+          "text": "Martins C, Gower BA, Hill JO, Hunter GR. Metabolic adaptation is an illusion, only present when participants are in negative energy balance. The American Journal of Clinical Nutrition 2020;112:1212–1218.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32844188/"
+        }
+      ]
+    },
+    {
+      "id": "muscle",
+      "icon": "dumbbell",
+      "title": "Kas yapmak",
+      "subtitle": "Artan yük, hipertrofi, protein",
+      "body": [
+        "## Sinyal ve tedarik",
+        "Kas, ona alıştığından fazlasını tekrar tekrar yaptırdığınızda ve inşa edecek kadar beslendiğinizde büyür. Program bölümü, makine ve tempo, bu ikisinin etrafına dizilmiş ayrıntılar.",
+        "## Yük, çabadan daha az önemli",
+        "Yirmi bir çalışma yüke göre bir araya getirildi: hafif, yani tek tekrar maksimumunun %60'ı ve altı, ile ağır, yani üstü; iki tarafta da setler tükenme noktasına kadar götürülmüş. Maksimal kuvvette ağır açık ara kazandı. Kas boyutunda ikisi aşağı yukarı aynıydı. Büyüme, set formun bozulduğu noktaya yakın bittiği sürece geniş bir yük aralığında elde edilebiliyor.",
+        "Kuvvet daha özgül bir adaptasyon. Hedef daha ağır bir tek tekrarsa, antrenmanın da ağır olması gerekiyor.",
+        "## Hacim, bir yere kadar",
+        "On beş çalışma boyunca, kas grubu başına haftalık set sayısı büyümeyi öngördü: daha çok set, daha çok boyut. Veri bu eğilimi haftada on set civarına kadar destekledi, sonra tükendi — eğrinin nerede döndüğünü söyleyecek kadar yüksek hacimli çalışma yoktu ve katılımcıların çoğu antrenmansızdı. Bunu bir doz–yanıt eğrisinin biçimi olarak okuyun, reçete olarak değil. Haftalık hacim eşitlendiğinde, onu hafta içine nasıl dağıttığınız az fark ediyor.",
+        "## Proteinin bir tavanı var, raftaki iddiadan düşük",
+        "Kırk dokuz randomize çalışma, 1.863 katılımcı: direnç antrenmanının üstüne eklenen protein yağsız kütleyi ve kuvveti artırıyor, fayda ise kilogram başına günde yaklaşık 1,6 g'da düzleşiyor. Güven aralığı 2,2'ye uzanıyor ve neredeyse hiçbir çalışma 2,25'in üstünü test etmedi; yani kırılma noktasının tam yeri yumuşak. Ölçek için: antrenman yapmayan bir yetişkinin Avrupa referans alımı 0,83 g/kg. Kabaca iki katı, on katı değil.",
+        "Etki yaşlı katılımcılarda daha küçük, hâlihazırda antrenman yapanlarda daha büyüktü.",
+        "## Netleşmiş olan",
+        "Kuvvet çalışmasının haftaya ait olduğu, herkes için. WHO tüm yetişkinlere, aerobik aktivitenin yanında haftada iki ya da daha fazla gün kas güçlendirme öneriyor; yaşlı yetişkinler için de sayıyor. Belirli bir kişinin ne kadar hızlı ve ne kadar yanıt vereceğini ise hiçbir tablo söyleyemez."
+      ],
+      "sources": [
+        {
+          "text": "Schoenfeld BJ, Grgic J, Ogborn D, Krieger JW. Strength and hypertrophy adaptations between low- vs. high-load resistance training: a systematic review and meta-analysis. Journal of Strength and Conditioning Research 2017;31:3508–3523.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28834797/"
+        },
+        {
+          "text": "Schoenfeld BJ, Ogborn D, Krieger JW. Dose-response relationship between weekly resistance training volume and increases in muscle mass: a systematic review and meta-analysis. Journal of Sports Sciences 2017;35:1073–1082.",
+          "url": "https://doi.org/10.1080/02640414.2016.1210197"
+        },
+        {
+          "text": "Morton RW, Murphy KT, McKellar SR, et al. A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults. British Journal of Sports Medicine 2018;52:376–384.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28698222/"
+        },
+        {
+          "text": "EFSA Panel on Dietetic Products, Nutrition and Allergies. Scientific opinion on dietary reference values for protein (2012): population reference intake 0.83 g/kg body weight per day.",
+          "url": "https://www.efsa.europa.eu/en/press/news/120209"
+        },
+        {
+          "text": "Bull FC, Al-Ansari SS, Biddle S, et al. World Health Organization 2020 guidelines on physical activity and sedentary behaviour. British Journal of Sports Medicine 2020;54:1451–1462.",
+          "url": "https://doi.org/10.1136/bjsports-2020-102955"
+        }
+      ]
+    },
+    {
+      "id": "weight",
+      "icon": "scalemass",
+      "title": "Kiloyu korumak",
+      "subtitle": "Geri alım neden kural, başarıyla birlikte ne geliyor",
+      "body": [
+        "## Zor kısım vermek değil",
+        "Çoğu yöntem kiloyu bir süre veriyor; azı korunuyor. Uzun vadeli çalışmalar bir araya getirildiğinde, verilen kilonun yarısından fazlası iki yıl içinde, %80'inden fazlası beş yıl içinde geri geliyor. Herhangi bir yaklaşımın karşılaştırılacağı taban bu — ve okuyacağınız karşılaştırmaların çoğu on iki haftada bitiyor.",
+        "## Vücut itiraz ediyor: ölçülü, ama uzun süre",
+        "Verilen her kilo için enerji harcaması günde kabaca 20-30 kcal düşerken, iştah günde yaklaşık 100 kcal'lik bir dürtü kadar yükseliyor. Bunlar kontrollü çalışmalardan çıkan ortalamalar ve hızla sönmüyorlar. Yani koruma, çabanın yokluğu değil; çabanın daha küçük ve çok daha uzun hâli.",
+        "## Hangi diyet? Büyük ölçüde hayatınızla temasa dayanan",
+        "609 yetişkin on iki ay boyunca, kalori hedefi verilmeksizin, sağlıklı az yağlı ya da sağlıklı az karbonhidratlı bir beslenmeye randomize edildi. Ortalama kayıp: 5,3 kg'a karşı 6,0 kg; anlamlı bir fark yok. Araştırmacıların üzerine oynadığı genotip örüntüleri de insülin salgısı ölçümü de kimin hangisinde daha iyi gideceğini öngörmedi. Her grubun içinde bireysel sonuçlar büyük kayıplardan küçük artışlara kadar uzandı.",
+        "## Kiloyu koruyanlarla birlikte gelen şeyler",
+        "Vücut ağırlığının onda birini veren insanların yaklaşık %20'si bu kaybı en az bir yıl koruyor. Ortalama 33 kg vermiş ve beş yıldan uzun süre korumuş olan ABD Ulusal Kilo Kontrol Kayıt Sistemi üyeleri; beslenme ve aktivite alışkanlıklarını sürdürdüklerini, düzenli tartıldıklarını, depresyon ve dürtüsellik düzeylerinin düşük olduğunu, çoğu zaman da denemeyi tetikleyen bir sağlık olayı yaşadıklarını bildiriyor. Kendilerini anlatan, kendi kendini seçmiş bir grup; yani bunu başarının neye benzediğinin portresi olarak okuyun, başarıyı üreten bir tarif olarak değil.",
+        "## Gösterişsiz okuma",
+        "Kanıt tekrarlanabilir olanı işaret ediyor: sapmayı fark edecek kadar sık ölçmek, gelecek ay da seçeceğiniz yemek, yapmaktan ürkmediğiniz hareket. Hangi diyetin şu sıra tartışıldığını işaret etmiyor. Ve bu çalışmaların hiçbiri bir kişiyi test etmedi — insanların ortalamalarını test ettiler ve bireysel sonuçlar o ortalamanın etrafında muazzam değişiyor."
+      ],
+      "sources": [
+        {
+          "text": "Hall KD, Kahan S. Maintenance of lost weight and long-term management of obesity. Medical Clinics of North America 2018;102:183–197.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/29156185/"
+        },
+        {
+          "text": "Gardner CD, Trepanowski JF, Del Gobbo LC, et al. Effect of low-fat vs low-carbohydrate diet on 12-month weight loss in overweight adults: the DIETFITS randomized clinical trial. JAMA 2018;319:667–679.",
+          "url": "https://doi.org/10.1001/jama.2018.0245"
+        },
+        {
+          "text": "Wing RR, Phelan S. Long-term weight loss maintenance. The American Journal of Clinical Nutrition 2005;82:222S–225S.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16002825/"
+        }
+      ]
+    },
+    {
+      "id": "endurance",
+      "icon": "figure.run",
+      "title": "Koşu ve dayanıklılık",
+      "subtitle": "VO₂ maks, bölge çalışması, interval",
+      "body": [
+        "## VO₂ maks nedir",
+        "Vücudunuzun bir dakikada alıp kullanabileceği en fazla oksijen. Sürdürülebilir aerobik işe bir tavan koyar. Hızlı olmakla aynı şey değildir: hız, ne kadar ekonomik hareket ettiğinize ve o tavanın ne kadarını bir saat boyunca tutabildiğinize de bağlıdır.",
+        "Antrenmanla gelişir, eşitsiz biçimde. HERITAGE Family Study'de 481 hareketsiz yetişkin aynı 20 haftalık programı tamamladı. Ortalama kazanç dakikada 384 ml oksijendi, standart sapma 202: kimi neredeyse kıpırdamadı, kimi ortalamanın iki katını kazandı. Yanıtlar ailelerde kümelendi; aileler arası varyans aile içi varyansın yaklaşık iki buçuk katıydı. Antrenmana yanıt kısmen kalıtsal ve kimsenin gelişme hızı bir tablodan okunamaz.",
+        "## Kolay kilometreler de sert intervaller de işe yarıyor",
+        "Yirmi sekiz çalışma bir araya getirildiğinde, sürekli dayanıklılık antrenmanı da yüksek şiddetli interval de antrenmansız kontrollere karşı büyük kazanç üretti: sırasıyla yaklaşık 4,9 ve 5,5 ml/kg/dk. İnterval küçük bir üstünlük tuttu, daha az formda başlayanlarda daha büyüğünü. Fark, “hangisi daha iyi” sorusunu “hangisi üç ay sonra hâlâ yapılıyor olacak” sorusundan zayıf kılacak kadar küçük.",
+        "## Bölgeler nereden geliyor, neyi bilemez",
+        "Bir bölge, maksimum kalp atışınızın ya da dinlenme ile maksimum arasındaki rezervin bir payıdır. Maksimum genelde ölçülmez, tahmin edilir: bildik 220 − yaş, 351 çalışmanın meta-analizinden gelen 208 − 0,7 × yaş'tan daha kötüdür ve o bile dakikada yaklaşık 10 atışlık bir standart hata taşır. On atış bir sınırı kaydırabilir. Ölçmediğiniz bir bölge tablosu kaba bir haritadır — öyle okunduğu sürece işe yarar. Openband, ölçtüğünüz bir maksimumu girene kadar ikinci formülü kullanıyor.",
+        "## 80/20 bir gözlem, yasa değil",
+        "Elit dayanıklılık sporcuları — atandıkları için değil, izlendikleri için — seanslarının kabaca %80'ini düşük şiddette geçiriyor. Şiddet dağılımının gerçekten randomize edildiği yerde tablo daha ince: 17 çalışmalık 2024 derlemesi, kutuplaşmış antrenmanın VO₂ zirvesinde küçük bir avantajı olduğunu buldu — standartlaştırılmış ortalama fark 0,24 — zamana karşı denemelerde ve diğer performans ölçümlerinde net bir avantaj bulmadı. Tartışmasız kısım ölçülü: hacmin çoğu kolay, bir kısmı gerçekten sert, ortada asılı kalanı az.",
+        "Bir yarışa hazırlanmayan herkes için halk sağlığı tabanı: haftada 150-300 dakika orta şiddetli ya da 75-150 dakika yüksek şiddetli aktivite, artı iki gün kuvvet çalışması."
+      ],
+      "sources": [
+        {
+          "text": "Bouchard C, An P, Rice T, et al. Familial aggregation of VO₂max response to exercise training: results from the HERITAGE Family Study. Journal of Applied Physiology 1999;87:1003–1008.",
+          "url": "https://doi.org/10.1152/jappl.1999.87.3.1003"
+        },
+        {
+          "text": "Milanović Z, Sporiš G, Weston M. Effectiveness of high-intensity interval training and continuous endurance training for VO₂max improvements: a systematic review and meta-analysis. Sports Medicine 2015;45:1469–1481.",
+          "url": "https://doi.org/10.1007/s40279-015-0365-0"
+        },
+        {
+          "text": "Tanaka H, Monahan KD, Seals DR. Age-predicted maximal heart rate revisited. Journal of the American College of Cardiology 2001;37:153–156.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11153730/"
+        },
+        {
+          "text": "Seiler S. What is best practice for training intensity and duration distribution in endurance athletes? International Journal of Sports Physiology and Performance 2010;5:276–291.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/20861519/"
+        },
+        {
+          "text": "Silva Oliveira G, Boppre G, Fonseca H. Comparison of polarized versus other types of endurance training intensity distribution on athletes' endurance performance: a systematic review with meta-analysis. Sports Medicine 2024;54:2071–2095.",
+          "url": "https://doi.org/10.1007/s40279-024-02034-z"
+        },
+        {
+          "text": "Bull FC, Al-Ansari SS, Biddle S, et al. World Health Organization 2020 guidelines on physical activity and sedentary behaviour. British Journal of Sports Medicine 2020;54:1451–1462.",
+          "url": "https://doi.org/10.1136/bjsports-2020-102955"
+        }
+      ]
+    },
+    {
+      "id": "recovery",
+      "icon": "lungs",
+      "title": "Toparlanma ve nefes",
+      "subtitle": "Uyku, yavaş nefes, stres",
+      "body": [
+        "## Arkasında en çok kanıt olan toparlanma aracı: uyku",
+        "Bir yıl süren yapılandırılmış uzlaşma çalışmasının ardından Amerikan Uyku Tıbbı Akademisi ile Uyku Araştırmaları Derneği, 18-60 yaş yetişkinler için gecede yedi saat ve üzerini önerdi. Üst sınır koymadılar ve ihtiyacın genetik, tıbbi ve davranışsal nedenlerle kişiden kişiye değiştiğini söylediler. Düzenli olarak bundan az uyumak kilo artışı, diyabet, hipertansiyon, kalp hastalığı ve depresyonla ilişkili.",
+        "İhtiyacınızdan fazla uyumak çok daha az çalışılmış. Beş-yedi hafta boyunca yatakta on saati hedefleyen on bir üniversiteli basketbolcu, zamana karşı sprinti yaklaşık 0,7 sn hızlı koştu ve serbest atış isabetini kabaca %9 artırdı. On bir kişi, kontrol grubu yok: düşündürücü, kesinleşmiş değil.",
+        "## Yavaş nefes ölçülebilir bir şey yapıyor",
+        "Yavaş nefes almak — dakikada yaklaşık altı nefes, 0,1 Hz civarı — vagal aracılı kalp atış değişkenliğini pratik sırasında, hemen sonrasında ve bir seans serisinin ardından yükseltiyor. Bu, 223 çalışma boyunca böyleydi. O ölçümün ötesinde stres, uyku ya da performans için ne yaptığı çok daha belirsiz; derlemenin yazarları bunu bir tedavi değil, düşük maliyetli bir yardımcı olarak öneriyor.",
+        "## Kalp atış değişkenliği bir eğilim, bir hüküm değil",
+        "HRV uykuyla, alkolle, hastalıkla, antrenman yüküyle ve ölçtüğünüz saatle oynar. Dayanıklılık sporcularının izlenmesi üzerine yapılan çalışmalar, haftada en az üç ölçümün ortalamasının adaptasyonu tek bir sabahtan daha iyi izlediği sonucuna vardı. Tek bir düşük sayı büyük ölçüde gürültü; bir haftalık düşük sayı bilgi.",
+        "## Kanıtı olan kısım, sıkıcı kısım",
+        "NHS'in kötü uyuyanlar için öz-yardım listesi sıradan talimatlardan oluşuyor: yatağa yalnızca uykunuz geldiğinde gidin, her gün aynı saatte kalkın, öncesinde bir saat yavaşlayın, odayı karanlık ve sessiz tutun, gün içinde egzersiz yapın ama yatmadan önceki dört saatte yapmayın, kafeini ve alkolü yatma saatine altı saat uzak tutun. Listedeki hiçbir şey fotoğrafta iyi durmuyor; atlanmasının bir nedeni de bu."
+      ],
+      "sources": [
+        {
+          "text": "Watson NF, Badr MS, Belenky G, et al. Recommended amount of sleep for a healthy adult: a joint consensus statement of the American Academy of Sleep Medicine and Sleep Research Society. SLEEP 2015;38:843–844.",
+          "url": "https://doi.org/10.5665/sleep.4716"
+        },
+        {
+          "text": "Mah CD, Mah KE, Kezirian EJ, Dement WC. The effects of sleep extension on the athletic performance of collegiate basketball players. Sleep 2011;34:943–950.",
+          "url": "https://doi.org/10.5665/SLEEP.1132"
+        },
+        {
+          "text": "Laborde S, Allen MS, Borges U, et al. Effects of voluntary slow breathing on heart rate and heart rate variability: a systematic review and meta-analysis. Neuroscience & Biobehavioral Reviews 2022;138:104711.",
+          "url": "https://doi.org/10.1016/j.neubiorev.2022.104711"
+        },
+        {
+          "text": "Plews DJ, Laursen PB, Le Meur Y, et al. Monitoring training with heart-rate variability: how much compliance is needed for valid assessment? International Journal of Sports Physiology and Performance 2014;9:783–790.",
+          "url": "https://doi.org/10.1123/ijspp.2013-0455"
+        },
+        {
+          "text": "NHS. Insomnia: self-help for sleeping badly.",
+          "url": "https://www.nhs.uk/conditions/insomnia/"
+        }
+      ]
+    },
+    {
+      "id": "nutrition",
+      "icon": "fork.knife",
+      "title": "Beslenme",
+      "subtitle": "Makro, mikro ve sayıların anlamı",
+      "body": [
+        "## Sağlık kurumlarının gerçekten koyduğu sayılar",
+        "İnternetteki makro oranlarının çoğunun resmî bir dayanağı yok. Bunların var — ve bunlar kişisel bir reçete değil, nüfus düzeyinde rehberlik.",
+        "- Toplam yağ enerjinin %30'u ya da altı, doymuş yağ %10'un altı, trans yağ %1'in altı (WHO, 2023).",
+        "- Serbest şekerler enerjinin %10'unun altı — yiyeceğe eklenen şekerler ile meyve suyu, şurup ve baldaki şekerler; bütün meyvedeki ya da sütteki şeker değil. %5'in altı daha zayıf, koşullu bir öneri (WHO, 2015).",
+        "- On yaşından itibaren günde en az 25 g doğal olarak bulunan diyet lifi ve en az 400 g sebze ve meyve (WHO, 2023).",
+        "- Günde 2 g'ın altında sodyum, yani yaklaşık 5 g tuz: bir çay kaşığının biraz altı (WHO).",
+        "- Protein: antrenman yapmayan bir yetişkin için kilogram başına 0,83 g (EFSA, 2012). Antrenman faydasının düzleştiği yer kabaca bunun iki katı.",
+        "## Çoğu insanın kaçırdığı besin lif",
+        "WHO'nun ısmarladığı, yaklaşık 40 yıllık çalışma ve kohortu kapsayan bir derleme dizisi, daha yüksek lif alımını koroner kalp hastalığı, inme, tip 2 diyabet ve kolorektal kanserin görülme sıklığı ve ölümlülüğündeki düşüşle ilişkili buldu; ilişki günde 25-29 g'da hâlâ iyileşiyordu. Kesinlik lif için orta, glisemik indeks ve glisemik yük için düşük ile çok düşük derecelendirildi — burada life bir sayı düşmesinin, glisemik indekse düşmemesinin nedeni bu.",
+        "## Adıyla bilmeye değer mikro besinler",
+        "Kuzey enlemlerinde sonbahar ve kışta güneşten D vitamini üretecek kadar UVB yok; bu yüzden NHS o aylarda günde 10 µg (400 IU) almayı düşünmeyi öneriyor, yetişkin üst sınırı ise 100 µg. Hayvansal ürün içermeyen bir beslenmenin güvenilir bir B12 kaynağına ihtiyacı var. Bunun ötesinde, çeşitli ve yeterli bir beslenmede takviyelerin çoğunun ölçülebilir etkisi yok — spor takviyelerinde ise IOC'nin uzlaşma raporu yalnızca birkaçı için iyi kanıt buluyor: kafein, kreatin, nitrat ve bazı tamponlayıcılar.",
+        "## Tartışmalı olan",
+        "Öğün zamanlaması. On üç kahvaltı çalışmasının meta-analizi, kahvaltı etmeye atanan insanların günde yaklaşık 260 kcal fazla aldığını ve atlamaya atananlardan yaklaşık 0,44 kg ağır bitirdiğini buldu. Her çalışma bir yanlılık riski taşıyordu ve takip süresi ortalama haftalarla ölçülüyordu; yazarlar da bir kural koymak yerine daha iyi çalışmalar istedi. Aç karnına antrenman benzer bir yerde: seans sırasında yakıt kullanımını yağa kaydırıyor, önce yemek uzun süreli işlerde performansa yardım ediyor, aylar içinde vücut yağına etkisi ise gösterilmiş değil."
+      ],
+      "sources": [
+        {
+          "text": "WHO. Saturated fatty acid and trans-fatty acid intake for adults and children (2023); Carbohydrate intake for adults and children (2023).",
+          "url": "https://www.who.int/news/item/17-07-2023-who-updates-guidelines-on-fats-and-carbohydrates"
+        },
+        {
+          "text": "WHO. Guideline: sugars intake for adults and children (2015).",
+          "url": "https://www.who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children"
+        },
+        {
+          "text": "WHO. Sodium reduction fact sheet.",
+          "url": "https://www.who.int/news-room/fact-sheets/detail/sodium-reduction"
+        },
+        {
+          "text": "Reynolds A, Mann J, Cummings J, et al. Carbohydrate quality and human health: a series of systematic reviews and meta-analyses. The Lancet 2019;393:434–445.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/30638909/"
+        },
+        {
+          "text": "NHS. Vitamin D: how much you need, and the autumn and winter supplement advice.",
+          "url": "https://www.nhs.uk/conditions/vitamins-and-minerals/vitamin-d/"
+        },
+        {
+          "text": "EFSA Panel on Dietetic Products, Nutrition and Allergies. Scientific opinion on dietary reference values for protein (2012).",
+          "url": "https://www.efsa.europa.eu/en/press/news/120209"
+        },
+        {
+          "text": "Maughan RJ, Burke LM, Dvorak J, et al. IOC consensus statement: dietary supplements and the high-performance athlete. British Journal of Sports Medicine 2018;52:439–455.",
+          "url": "https://doi.org/10.1136/bjsports-2018-099027"
+        },
+        {
+          "text": "Sievert K, Hussain SM, Page MJ, et al. Effect of breakfast on weight and energy intake: systematic review and meta-analysis of randomised controlled trials. BMJ 2019;364:l42.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/30700403/"
+        },
+        {
+          "text": "Aird TP, Davies RW, Carson BP. Effects of fasted vs fed-state exercise on performance and post-exercise metabolism: a systematic review and meta-analysis. Scandinavian Journal of Medicine & Science in Sports 2018;28:1476–1493.",
+          "url": "https://doi.org/10.1111/sms.13054"
+        }
+      ]
+    },
+    {
+      "id": "mind",
+      "icon": "brain.head.profile",
+      "title": "Zihin ve alışkanlık",
+      "subtitle": "Odak, disiplin, bir rutin nasıl yerleşir",
+      "body": [
+        "## İrade değil, sabit bir bağlamda tekrar",
+        "Alışkanlık, bir ipucunun karar vermeden başlattığı davranıştır. Doksan altı kişi birer yeni günlük sağlık davranışı edindi ve 84 gün boyunca ne kadar otomatik geldiğini puanladı. Otomatiklik düzleşen bir eğri boyunca yükseldi: platoya yaklaşmanın modellenmiş ortalama süresi 66 gündü, kişiler 18 günden öngörülen 254 güne kadar uzanıyordu. Popüler 21 gün bu çalışmada yok — ve aslında 66 da yok, çünkü bulgunun kendisi bu yayılımdı.",
+        "Ortalamadan daha işe yarar iki ayrıntı var. Tek bir günü kaçırmak eğriyi ölçülebilir biçimde bükmedi; kronik olarak tutarsız olmak büktü. Ve daha karmaşık davranışlar — bir bardak su yerine egzersiz — daha uzun sürdü.",
+        "## Ne zaman ve nerede sorusunu önceden bağlayın",
+        "İpucunu önceden adlandırmak — şundan sonra, şurada, şunu yapacağım — var olan en çok test edilmiş davranışsal kaldıraç. 2006'daki 94 testlik bir meta-analiz etkiyi d = 0,65, yani orta-büyük buldu. 642 testi kapsayan 2024 güncellemesi bunu genelde 0,36'ya, özellikle davranış için 0,27'ye ve bir yanlılık düzeltmesi altında 0,15'e kadar indirdi. İlk reklam edildiğinden küçük, yine de var ve bedava.",
+        "## Egzersiz ve zihin",
+        "Depresyonda, 218 çalışmalık bir ağ meta-analizi; yürüme ya da koşu, kuvvet antrenmanı, yoga ve tai chi'nin aktif kontrollere karşı orta düzeyde azalma ürettiğini, reçete edilen şiddet yüksek olduğunda etkinin büyüdüğünü buldu. Güven düşük ile çok düşük derecelendirildi: o 218 çalışmanın yalnızca biri düşük yanlılık riski için Cochrane eşiğini geçiyordu.",
+        "Sağlıklı insanlarda biliş için dürüst cevap, pazarlamadan ince. Yirmi dört meta-analizi kapsayan bir şemsiye derleme — 109 çalışma, 11.266 katılımcı — küçük bir birleşik etki buldu: d = 0,22. Düzenleyiciler ve yayın yanlılığı hesaba katıldığında bu etki belirgin biçimde küçüldü. Yazarlar, egzersizin sağlıklı insanları keskinleştirdiği iddiası konusunda temkinli olunmasını istedi. Ruh hâlinin desteği bilişten iyi; iki sonuç da teşhis almış insanlar hakkında bir şey söylemiyor, onlar bu çalışmalarda yoktu.",
+        "## Disiplin neymiş",
+        "Büyük ölçüde tasarım. Ayakta kalan kanıt bağlamla ilgili: sabit bir saat, sabit bir yer, hatırlamak zorunda olmadığınız bir ipucu, yorgunken tekrarlanacak kadar basit bir davranış. Daha sıkı çalışmanın kanıtı kıt."
+      ],
+      "sources": [
+        {
+          "text": "Lally P, van Jaarsveld CHM, Potts HWW, Wardle J. How are habits formed: modelling habit formation in the real world. European Journal of Social Psychology 2010;40:998–1009.",
+          "url": "https://doi.org/10.1002/ejsp.674"
+        },
+        {
+          "text": "Gollwitzer PM, Sheeran P. Implementation intentions and goal achievement: a meta-analysis of effects and processes. Advances in Experimental Social Psychology 2006;38:69–119.",
+          "url": "https://doi.org/10.1016/S0065-2601(06)38002-1"
+        },
+        {
+          "text": "Sheeran P, Listrom O, Gollwitzer PM. The when and how of planning: meta-analysis of the scope and components of implementation intentions. European Review of Social Psychology 2024.",
+          "url": "https://doi.org/10.1080/10463283.2024.2334563"
+        },
+        {
+          "text": "Noetel M, Sanders T, Gallardo-Gómez D, et al. Effect of exercise for depression: systematic review and network meta-analysis of randomised controlled trials. BMJ 2024;384:e075847.",
+          "url": "https://doi.org/10.1136/bmj-2023-075847"
+        },
+        {
+          "text": "Ciria LF, Román-Caballero R, Vadillo MA, et al. An umbrella review of randomized control trials on the effects of physical exercise on cognition. Nature Human Behaviour 2023;7:928–941.",
+          "url": "https://doi.org/10.1038/s41562-023-01554-4"
+        }
+      ]
+    }
+  ]
+}
