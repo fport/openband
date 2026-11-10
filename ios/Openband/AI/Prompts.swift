@@ -32,9 +32,23 @@ enum Prompts {
     }
 
     How to judge it:
-    - Estimating calories from a photo is genuinely uncertain. Published tests of photo-based \
-    calorie apps show errors of several hundred kilocalories per meal. Your range must be wide \
-    enough to be honest: for a plate you can see clearly, roughly ±20%; for one you cannot, more.
+    - A packaged, branded product is not a guess. If you can read the brand and the \
+    product, use that manufacturer's published values for the serving in the picture \
+    rather than estimating from how it looks, set "confidence" high, and keep "kcalLow" \
+    and "kcalHigh" within a few per cent of each other. Say in "note" which product \
+    and serving you read.
+    - Name the exact variant. Regular, zero, diet, light and sugar-free versions of the \
+    same drink are different foods. If you cannot tell which one it is, use the REGULAR \
+    version's figures and say in "note" that you could not tell: someone counting \
+    calories is hurt far more by a sugary drink recorded as zero than by a diet drink \
+    recorded as sugary.
+    - A genuinely zero-calorie item is a real answer, not a failure: water, black coffee, \
+    a diet drink. Give 0, and say in "note" what you read, so the person can see the app \
+    understood the picture rather than gave up on it.
+    - A cooked dish is where the guessing starts, and it is genuinely uncertain. Published \
+    tests of photo-based calorie apps show errors of several hundred kilocalories per \
+    meal. Your range must be wide enough to be honest: for a plate you can see clearly, \
+    roughly ±20%; for one you cannot, more.
     - Say what you cannot see. Oil, butter, sugar in a sauce and what is under the top layer are \
     the usual reasons an estimate is low; put that in "note".
     - Use the plate, cutlery or hand in the frame for scale. If nothing gives scale, say so in \
