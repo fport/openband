@@ -130,7 +130,7 @@ struct ShareCard: View {
         }
         // Moving time, which is the number every other app on the feed is showing.
         out.append((WorkoutFormat.clock(workout.moving > 0 ? workout.moving : workout.elapsed), nil,
-                    String(localized: "Time")))
+                    String(localized: "workout.time", defaultValue: "Time", comment: "How long a workout lasted, not a clock time")))
         // A ride is remembered by how much it climbed, a run by how fast it was.
         if workout.sport.tempo == .speed, workout.elevationGain > 10 {
             let gain = WorkoutFormat.elevation(workout.elevationGain)

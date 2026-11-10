@@ -20,6 +20,8 @@ Over Bluetooth LE, from your computer. Your data stays with you.</p>
 stored key, battery, firmware, today's totals and setting the clock. Per-minute history and sleep
 pass against Gadgetbridge vectors and a simulated band and still wait for a band that was worn.
 
+**Write-up:** [A Tap on My Wrist Moves the Robot Arm](https://getporti.com/paper/band-to-robot-arm) — how Openband, so101-remote and so101-band fit together.
+
 ## Start
 
 ```bash
