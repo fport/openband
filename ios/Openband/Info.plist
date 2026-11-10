@@ -46,20 +46,18 @@
 	<array>
 		<string>_so101band._tcp</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Openband uses the camera for meal and body check-in photos. They go to the AI provider you chose, with your own key, and nowhere else.</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Openband reads the steps your iPhone counted to fill the minutes your band has nothing for. This data stays on your iPhone and is never sent to an AI provider or anywhere else.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Openband saves what your band measured (steps, heart rate, blood oxygen, sleep) to Apple Health.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Openband uses the camera for meal and body check-in photos. They go to the AI provider you chose, with your own key, and nowhere else.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Openband follows your route while you train, so a run, ride or walk gets its distance, pace and map. The route stays on your phone.</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>location</string>
-	</array>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Openband talks to so101-band on your Mac over the local network to drive the robot arm.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Openband follows your route while you train, so a run, ride or walk gets its distance, pace and map. The route stays on your phone.</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>PlusJakartaSans-Regular.ttf</string>
@@ -72,6 +70,10 @@
 		<key>UIApplicationSupportsMultipleScenes</key>
 		<false/>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UIRequiredDeviceCapabilities</key>
