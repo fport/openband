@@ -24,6 +24,8 @@ final class WorkoutRecorder: ObservableObject {
     @Published var problem: String?
 
     let route = RouteRecorder()
+    /// The Lock Screen and Dynamic Island, for as long as the workout runs.
+    private let activity = WorkoutActivityLink()
 
     private var pausedAt: Date?
     private var pausedSeconds: TimeInterval = 0
@@ -33,6 +35,7 @@ final class WorkoutRecorder: ObservableObject {
     init() {
         // The route's own changes have to reach this object too, or the live screen never redraws.
         routeChanges = route.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }
+        activity.endOrphaned()
     }
 
     var isRunning: Bool { phase == .recording || phase == .paused }
@@ -51,6 +54,12 @@ final class WorkoutRecorder: ObservableObject {
 
     var heartRate: Int? { heartRates.last }
 
+    /// The figures as the Live Activity gets them.
+    private var activityState: WorkoutActivityAttributes.ContentState {
+        .init(elapsed: elapsed, distance: distance, tempo: tempo, heartRate: heartRate,
+              isPaused: phase == .paused, pushedAt: Date())
+    }
+
     // MARK: control
 
     func start(_ sport: Sport, at date: Date = Date()) {
@@ -66,7 +75,15 @@ final class WorkoutRecorder: ObservableObject {
         if sport.tracksLocation { route.start(sport, at: date) }
         UIApplication.shared.isIdleTimerDisabled = true
         ticker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-            .sink { [weak self] date in self?.now = date }
+            .sink { [weak self] date in self?.tick(date) }
+        activity.start(sport: sport, startedAt: date, state: activityState)
+    }
+
+    /// One second of wall clock: the screen redraws, and the Lock Screen catches up when its
+    /// turn comes round.
+    private func tick(_ date: Date) {
+        now = date
+        activity.update(activityState)
     }
 
     func pause() {
@@ -74,6 +91,7 @@ final class WorkoutRecorder: ObservableObject {
         pausedAt = Date()
         phase = .paused
         route.pause()
+        activity.update(activityState, force: true)
     }
 
     func resume() {
@@ -82,10 +100,12 @@ final class WorkoutRecorder: ObservableObject {
         self.pausedAt = nil
         phase = .recording
         route.resume()
+        activity.update(activityState, force: true)
     }
 
     func discard() {
         finishTracking()
+        activity.end(activityState)
         startedAt = nil
         phase = .idle
     }
@@ -107,7 +127,11 @@ final class WorkoutRecorder: ObservableObject {
         let end = pausedAt ?? Date()
         phase = .saving
         let points = route.points
+        // Stop the clock where the workout actually ended, so the last figures the live screen
+        // and the activity show are the ones that get saved.
+        now = end
         finishTracking()
+        activity.end(activityState)
 
         guard end.timeIntervalSince(startedAt) - pausedSeconds >= 10 else {
             self.startedAt = nil

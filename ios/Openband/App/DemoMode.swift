@@ -19,6 +19,13 @@ final class AppSession: ObservableObject {
     init() {
         (container, model) = Self.make(demo: DemoMode.isOn)
         model.onLiveHeartRate = { [recorder] bpm in recorder.record(heartRate: bpm) }
+        // The Lock Screen's two buttons arrive as App Intents running in this process, with no
+        // view tree to reach the recorder through. This is the one place that has all the
+        // pieces, so it is where they get wired up.
+        WorkoutActivityActions.togglePause = { [recorder] in
+            recorder.phase == .paused ? recorder.resume() : recorder.pause()
+        }
+        WorkoutActivityActions.finish = { [weak self] in await self?.finishWorkout() }
     }
 
     /// Demo mode never touches the real store or the onboarding flag; leaving it returns to the
@@ -32,6 +39,16 @@ final class AppSession: ObservableObject {
             UserDefaults.standard.set(true, forKey: "onboarded")
         }
         generation += 1
+    }
+
+    /// Finishing from the Lock Screen: the same save the live screen does, without the
+    /// navigation that only means anything with the app in front.
+    func finishWorkout() async {
+        let weight = Profile.load().weightKg ?? 70
+        guard let workout = await recorder.finish(context: container.mainContext,
+                                                  bandID: model.firstBandID, weightKg: weight)
+        else { return }
+        await AppleHealth.shared.save(workout: workout, context: container.mainContext)
     }
 
     static let models: [any PersistentModel.Type] = [Band.self, Sample.self, Webhook.self, ActivityBlob.self,
