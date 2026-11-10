@@ -118,7 +118,13 @@ night. **Coach** reads a meal photo or a body check-in. **Band** is the device a
 Workouts go to Apple Health as real `HKWorkout`s with their route attached, so they count towards
 the rings and show up in Fitness. What the band measured goes out too — steps, heart rate, blood
 oxygen, sleep — attributed to the band rather than to the phone, with a sync identifier per record
-so syncing again replaces instead of duplicating.
+so syncing again replaces instead of duplicating. Each band remembers how far it has exported, so
+a sync sends the new minutes and today again rather than rewriting the overlap every time.
+
+Steps go the other way to fill the minutes the band has nothing for, and that read is anchored:
+Health is asked what has changed since the last pass instead of for a fixed 90 days, and a step
+sample deleted in Health stops filling the minute it filled. The anchor itself can only be checked
+on a real iPhone — a simulator's Health store is empty.
 
 ### Coach, and your own API key
 

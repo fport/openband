@@ -35,7 +35,7 @@ struct AppleHealthView: View {
                     .buttonStyle(.fbTertiary)
                 }
                 if health.readEnabled {
-                    Button(String(localized: "Fill gaps now")) { Task { await model.fillGapsFromHealth() } }
+                    Button(String(localized: "Fill gaps now")) { Task { await model.fillGapsFromHealth(full: true) } }
                         .buttonStyle(.fbTertiary)
                 }
                 if !AppleHealth.isAvailable {
